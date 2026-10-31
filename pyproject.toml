@@ -41,7 +41,7 @@ packages = ["src/boussole"]
 [tool.ruff]
 line-length = 100
 target-version = "py312"
-src = ["src", "tests"]
+src = ["src", "tests", "bench"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP", "N", "S", "C90", "SIM", "RUF"]
@@ -56,7 +56,7 @@ max-complexity = 8
 [tool.mypy]
 strict = true
 python_version = "3.12"
-files = ["src", "tests"]
+files = ["src", "tests", "bench"]
 mypy_path = "src"
 explicit_package_bases = true
 
