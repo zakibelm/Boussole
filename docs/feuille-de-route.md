@@ -18,9 +18,9 @@ Critère de sortie : une réponse sourcée et journalisée de bout en bout.
 - [ ] Indexation du PMBOK 8 et skills par agent (en attente du PDF)
 - [x] Garde-fous : politique d'autonomie (config/autonomy.yaml), journal d'audit signé, séparation lecture et action (ADR 0006)
 - [ ] Benchmark reproductible (3 tâches PMO, au moins 2 modèles via OpenRouter)
-- [ ] CI : lint, types, tests, scan des dépendances et des secrets
+- [x] CI : lint, types, tests, couverture, pip-audit, gitleaks, fichiers interdits (GitHub Actions)
 - [x] Tests red team 1 à 3
-- [ ] Tests d'intégration PostgreSQL exécutés (en attente de Docker)
+- [x] Tests d'intégration PostgreSQL exécutés (dans la CI, service pgvector)
 
 ## Phase 1 : pilote
 
