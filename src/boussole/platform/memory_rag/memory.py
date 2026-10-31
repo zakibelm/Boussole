@@ -1,0 +1,74 @@
+"""Mémoire RAG : ingestion et recherche avec citations."""
+
+import logging
+import uuid
+from dataclasses import dataclass
+from pathlib import Path
+
+from boussole.platform.memory_rag.chunking import (
+    chunk_document,
+    heading_sections,
+    outline_sections,
+    read_pages,
+)
+from boussole.platform.memory_rag.port import Embedder, Hit, VectorStore
+
+log = logging.getLogger(__name__)
+
+LOCAL_DATA = Path(__file__).resolve().parents[4] / "data" / "local"
+NO_SOURCE = "Aucune source trouvée dans la mémoire pour cette question."
+
+
+@dataclass(frozen=True)
+class IngestReport:
+    source: str
+    pages: int
+    sections: int
+    chunks: int
+    sections_from: str  # « signets » ou « titres »
+
+
+class OutsideLocalDataError(ValueError):
+    """Le document protégé doit rester dans data/local/, ignoré par git."""
+
+
+class RagMemory:
+    def __init__(
+        self, embedder: Embedder, store: VectorStore, local_root: Path = LOCAL_DATA
+    ) -> None:
+        self._embedder = embedder
+        self._store = store
+        self._local_root = local_root.resolve()
+
+    def ingest_pdf(self, pdf: Path, source: str) -> IngestReport:
+        """Réindexe entièrement `source`. Seuls des compteurs sont journalisés."""
+        resolved = pdf.resolve()
+        if not resolved.is_relative_to(self._local_root):
+            raise OutsideLocalDataError(f"Le PDF doit être dans {self._local_root}.")
+        pages = read_pages(resolved)
+        sections = outline_sections(resolved)
+        origin = "signets"
+        if not sections:
+            sections, origin = heading_sections(pages), "titres"
+        chunks = chunk_document(pages, sections, source)
+        self._store.remove_source(source)
+        vectors = self._embedder.embed_documents([c.text for c in chunks])
+        self._store.add(chunks, vectors, self._embedder.model_name)
+        report = IngestReport(source, len(pages), len(sections), len(chunks), origin)
+        log.info("ingestion %s", report)
+        return report
+
+    def search(self, question: str, k: int = 5, project_id: uuid.UUID | None = None) -> list[Hit]:
+        vector = self._embedder.embed_query(question)
+        hits = self._store.search(vector, k, self._embedder.model_name, project_id)
+        log.info("recherche k=%d citations=%s", k, [h.chunk.citation() for h in hits])
+        return hits
+
+
+def format_sources(hits: list[Hit]) -> str:
+    """Bloc de sources numérotées à joindre au contexte d'un agent."""
+    if not hits:
+        return NO_SOURCE
+    return "\n\n".join(
+        f"[{i}] {hit.chunk.citation()}\n{hit.chunk.text}" for i, hit in enumerate(hits, start=1)
+    )
