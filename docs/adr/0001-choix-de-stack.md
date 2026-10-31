@@ -1,6 +1,6 @@
 # ADR 0001 : choix du langage et de la base de données
 
-- **Statut :** proposé, en attente de validation humaine (point d'arrêt obligatoire)
+- **Statut :** accepté le 2026-10-31 par Zakaria Belmeddah
 - **Date :** 2026-10-31
 - **Décideur :** Zakaria Belmeddah
 
@@ -70,12 +70,14 @@ via l'API unique.
 - Réversibilité : le langage est structurant (coûteux à changer); la base
   vectorielle est réversible grâce au port.
 
-## Questions pour la validation
+## Validation
 
-1. Valides-tu Python 3.12 + PostgreSQL 16/pgvector ?
-2. Hébergement visé de la base : local seulement pour la phase 0, ou un projet
-   Supabase (région Canada) dès maintenant ?
-3. Forge et CI : GitHub + GitHub Actions ?
-4. Les deux fournisseurs LLM réels pour la passerelle et le benchmark (ex. :
-   Anthropic et OpenRouter), et le budget d'essai de la phase 0 en dollars
-   canadiens ?
+1. Python 3.12 + PostgreSQL 16/pgvector : **validé**.
+2. Hébergement de la base : **local (conteneur) pour la phase 0** par défaut,
+   sans donnée réelle ni secret. Le passage à un hébergement managé est un
+   point d'arrêt distinct.
+3. CI : **GitHub Actions** par défaut (fichier de workflow dans le dépôt);
+   aucun dépôt distant n'est créé sans demande.
+4. Fournisseurs LLM réels et budget d'essai : **à fixer** avant le premier
+   appel payant (point d'arrêt). D'ici là, seul l'adaptateur factice est
+   exécuté.
