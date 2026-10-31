@@ -78,6 +78,31 @@ def test_allowlisted_subdomain_is_accepted() -> None:
     assert decide(POLICY, request, Autonomy.AUTOMATION, None).verdict is Verdict.ALLOW
 
 
+@pytest.mark.parametrize(
+    "destination",
+    [
+        "https://exfil.example.com#.openrouter.ai",
+        "https://exfil.example.com?.openrouter.ai",
+        "https://openrouter.ai@exfil.example.com/",
+        "https://exfil.example.com\\.openrouter.ai",
+        "https://evilopenrouter.ai",
+        "https://[::1",
+        "",
+    ],
+)
+def test_disguised_destination_is_denied(destination: str) -> None:
+    request = _request("read_project_data", destination=destination)
+    assert decide(POLICY, request, Autonomy.AUTOMATION, None).verdict is Verdict.DENY
+
+
+@pytest.mark.parametrize(
+    "destination", ["openrouter.ai", "HTTPS://API.OpenRouter.ai:443/v1", "https://openrouter.ai./"]
+)
+def test_legitimate_destination_forms_are_accepted(destination: str) -> None:
+    request = _request("read_project_data", destination=destination)
+    assert decide(POLICY, request, Autonomy.AUTOMATION, None).verdict is Verdict.ALLOW
+
+
 # --- Journal d'audit -------------------------------------------------------
 
 
