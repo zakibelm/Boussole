@@ -14,9 +14,11 @@ import statistics
 import sys
 import time
 import uuid
+from collections.abc import Callable
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
 from decimal import Decimal
+from functools import partial
 from pathlib import Path
 
 from bench.tasks import TASKS, Task
@@ -43,6 +45,8 @@ RESULTS = Path(__file__).resolve().parent / "results"
 CHARS_PER_TOKEN = 4
 EXPECTED_OUTPUT_SHARE = Decimal("0.5")  # part de max_tokens générée, raisonnement compris (prudent)
 TIE_MARGIN = 0.05
+RETRY_PAUSES_S = (2.0, 6.0)  # deux nouvelles tentatives si OpenRouter est injoignable
+MAX_NETWORK_FAILURES = 5
 
 
 @dataclass(frozen=True)
@@ -61,13 +65,36 @@ def system_prompt(catalog: Catalog, agent_id: str) -> str:
     return f"{catalog.shared_rules.strip()}\n\n{catalog.get(agent_id).skill.strip()}"
 
 
+class NetworkDownError(RuntimeError):
+    """Trop d'échecs réseau d'affilée : on arrête plutôt que d'enchaîner les erreurs."""
+
+
 def run_model(gateway: BudgetedGateway, catalog: Catalog, model: str) -> list[Row]:
     rows: list[Row] = []
+    failures_in_a_row = 0
     for task in TASKS:
         system = system_prompt(catalog, task.agent_id)
         for item in task.items():
-            rows.append(_run_item(gateway, task, item, model, system))
+            row = _with_retries(partial(_run_item, gateway, task, item, model, system))
+            rows.append(row)
+            failures_in_a_row = failures_in_a_row + 1 if _network(row) else 0
+            if failures_in_a_row >= MAX_NETWORK_FAILURES:
+                raise NetworkDownError(f"OpenRouter injoignable ({model}), exécution arrêtée.")
     return rows
+
+
+def _with_retries(attempt: Callable[[], Row]) -> Row:
+    row = attempt()
+    for pause in RETRY_PAUSES_S:
+        if not _network(row):
+            break
+        time.sleep(pause)
+        row = attempt()
+    return row
+
+
+def _network(row: Row) -> bool:
+    return bool(row.error and "injoignable" in row.error)
 
 
 def _run_item(
@@ -231,7 +258,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         for model in models:
             rows.extend(run_model(gateway, catalog, model))
-    except BudgetExceededError as exc:
+    except (BudgetExceededError, NetworkDownError) as exc:
         print(f"Arrêt : {exc}", file=sys.stderr)
     if not rows:
         return 1

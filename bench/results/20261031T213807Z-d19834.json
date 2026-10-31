@@ -1,0 +1,1073 @@
+{
+  "run_at": "20261031T213807Z",
+  "label": "d19834",
+  "tasks": {
+    "status": {
+      "agent": "closing",
+      "items": 5
+    },
+    "risks": {
+      "agent": "domain.risk",
+      "items": 5
+    },
+    "approach": {
+      "agent": "selector",
+      "items": 10
+    }
+  },
+  "summary": {
+    "anthropic/claude-haiku-5.5": {
+      "status": 0.0,
+      "risks": 0.0,
+      "approach": 0.0,
+      "global": 0.0,
+      "cost_cad": 0.0,
+      "latency_mean_s": 0.00215,
+      "latency_p95_s": 0.003,
+      "errors": 20.0
+    },
+    "anthropic/claude-sonnet-5.5": {
+      "status": 0.5,
+      "risks": 1.0,
+      "approach": 0.4,
+      "global": 0.575,
+      "cost_cad": 0.169571,
+      "latency_mean_s": 7.6377,
+      "latency_p95_s": 9.858,
+      "errors": 6.0
+    },
+    "google/gemini-3.8-flash": {
+      "status": 0.0,
+      "risks": 0.0,
+      "approach": 0.0,
+      "global": 0.0,
+      "cost_cad": 0.0,
+      "latency_mean_s": 0.0015,
+      "latency_p95_s": 0.002,
+      "errors": 20.0
+    },
+    "mistralai/mistral-large-4-0": {
+      "status": 0.0,
+      "risks": 0.0,
+      "approach": 0.0,
+      "global": 0.0,
+      "cost_cad": 0.0,
+      "latency_mean_s": 0.0015,
+      "latency_p95_s": 0.002,
+      "errors": 20.0
+    },
+    "openai/gpt-5.6-luna": {
+      "status": 0.0,
+      "risks": 0.0,
+      "approach": 0.0,
+      "global": 0.0,
+      "cost_cad": 0.0,
+      "latency_mean_s": 0.0015,
+      "latency_p95_s": 0.002,
+      "errors": 20.0
+    }
+  },
+  "recommended_default": "anthropic/claude-sonnet-5.5",
+  "rows": [
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "status",
+      "item": "s01",
+      "score": 0.5,
+      "cost_cad": "0.012496",
+      "latency_s": 6.896,
+      "answer": "**Statut projet CRM, semaine 22** (source : notes de statut fournies, aucune autre source en mémoire)\n\n- **Avancement :** environ 60 % du travail est réalisé. L'import des contacts est terminé et 2 des 5 intégrations sont livrées.\n- **Budget :** 410 000 $ dépensés sur 500 000 $ prévus, soit 82 % du budget pour 60 % du travail. Mon calcul à partir des notes donne une valeur acquise d'environ 300 000 $ et un indice de coût (CPI) d'environ 0,73. Il suppose que le « 60 % » est fiable et que 500 000 $ est le budget total. Au rythme actuel, le budget sera dépassé.\n- **Échéancier :** la migration des historiques glisse de 3 semaines. Les notes ne disent pas si ce glissement touche le chemin critique ni si les tests avec les ventes du 4 novembre sont maintenus.\n- **Problème :** le fournisseur n'a pas livré l'extraction des historiques, ce qui bloque la migration. Les notes ne mentionnent ni échéance de livraison ni escalade en cours.\n- **Décision attendue :** faut-il réduire la portée des rapports ? Les notes ne chiffrent ni l'économie ni le gain de délai attendus. Je recommande de demander cette estimation avant que la direction tranche.",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "status",
+      "item": "s02",
+      "score": 0.5,
+      "cost_cad": "0.010895",
+      "latency_s": 5.769,
+      "answer": "**Statut – Rénovation de l'école Saint-Jean (pour la direction)**\n\n- **Avancement :** la charpente est terminée et la toiture est à 70 %.\n- **Budget :** respecté à 2 % près. Les notes ne précisent ni le sens de l'écart (dépassement ou économie) ni le budget de référence.\n- **Échéancier :** l'ouverture à la rentrée de janvier est maintenue, à condition que l'expertise ne révèle pas de problème structurel.\n- **Problèmes :** une infiltration d'eau a été découverte dans l'aile B, et l'expertise est demandée. Ses résultats et sa date ne sont pas indiqués.\n- **Décision attendue :** les notes n'en formulent pas explicitement. Le directeur demande une visite des parents le 12 décembre, et la direction devra se prononcer sur cette demande. Il faudra sans doute tenir compte de l'infiltration dans l'aile B, mais c'est mon inférence et non une information des notes.\n\n**Sources :** ces éléments viennent uniquement des notes fournies. Aucune donnée de la mémoire Boussole n'a été consultée pour les confirmer.",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "status",
+      "item": "s03",
+      "score": 0.5,
+      "cost_cad": "0.010609",
+      "latency_s": 5.469,
+      "answer": "**Statut pour la direction : Programme cybersécurité, mois 4**\n\n- **Avancement :** la MFA est déployée à 85 % des comptes, pour un objectif de 100 % au 30 novembre. Aucun incident ce mois-ci.\n- **Budget :** les notes ne donnent ni budget approuvé ni dépenses à date. Seul chiffre disponible : 120 000 $ si les trois applications anciennes sont remplacées. Je n'ai pas d'autre source pour l'état du budget.\n- **Échéancier :** la date cible du 30 novembre est maintenue dans les notes, mais aucune prévision de fin n'y figure. Les 15 % restants dépendent probablement des trois applications incompatibles, ce qui reste à confirmer.\n- **Problèmes :** trois applications anciennes ne supportent pas la MFA, ce qui bloque l'atteinte de 100 %. L'auditeur externe passe en janvier, donc la situation de ces applications sera visible à l'audit.\n- **Décision attendue :** choisir entre le remplacement des trois applications (120 000 $) et une exception temporaire. Les notes ne précisent ni la durée ni les mesures compensatoires de l'exception, ni l'échéance de la décision. Ces éléments sont à définir avant l'arbitrage.\n\n**À confirmer avant diffusion :** budget consommé, prévision de fin, et date limite de décision.",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "status",
+      "item": "s04",
+      "score": 0.5,
+      "cost_cad": "0.010256",
+      "latency_s": 5.357,
+      "answer": "**Statut Aurora, résumé pour la direction**\n\n- **Avancement :** les précommandes dépassent la prévision de 40 %. La demande est donc plus forte que prévu. Les notes ne donnent pas d'état d'avancement des livrables.\n- **Budget :** non précisé dans les notes. Aucun chiffre ne peut être avancé, et l'impact financier de l'option en deux vagues n'est pas évalué.\n- **Échéancier :** le marketing veut maintenir le lancement au 1er décembre. La production du premier mois est limitée à 8 000 unités au lieu de 11 000, soit un écart de 3 000 unités (calcul à partir des notes).\n- **Problèmes et risques :** risque de ruptures de stock et de clients mécontents si le lancement a lieu à la date prévue avec la capacité actuelle.\n- **Décision attendue :** choisir entre maintenir le 1er décembre avec une livraison en deux vagues (option proposée) et une autre approche. La direction devrait demander une évaluation des coûts, des délais et de l'effet sur les clients avant de trancher.\n\n**Limites :** ces éléments viennent uniquement des notes fournies. Je n'ai aucune source en mémoire pour les valider, et rien n'est dit sur le budget ni sur l'avancement détaillé.",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "status",
+      "item": "s05",
+      "score": 0.5,
+      "cost_cad": "0.014196",
+      "latency_s": 6.5,
+      "answer": "**Statut : implantation ERP, phase finance**\n\n- **Avancement :** les tests d'acceptation sont réussis à 92 %. Les 8 % restants portent sur la consolidation multidevise, qui bloque la mise en production.\n- **Budget :** le seul chiffre disponible est le coût de l'attente, estimé à 25 000 $. Le budget total, l'écart et le coût d'un consultant supplémentaire ne sont pas dans les notes.\n- **Échéancier :** le consultant expert n'est disponible que dans trois semaines. Si l'on attend, la mise en production serait donc reportée d'environ trois semaines (déduction de ma part). Les dates de référence ne sont pas fournies.\n- **Problème :** la consolidation multidevise est bloquante et dépend d'une seule ressource experte.\n- **Décision attendue :** la direction financière doit choisir entre attendre le consultant (coût estimé à 25 000 $) et embaucher un autre consultant (coût et délai d'intégration non chiffrés).\n\n**Sources :** ces éléments viennent uniquement des notes fournies. Je n'ai consulté aucune source en mémoire, et aucun chiffre n'est ajouté. Avant de présenter la décision, il faudrait obtenir le coût et le délai de l'option « autre consultant » pour que la comparaison soit complète.",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "risks",
+      "item": "r01",
+      "score": 1.0,
+      "cost_cad": "0.013180",
+      "latency_s": 6.958,
+      "answer": "```json\n[\n  {\n    \"titre\": \"Retard de livraison des serveurs\",\n    \"description\": \"Le fournisseur annonce six semaines au lieu de deux (compte rendu du 14 octobre), soit quatre semaines de retard. Les activités dépendantes de l'infrastructure, dont la migration, risquent de glisser. Le retard est déjà annoncé, donc c'est presque un problème avéré. Cotation : jugement d'analyse, sans référence en mémoire.\",\n    \"probabilite\": 5,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Dépendance à une seule administratrice de bases de données\",\n    \"description\": \"Elle part en congé parental en décembre et personne d'autre ne connaît la migration (compte rendu du 14 octobre). La migration risque d'être bloquée, retardée ou mal exécutée en son absence. Le retard des serveurs accroît le risque que la migration tombe pendant son absence. Cotation : jugement d'analyse, sans référence en mémoire.\",\n    \"probabilite\": 4,\n    \"impact\": 5\n  },\n  {\n    \"titre\": \"Dérive de périmètre : deux rapports supplémentaires sans révision du budget\",\n    \"description\": \"Le client a demandé deux nouveaux rapports sans revoir le budget (compte rendu du 14 octobre). Cela risque de causer un dépassement de coûts et d'échéancier, ou de tirer sur des ressources déjà contraintes. Cotation : jugement d'analyse, sans référence en mémoire.\",\n    \"probabilite\": 4,\n    \"impact\": 3\n  }\n]\n```",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "risks",
+      "item": "r02",
+      "score": 1.0,
+      "cost_cad": "0.011267",
+      "latency_s": 5.432,
+      "answer": "```json\n[\n  {\n    \"titre\": \"Intempéries pendant le coulage des fondations\",\n    \"description\": \"Selon le texte, les prévisions annoncent trois semaines de pluie pendant le coulage. Cela risque de retarder le coulage, de dégrader la qualité du béton et de décaler les tâches suivantes. Probabilité et impact sont des estimations, sans donnée historique en mémoire.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Hausse du coût de l'acier\",\n    \"description\": \"Selon le texte, le prix de l'acier a augmenté de 18 % depuis la soumission. Le risque de dépassement budgétaire est déjà matérialisé, mais son ampleur n'est pas chiffrable : la part de l'acier dans le budget n'est pas fournie. Impact estimé, sans source en mémoire.\",\n    \"probabilite\": 5,\n    \"impact\": 3\n  },\n  {\n    \"titre\": \"Date de visite de l'inspecteur municipal non confirmée\",\n    \"description\": \"Selon le texte, l'inspecteur n'a pas confirmé sa date de visite, qui conditionne la suite des travaux. Un retard de l'inspection peut bloquer l'avancement et créer un décalage sur le chemin critique. Probabilité et impact sont des estimations, sans source en mémoire.\",\n    \"probabilite\": 3,\n    \"impact\": 4\n  }\n]\n```",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "risks",
+      "item": "r03",
+      "score": 1.0,
+      "cost_cad": "0.013544",
+      "latency_s": 6.808,
+      "answer": "[\n  {\n    \"titre\": \"Baisse de capacité de livraison de l'équipe\",\n    \"description\": \"Selon le texte, la vélocité a baissé de 30 % depuis la réaffectation de deux développeurs à un autre projet. Le risque est que cette baisse persiste et compromette les jalons à venir. Le texte ne dit pas si les développeurs reviendront. Probabilité et impact sont des estimations à valider par l'équipe.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Incompatibilité de l'intégration avec la nouvelle version de l'API de paiement\",\n    \"description\": \"Selon le texte, l'API du partenaire de paiement change de version le mois prochain et l'intégration n'a pas été testée sur cette version. Des échecs de paiement ou une interruption du service sont possibles après la bascule. Le texte ne précise pas la date exacte, ni si l'ancienne version restera disponible.\",\n    \"probabilite\": 4,\n    \"impact\": 5\n  },\n  {\n    \"titre\": \"Lenteurs de connexion et insatisfaction des utilisateurs pilotes\",\n    \"description\": \"Selon le texte, les utilisateurs pilotes se plaignent de lenteurs à chaque connexion. Ce problème est déjà observé, donc proche d'un incident. Il peut nuire à l'adoption et à la validation du pilote. La cause n'est pas identifiée dans le texte, et l'impact est à confirmer par des mesures de performance.\",\n    \"probabilite\": 5,\n    \"impact\": 3\n  }\n]",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "risks",
+      "item": "r04",
+      "score": 1.0,
+      "cost_cad": "0.011099",
+      "latency_s": 5.796,
+      "answer": "```json\n[\n  {\n    \"titre\": \"Départ du commanditaire principal sans remplaçant nommé\",\n    \"description\": \"Le commanditaire quitte l'entreprise à la fin du trimestre et aucun remplaçant n'est désigné (source : note du comité directeur). Risque de perte de soutien et d'arbitrage, de retard dans les décisions et de dérive de la gouvernance. Probabilité et impact : estimations de l'agent, sans source en mémoire, à valider par l'humain.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Non-conformité potentielle à la Loi 25 pour l'hébergement des données aux États-Unis\",\n    \"description\": \"Les données personnelles des clients seraient hébergées aux États-Unis, et le service juridique n'a pas encore évalué cette situation au regard de la Loi 25 (source : note du comité directeur). Risque de sanctions, d'atteinte à la réputation et de reprise de l'architecture d'hébergement. Aucune source en mémoire sur les exigences précises de la Loi 25 : à confirmer par le service juridique. Probabilité et impact : estimations de l'agent, à valider.\",\n    \"probabilite\": 3,\n    \"impact\": 5\n  }\n]\n```",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "risks",
+      "item": "r05",
+      "score": 1.0,
+      "cost_cad": "0.018206",
+      "latency_s": 9.858,
+      "answer": "```json\n[\n  {\n    \"titre\": \"Conflit entre la formation et la clôture financière annuelle\",\n    \"description\": \"La formation de 300 employés est planifiée la même semaine que la clôture financière. Les employés de la finance risquent d'être indisponibles ou surchargés, ce qui menace la qualité de la clôture et le taux de participation à la formation. Réponse proposée (à valider par l'humain) : éviter le conflit en déplaçant la formation ou en l'échelonnant par groupes, et exempter les équipes finance de cette semaine. Cotation fondée sur le jugement, sans source en mémoire.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Défaillance du logiciel de formation à grande échelle\",\n    \"description\": \"Le logiciel n'a jamais été utilisé pour 300 utilisateurs. Il y a un risque de lenteurs, de pannes ou de problèmes d'accès qui perturberaient la formation. Réponse proposée (à valider par l'humain) : atténuer par un test de charge préalable, un déploiement par vagues, un plan de repli (session en présentiel ou en différé) et un support technique dédié. Cotation fondée sur le jugement, sans source en mémoire.\",\n    \"probabilite\": 3,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Différend avec le syndicat sur les changements d'horaire\",\n    \"description\": \"Le syndicat demande à être consulté avant tout changement d'horaire. Replanifier la formation ou ajuster les horaires pour résoudre le conflit avec la clôture sans consultation préalable pourrait causer un litige, un grief ou un retard. Réponse proposée (à valider par l'humain) : éviter le problème en engageant la consultation tôt et en documentant les échanges. Cotation fondée sur le jugement, sans source en mémoire. Les obligations de consultation propres à votre convention collective n'ont pas été vérifiées.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  }\n]\n```",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "approach",
+      "item": "a01",
+      "score": 1.0,
+      "cost_cad": "0.009419",
+      "latency_s": 4.945,
+      "answer": "```json\n{\n  \"approche\": \"predictive\",\n  \"justification\": \"Les trois familles de critères convergent vers le prédictif, d'après la seule description du projet. Livrables : exigences stables, plans approuvés par la ville, et modification coûteuse une fois le béton coulé, donc peu de place pour l'itération. Projet : date de livraison contractuelle fixe et 40 sous-traitants, ce qui impose une planification et une coordination en amont des interdépendances. Organisation : structure hiérarchique, cohérente avec une gouvernance par jalons et contrôle des changements formel. Aucun signal divergent n'impose l'hybride. Limite : je n'ai aucune source en mémoire pour le texte du PMBOK 4.3, donc la correspondance avec ces critères n'est pas vérifiée contre le guide. La décision finale revient à l'humain.\"\n}\n```",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "approach",
+      "item": "a02",
+      "score": 1.0,
+      "cost_cad": "0.010945",
+      "latency_s": 5.808,
+      "answer": "```json\n{\n  \"approche\": \"adaptive\",\n  \"justification\": \"Livrables : les fonctions sont à découvrir avec les premiers utilisateurs et le marché est inconnu, donc les exigences sont incertaines et évolutives, ce qui favorise l'adaptatif. Projet : le financement par tranches selon les résultats et les retours clients toutes les deux semaines correspondent à une livraison incrémentale avec validation fréquente. Cela reste compatible avec l'adaptatif, car les tranches peuvent être liées à des jalons de valeur livrée. Organisation : l'équipe autogérée de 6 personnes et le cycle de retour court indiquent une culture et une gouvernance capables de soutenir l'adaptatif. Les trois critères convergent, il n'y a donc pas de signal divergent justifiant l'hybride. Limite : aucune source de la mémoire n'a été consultée. L'analyse repose sur les critères PMBOK 4.3 cités dans la demande et sur les seules informations du projet. La gouvernance du financement (jalons, critères de décision des tranches) n'est pas précisée et devrait être confirmée par l'humain.\"\n}\n```",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "approach",
+      "item": "a03",
+      "score": 1.0,
+      "cost_cad": "0.012393",
+      "latency_s": 6.85,
+      "answer": "```json\n{\n  \"approche\": \"hybrid\",\n  \"justification\": \"Les signaux divergent, donc hybride. Livrables : le paramétrage réglementaire et la migration des données ont des exigences stables, imposées par la loi, ce qui favorise le prédictif. Les tableaux de bord pour les gestionnaires ont des exigences émergentes, à découvrir avec les utilisateurs, ce qui favorise l'adaptatif. Projet : les échéances légales sont fixes et non négociables, ce qui favorise le prédictif pour le paramétrage et la migration. Le déploiement dans 8 usines permet des incréments et des retours itératifs pour les tableaux de bord, ce qui favorise l'adaptatif. Organisation : l'énoncé ne dit rien sur la culture, la gouvernance, la capacité des équipes ni l'engagement des parties prenantes. Ce critère n'est donc pas évalué et reste à confirmer avec l'humain. Recommandation : planifier de façon prédictive (jalons datés, contrôle des changements, validation de conformité) le paramétrage réglementaire et la migration, et livrer les tableaux de bord de façon adaptative (itérations courtes avec les gestionnaires, backlog priorisé). Aucune source de la mémoire n'a été consultée. L'analyse repose uniquement sur l'énoncé du projet et sur les trois critères de la section 4.3 du PMBOK que vous avez cités. La décision finale appartient à l'humain.\"\n}\n```",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "approach",
+      "item": "a04",
+      "score": 1.0,
+      "cost_cad": "0.011066",
+      "latency_s": 6.265,
+      "answer": "{\"approche\": \"predictive\", \"justification\": \"Les trois familles de critères convergent vers le prédictif, donc pas de divergence justifiant l'hybride. (1) Livrables : exigences entièrement définies par le régulateur, donc stables, peu de changement attendu et faible incertitude sur le périmètre ; la documentation de validation exigée à chaque étape suppose des livrables planifiés et vérifiables. (2) Projet : audits obligatoires à dates fixes, donc jalons non négociables ; le séquencement et la validation par étapes favorisent un cycle planifié, et le risque de non-conformité est élevé et peu tolérable. (3) Organisation : aucune tolérance à l'improvisation et exigence de traçabilité, ce qui indique une gouvernance formelle, un contrôle des changements strict et une culture orientée conformité plutôt qu'expérimentation. Limite : je n'ai pas de source en mémoire pour citer le texte exact de la section 4.3 du PMBOK Guide 8e éd. ; cette analyse s'appuie sur les seules informations fournies dans la description du projet et la grille livrables/projet/organisation, à confirmer par le chef de projet.\"}",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "approach",
+      "item": "a05",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 64.005,
+      "answer": "",
+      "error": "OpenRouter injoignable : ReadTimeout"
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "approach",
+      "item": "a06",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.009,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "approach",
+      "item": "a07",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.007,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "approach",
+      "item": "a08",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.008,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "approach",
+      "item": "a09",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.008,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "approach",
+      "item": "a10",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.006,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "status",
+      "item": "s01",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.005,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "status",
+      "item": "s02",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.003,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "status",
+      "item": "s03",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "status",
+      "item": "s04",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.003,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "status",
+      "item": "s05",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "risks",
+      "item": "r01",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "risks",
+      "item": "r02",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "risks",
+      "item": "r03",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.003,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "risks",
+      "item": "r04",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "risks",
+      "item": "r05",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "approach",
+      "item": "a01",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "approach",
+      "item": "a02",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "approach",
+      "item": "a03",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "approach",
+      "item": "a04",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "approach",
+      "item": "a05",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "approach",
+      "item": "a06",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "approach",
+      "item": "a07",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "approach",
+      "item": "a08",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.001,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "approach",
+      "item": "a09",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.001,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "approach",
+      "item": "a10",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.001,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "status",
+      "item": "s01",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "status",
+      "item": "s02",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "status",
+      "item": "s03",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "status",
+      "item": "s04",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "status",
+      "item": "s05",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "risks",
+      "item": "r01",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.001,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "risks",
+      "item": "r02",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.001,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "risks",
+      "item": "r03",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.001,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "risks",
+      "item": "r04",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.001,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "risks",
+      "item": "r05",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "approach",
+      "item": "a01",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "approach",
+      "item": "a02",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "approach",
+      "item": "a03",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "approach",
+      "item": "a04",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.001,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "approach",
+      "item": "a05",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.001,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "approach",
+      "item": "a06",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.001,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "approach",
+      "item": "a07",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.001,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "approach",
+      "item": "a08",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "approach",
+      "item": "a09",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.001,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "approach",
+      "item": "a10",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.001,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "status",
+      "item": "s01",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.001,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "status",
+      "item": "s02",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "status",
+      "item": "s03",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "status",
+      "item": "s04",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "status",
+      "item": "s05",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "risks",
+      "item": "r01",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "risks",
+      "item": "r02",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.001,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "risks",
+      "item": "r03",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.001,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "risks",
+      "item": "r04",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.001,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "risks",
+      "item": "r05",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.001,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "approach",
+      "item": "a01",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "approach",
+      "item": "a02",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.003,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "approach",
+      "item": "a03",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "approach",
+      "item": "a04",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.001,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "approach",
+      "item": "a05",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.001,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "approach",
+      "item": "a06",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.001,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "approach",
+      "item": "a07",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.001,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "approach",
+      "item": "a08",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.001,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "approach",
+      "item": "a09",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.001,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "approach",
+      "item": "a10",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "status",
+      "item": "s01",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.001,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "status",
+      "item": "s02",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "status",
+      "item": "s03",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "status",
+      "item": "s04",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.001,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "status",
+      "item": "s05",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.001,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "risks",
+      "item": "r01",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.001,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "risks",
+      "item": "r02",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "risks",
+      "item": "r03",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.001,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "risks",
+      "item": "r04",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.001,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "risks",
+      "item": "r05",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.001,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "approach",
+      "item": "a01",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "approach",
+      "item": "a02",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "approach",
+      "item": "a03",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "approach",
+      "item": "a04",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "approach",
+      "item": "a05",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.001,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "approach",
+      "item": "a06",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.001,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "approach",
+      "item": "a07",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "approach",
+      "item": "a08",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "approach",
+      "item": "a09",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.002,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "approach",
+      "item": "a10",
+      "score": 0.0,
+      "cost_cad": "0",
+      "latency_s": 0.001,
+      "answer": "",
+      "error": "OpenRouter injoignable : ConnectError"
+    }
+  ]
+}

@@ -98,3 +98,15 @@ def test_truncated_or_empty_answers_are_errors_not_zeros() -> None:
     assert "tronquée" in (run._answer_problem(truncated) or "")
     assert "vide" in (run._answer_problem(empty) or "")
     assert run._answer_problem(GenerationResult("ok", "m", usage, finish_reason="stop")) is None
+
+
+def test_network_failures_are_retried_then_stop_the_run(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr("time.sleep", lambda _: None)
+    down = run.Row("m", "status", "s01", 0.0, "0", 0.0, "", "OpenRouter injoignable : ConnectError")
+    up = run.Row("m", "status", "s01", 1.0, "0", 0.0, "ok", None)
+    attempts = iter([down, down, up])
+    assert run._with_retries(lambda: next(attempts)) == up
+    monkeypatch.setattr(run, "_run_item", lambda *args: down)
+    with pytest.raises(run.NetworkDownError):
+        catalog = load_catalog(Path(__file__).resolve().parents[2] / "config" / "agents.yaml")
+        run.run_model(None, catalog, "m")  # type: ignore[arg-type]
