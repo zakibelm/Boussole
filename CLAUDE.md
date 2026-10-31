@@ -49,6 +49,20 @@ clôture.
 Socle : passerelle LLM, orchestration, mémoire RAG, outils et connecteurs,
 garde-fous, mesure.
 
+## Exigences produit (ADR 0003)
+L'adoption est un critère de réussite au même titre que la justesse :
+- Créer un projet doit tenir en une conversation : description, approche
+  proposée, modèle prérempli.
+- Chaque projet a son tableau de bord dès la phase 1; les chiffres viennent des
+  données, jamais d'un modèle.
+- Le PMO configure sans code (sélecteur, autonomie, modèles de projet, agents,
+  skills); chaque changement est versionné, signé et réversible.
+- Un agent créé par le PMO passe par les mêmes garde-fous que les autres.
+- Boussole s'expose par API et MCP sous les mêmes niveaux d'autonomie.
+- Coûts en dollars canadiens, plafond de coût IA visible, jamais de crédits.
+
+La feuille de route à jour est dans docs/feuille-de-route.md.
+
 ## Normes de code
 - Typage strict, lint et formatage automatiques, fonctions courtes, aucun
   code mort.
