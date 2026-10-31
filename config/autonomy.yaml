@@ -1,0 +1,68 @@
+# Politique d'autonomie de Boussole : niveau par TYPE D'ACTION (CLAUDE.md).
+# Le niveau effectif est le plus restrictif entre celui de l'action et le
+# plafond de l'agent (config/agents.yaml). Ordre, du plus autonome au moins
+# autonome : automation < assistance < augmentation.
+#
+# class : read | reversible_write | irreversible
+# level : automation (agit seul, journalisé) | assistance (brouillon révisé)
+#         | augmentation (l'humain décide)
+# approvers : rôles humains autorisés à valider (irréversible : obligatoire)
+#
+# Règles non configurables, appliquées par le code :
+# - une action inconnue est refusée;
+# - une action irréversible exige un humain nommé ayant un rôle autorisé;
+# - une action déclenchée depuis un contenu externe exige une confirmation humaine;
+# - un agent n'agit que dans son projet, vers des destinations en liste blanche.
+
+actions:
+  read_project_data:
+    class: read
+    level: automation
+    description: Lire les données du projet courant
+  search_memory:
+    class: read
+    level: automation
+    description: Chercher dans la mémoire RAG (sources citées)
+  update_task_status:
+    class: reversible_write
+    level: automation
+    description: Changer le statut d'une tâche
+  draft_plan:
+    class: reversible_write
+    level: assistance
+    approvers: [project_manager, pmo]
+    description: Proposer un plan (portée, échéancier, risques)
+  record_risk:
+    class: reversible_write
+    level: assistance
+    approvers: [project_manager, pmo]
+    description: Ajouter ou modifier un risque
+  recommend_approach:
+    class: reversible_write
+    level: augmentation
+    approvers: [pmo, ceo]
+    description: Recommander l'approche du projet
+  send_message:
+    class: irreversible
+    level: augmentation
+    approvers: [project_manager, pmo]
+    description: Envoyer un message hors de Boussole
+  change_budget:
+    class: irreversible
+    level: augmentation
+    approvers: [pmo, ceo]
+    description: Modifier le budget approuvé
+  close_project:
+    class: irreversible
+    level: augmentation
+    approvers: [pmo]
+    description: Clore un projet
+  delete_data:
+    class: irreversible
+    level: augmentation
+    approvers: [pmo]
+    description: Supprimer des données
+
+# Destinations réseau autorisées pour les actions qui sortent de Boussole.
+network_allowlist:
+  - openrouter.ai

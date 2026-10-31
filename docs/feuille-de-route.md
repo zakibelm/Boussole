@@ -16,10 +16,10 @@ Critère de sortie : une réponse sourcée et journalisée de bout en bout.
 - [x] ★ Page Paramètres : clé OpenRouter, modèle et skill versionné par agent, plafond de coût IA visible
 - [x] Mémoire RAG : découpage par section, embeddings locaux, citations, droits par projet (ADR 0004)
 - [ ] Indexation du PMBOK 8 et skills par agent (en attente du PDF)
-- [ ] Garde-fous : politique d'autonomie (config/autonomy.yaml), journal d'audit signé, séparation lecture et action
+- [x] Garde-fous : politique d'autonomie (config/autonomy.yaml), journal d'audit signé, séparation lecture et action (ADR 0006)
 - [ ] Benchmark reproductible (3 tâches PMO, au moins 2 modèles via OpenRouter)
 - [ ] CI : lint, types, tests, scan des dépendances et des secrets
-- [ ] Tests red team 1 à 3
+- [x] Tests red team 1 à 3
 - [ ] Tests d'intégration PostgreSQL exécutés (en attente de Docker)
 
 ## Phase 1 : pilote

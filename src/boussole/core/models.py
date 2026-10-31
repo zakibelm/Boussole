@@ -6,6 +6,7 @@ from decimal import Decimal
 from typing import Any
 
 from sqlalchemy import (
+    JSON,
     BigInteger,
     CheckConstraint,
     Date,
@@ -13,6 +14,7 @@ from sqlalchemy import (
     Enum,
     ForeignKey,
     Identity,
+    Integer,
     MetaData,
     Numeric,
     String,
@@ -189,7 +191,9 @@ class AgentLogEntry(Base):
 
     __tablename__ = "agent_log"
 
-    id: Mapped[int] = mapped_column(BigInteger, Identity(always=True), primary_key=True)
+    id: Mapped[int] = mapped_column(
+        BigInteger().with_variant(Integer, "sqlite"), Identity(always=True), primary_key=True
+    )
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     correlation_id: Mapped[uuid.UUID] = mapped_column(index=True)
     project_id: Mapped[uuid.UUID | None] = mapped_column(
@@ -198,7 +202,9 @@ class AgentLogEntry(Base):
     agent: Mapped[str] = mapped_column(String(80))
     action: Mapped[str] = mapped_column(String(120))
     action_class: Mapped[ActionClass] = mapped_column(_enum(ActionClass))
-    payload: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict)
+    payload: Mapped[dict[str, Any]] = mapped_column(
+        JSON().with_variant(JSONB(), "postgresql"), default=dict
+    )
     prev_hash: Mapped[str | None] = mapped_column(String(64))
     entry_hash: Mapped[str] = mapped_column(String(64), unique=True)
     signature: Mapped[str | None] = mapped_column(String(256))
