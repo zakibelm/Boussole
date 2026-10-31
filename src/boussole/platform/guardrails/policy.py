@@ -1,15 +1,18 @@
 """Politique d'autonomie : décide, avant toute action, si elle peut avoir effet."""
 
+import re
 import uuid
 from dataclasses import dataclass, field
 from enum import StrEnum
 from pathlib import Path
+from urllib.parse import urlsplit
 
 import yaml
 from pydantic import BaseModel, model_validator
 
 from boussole.core.enums import ActionClass, Autonomy
 
+_HOSTNAME = re.compile(r"[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*\.?")
 _RESTRICTIVENESS = {Autonomy.AUTOMATION: 0, Autonomy.ASSISTANCE: 1, Autonomy.AUGMENTATION: 2}
 
 
@@ -138,8 +141,27 @@ def _scope_denial(config: AutonomyConfig, request: ActionRequest) -> str | None:
 
 
 def _allowed(destination: str, allowlist: list[str]) -> bool:
-    host = destination.split("://")[-1].split("/")[0].split(":")[0].lower()
-    return any(host == d or host.endswith(f".{d}") for d in allowlist)
+    host = _host(destination)
+    if host is None:
+        return False
+    domains = (d.lower().rstrip(".") for d in allowlist)
+    return any(host == d or host.endswith(f".{d}") for d in domains)
+
+
+def _host(destination: str) -> str | None:
+    """Hôte réel selon RFC 3986; None si l'adresse est ambiguë (échec fermé).
+
+    Un découpage naïf accepterait « https://pirate.com#.openrouter.ai » : l'hôte
+    réel est pirate.com, mais la chaîne se termine par le domaine autorisé.
+    """
+    url = destination if "://" in destination else f"//{destination}"
+    try:
+        host = urlsplit(url).hostname
+    except ValueError:
+        return None
+    if not host or not _HOSTNAME.fullmatch(host):
+        return None
+    return host.rstrip(".")
 
 
 def _most_restrictive(a: Autonomy, b: Autonomy) -> Autonomy:
