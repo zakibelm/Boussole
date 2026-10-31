@@ -3,7 +3,8 @@
 Une phase ne démarre que lorsque le critère de sortie de la précédente est
 démontré et que son rapport (réalisé, tests, benchmark, red team, écarts,
 prochaine étape) est validé. Les dates se fixent à la fin de la phase 0.
-Les ajouts issus de l'ADR 0003 (marché) sont marqués ★.
+Les ajouts issus de l'ADR 0003 (forces de monday.com) sont marqués ★; ceux de
+l'ADR 0005 (écarts relevés par l'analyse d'octobre 2026) sont marqués ◆.
 
 ## Phase 0 : fondations (en cours)
 
@@ -13,7 +14,8 @@ Critère de sortie : une réponse sourcée et journalisée de bout en bout.
 - [x] Modèle de données versionné par migrations
 - [x] Passerelle LLM : port commun, adaptateur OpenRouter, adaptateur factice, plafond de budget (ADR 0002)
 - [x] ★ Page Paramètres : clé OpenRouter, modèle et skill versionné par agent, plafond de coût IA visible
-- [ ] Mémoire RAG : ingestion locale du PMBOK 8, citations
+- [x] Mémoire RAG : découpage par section, embeddings locaux, citations, droits par projet (ADR 0004)
+- [ ] Indexation du PMBOK 8 et skills par agent (en attente du PDF)
 - [ ] Garde-fous : politique d'autonomie (config/autonomy.yaml), journal d'audit signé, séparation lecture et action
 - [ ] Benchmark reproductible (3 tâches PMO, au moins 2 modèles via OpenRouter)
 - [ ] CI : lint, types, tests, scan des dépendances et des secrets
@@ -34,6 +36,12 @@ Critère de sortie : validations humaines mesurées et valeur perçue positive.
 - ★ Chat limité au projet courant
 - ★ Configuration sans code : critères et pondérations du sélecteur, niveaux d'autonomie, modèles de projet
 - ★ API publique
+- ◆ Vues de travail : tableau et Kanban
+- ◆ Formulaire de demande de projet, relié au sélecteur
+- ◆ Notifications (courriel, Teams ou Slack) pour les validations en attente
+- ◆ Validation sur mobile
+- ◆ Alertes de coût IA avant le plafond
+- ◆ Budget de performance mesuré en CI
 - Jeu de référence de 10 projets, mesure du taux de modification et de refus
 - Sondage de valeur perçue (5 questions)
 - Tests red team 4 à 7
@@ -51,15 +59,24 @@ Critère de sortie : sélecteur calibré par test sur des projets passés.
 - ★ Agents créés par le PMO, sous garde-fous
 - ★ Serveur MCP
 - ★ Rapports alignés sur les six domaines, valeur et bénéfices
+- ◆ Gantt avec dépendances, chemin critique et ligne de base
+- ◆ Mode simulation des agents avant activation
+- ◆ Modèles d'agents alignés sur le PMBOK
+- ◆ Comptes rendus de réunion : décisions, actions, risques vers la file de validation
+- ◆ Documents de projet générés (charte, statut, clôture), export Word et PDF
 
 ## Phase 3 : échelle
 
 Critère de sortie : indicateurs du PMO en hausse, revue sécurité et juridique faite.
 
 - Connecteurs complets, ★ ouverts aux connecteurs tiers sous le même contrat
+- ◆ Synchronisation bidirectionnelle avec Jira, Azure DevOps, Microsoft Project
 - Portefeuille, catalogue de services, maturité
 - Tableau de bord du PMO (valeur et fiabilité de l'IA)
 - Alerte sur un taux de modification humaine proche de zéro
 - Résilience : mode dégradé, sauvegarde et restauration, plafonds par tâche
+- ◆ Plafonds de coût IA par client
+- ◆ Accès invité en lecture pour le client ou le commanditaire
+- ◆ Authentification unique (SSO) et MFA
 - Exploitation et dossier de revue
 - ★ Grille tarifaire simple en dollars canadiens
