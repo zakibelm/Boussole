@@ -1,0 +1,17 @@
+{% set slug = a.id | replace(".", "-") %}
+<tr class="{{ 'child' if child else '' }}">
+  <td>{{ a.name }}<br><span class="muted">{{ a.id }}</span></td>
+  <td class="model">
+    <input list="models" name="model" value="{{ effective(a.id) }}" aria-label="Modèle de {{ a.name }}"
+           hx-post="/settings/agents/{{ a.id }}/model" hx-trigger="change"
+           hx-target="#status-{{ slug }}" hx-swap="innerHTML">
+  </td>
+  <td><span class="status" id="status-{{ slug }}"></span></td>
+  <td>
+    <button class="link" hx-get="/settings/agents/{{ a.id }}/skill"
+            hx-target="#skill-{{ slug }}" hx-swap="innerHTML">
+      {% set v = skill_version(a.id) %}{{ "Défaut" if v == 0 else "v" ~ v }} · modifier
+    </button>
+  </td>
+</tr>
+<tr class="skill-panel"><td colspan="4" id="skill-{{ slug }}" style="padding:0"></td></tr>

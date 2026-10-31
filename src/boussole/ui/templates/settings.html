@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Paramètres · Boussole{% endblock %}
+{% block content %}
+<h1>Paramètres</h1>
+<p class="lead">Clé OpenRouter, modèle et skill de chaque agent et sous-agent.</p>
+
+<section class="card">
+  <h2>Clé API OpenRouter</h2>
+  <div id="key-section">{% include "_key.html" %}</div>
+</section>
+
+<section class="card">
+  <h2>Budget d'essai</h2>
+  {% set pct = ((spent / cap) * 100) if cap else 0 %}
+  <div class="meter" aria-label="Budget consommé"><span style="width: {{ [pct, 100] | min }}%"></span></div>
+  <p class="muted">{{ "%.2f" | format(spent) }} $ CA dépensés sur {{ "%.2f" | format(cap) }} $ CA.
+    Au plafond, tout appel payant est refusé.</p>
+</section>
+
+<section class="card">
+  <h2>Agents et sous-agents</h2>
+  {% if models_error %}<p class="error">Liste des modèles indisponible : {{ models_error }}</p>
+  {% elif not models %}<p class="muted">Enregistre la clé pour choisir parmi les modèles d'OpenRouter.
+    En attendant, tu peux saisir un identifiant (ex. anthropic/claude-sonnet-5.5).</p>
+  {% else %}<p class="muted">{{ models | length }} modèles disponibles. Prix en $ CA par million de jetons (entrée / sortie).</p>
+  {% endif %}
+
+  <datalist id="models">
+    {% for m in models %}<option value="{{ m.id }}">{{ m.name }} · {{ m.prompt_cad_per_mtok }} / {{ m.completion_cad_per_mtok }} $ CA</option>{% endfor %}
+  </datalist>
+
+  <details>
+    <summary class="muted">Règles communes ajoutées avant chaque skill</summary>
+    <pre class="rules">{{ shared_rules }}</pre>
+  </details>
+
+  {% for group in groups %}
+  <h3>{{ group.name }}</h3>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Agent</th><th>Modèle</th><th></th><th>Skill</th></tr></thead>
+    <tbody>
+    {% for agent in group.agents %}
+      {% with a=agent, child=False %}{% include "_agent_row.html" %}{% endwith %}
+      {% for sub in agent.children %}
+        {% with a=sub, child=True %}{% include "_agent_row.html" %}{% endwith %}
+      {% endfor %}
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  {% endfor %}
+</section>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% set slug = agent_id | replace(".", "-") %}
+<div style="padding: 16px">
+  <div class="row" style="justify-content: space-between">
+    <strong>Skill de {{ agent_name }}</strong>
+    <span class="muted">{{ "Valeur par défaut du catalogue" if skill.version == 0 else "Version " ~ skill.version ~ " · " ~ skill.author }}</span>
+  </div>
+
+  <form hx-post="/settings/agents/{{ agent_id }}/skill" hx-target="#skill-{{ slug }}" hx-swap="innerHTML">
+    <textarea name="text" id="skill-text-{{ slug }}" aria-label="Texte du skill">{{ draft if draft is defined else skill.text }}</textarea>
+    <div class="row" style="margin-top: 8px">
+      <input type="text" name="reason" placeholder="Motif de la modification (facultatif)" style="flex: 1; min-width: 220px">
+      <button class="primary" type="submit">Enregistrer la version</button>
+    </div>
+  </form>
+
+  <form class="row" style="margin-top: 8px" hx-post="/settings/agents/{{ agent_id }}/skill/refine"
+        hx-target="#skill-{{ slug }}" hx-swap="innerHTML" hx-include="#skill-text-{{ slug }}"
+        hx-indicator="#refining-{{ slug }}">
+    <input type="text" name="instruction" value="{{ instruction if instruction is defined else '' }}"
+           placeholder="Consigne pour l'IA (ex. : plus concis, ajoute les seuils d'alerte)" style="flex: 1; min-width: 220px">
+    <button type="submit">✨ Raffiner avec l'IA</button>
+    <span id="refining-{{ slug }}" class="htmx-indicator muted">Raffinement en cours…</span>
+  </form>
+  <p class="muted">Le raffinement fait un appel payant, compté dans le budget d'essai.</p>
+
+  {% if proposal is defined %}
+  <div class="proposal">
+    <strong>Proposition de l'IA</strong> <span class="muted">— rien n'est enregistré tant que tu n'acceptes pas.</span>
+    <form hx-post="/settings/agents/{{ agent_id }}/skill" hx-target="#skill-{{ slug }}" hx-swap="innerHTML">
+      <textarea name="text" aria-label="Skill proposé">{{ proposal }}</textarea>
+      <input type="hidden" name="source" value="ai_refined">
+      <input type="hidden" name="reason" value="Raffiné par l'IA{{ ' : ' ~ instruction if instruction else '' }}">
+      <div class="row" style="margin-top: 8px">
+        <button class="primary" type="submit">Accepter (modifiable avant)</button>
+        <button type="button" hx-get="/settings/agents/{{ agent_id }}/skill" hx-target="#skill-{{ slug }}" hx-swap="innerHTML">Refuser</button>
+      </div>
+    </form>
+  </div>
+  {% endif %}
+
+  {% if notice %}<p class="notice">{{ notice }}</p>{% endif %}
+  {% if error %}<p class="error">{{ error }}</p>{% endif %}
+
+  {% if history %}
+  <details style="margin-top: 12px">
+    <summary class="muted">Historique ({{ history | length }} versions)</summary>
+    <ul class="history">
+      {% for h in history %}
+      <li>v{{ h.version }} · {{ h.source }} · {{ h.author }}{% if h.reason %} · {{ h.reason }}{% endif %}
+        {% if h.version != skill.version %}
+        <button class="link" hx-post="/settings/agents/{{ agent_id }}/skill/revert/{{ h.version }}"
+                hx-target="#skill-{{ slug }}" hx-swap="innerHTML">Revenir à cette version</button>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </details>
+  {% endif %}
+  <div class="row" style="justify-content: flex-end">
+    <button class="link" onclick="this.closest('td').innerHTML = ''">Fermer</button>
+  </div>
+</div>
