@@ -1,6 +1,6 @@
 # ADR 0005 : écarts fonctionnels relevés face à monday.com
 
-- **Statut :** proposé le 2026-10-31, en attente de validation par Zakaria Belmeddah
+- **Statut :** accepté le 2026-10-31 par Zakaria Belmeddah
 - **Date :** 2026-10-31
 
 ## Contexte
@@ -11,7 +11,7 @@ fonctions absentes de Boussole qui aideraient son adoption et sa performance.
 La rétro-ingénierie du service a été écartée : les conditions d'utilisation de
 monday.com l'interdisent, et seules les fonctions offertes comptent pour nous.
 
-## Décision proposée
+## Décision
 
 Ajouter les treize écarts à la feuille de route (marqués ◆), chacun dans la
 phase où il sert le critère de sortie, avec son garde-fou :
