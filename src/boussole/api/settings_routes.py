@@ -9,12 +9,18 @@ from fastapi.templating import Jinja2Templates
 
 from boussole.agents.skill_refiner import refine_skill
 from boussole.api.services import Services
+from boussole.core.enums import Autonomy
 from boussole.platform.llm_gateway.budget import BudgetExceededError
 from boussole.platform.llm_gateway.port import GatewayError, ModelInfo
 from boussole.platform.secrets import OPENROUTER_KEY, mask
 from boussole.platform.settings_store.repository import SkillSource
 
 MODEL_ID = re.compile(r"^[\w.-]+/[\w.:-]+$")
+AUTONOMY_LABELS = {
+    Autonomy.AUTOMATION: "Automatisation",
+    Autonomy.ASSISTANCE: "Assistance",
+    Autonomy.AUGMENTATION: "Augmentation",
+}
 KEY_PREFIX = "sk-or-"
 
 router = APIRouter(prefix="/settings")
@@ -79,6 +85,7 @@ def settings_page(request: Request) -> HTMLResponse:
         spent=services.ledger.total_spent_cad(),
         cap=services.cap_cad,
         shared_rules=services.catalog.shared_rules,
+        autonomy_labels=AUTONOMY_LABELS,
     )
 
 

@@ -29,6 +29,9 @@
     {% for m in models %}<option value="{{ m.id }}">{{ m.name }} · {{ m.prompt_cad_per_mtok }} / {{ m.completion_cad_per_mtok }} $ CA</option>{% endfor %}
   </datalist>
 
+  <p class="muted">Autonomie (annexe X3) : <strong>Automatisation</strong> agit seule sur le faible risque ·
+    <strong>Assistance</strong> produit un brouillon révisé · <strong>Augmentation</strong> conseille, l'humain décide.
+    Plafond fixé par l'architecture.</p>
   <details>
     <summary class="muted">Règles communes ajoutées avant chaque skill</summary>
     <pre class="rules">{{ shared_rules }}</pre>
@@ -38,7 +41,7 @@
   <h3>{{ group.name }}</h3>
   <div class="table-wrap">
   <table>
-    <thead><tr><th>Agent</th><th>Modèle</th><th></th><th>Skill</th></tr></thead>
+    <thead><tr><th>Agent</th><th>Autonomie</th><th>Modèle</th><th></th><th>Skill</th></tr></thead>
     <tbody>
     {% for agent in group.agents %}
       {% with a=agent, child=False %}{% include "_agent_row.html" %}{% endwith %}

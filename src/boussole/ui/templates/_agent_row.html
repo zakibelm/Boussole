@@ -1,6 +1,7 @@
 {% set slug = a.id | replace(".", "-") %}
 <tr class="{{ 'child' if child else '' }}">
   <td>{{ a.name }}<br><span class="muted">{{ a.id }}</span></td>
+  <td><span class="badge badge-{{ a.autonomy.value }}">{{ autonomy_labels[a.autonomy] }}</span></td>
   <td class="model">
     <input list="models" name="model" value="{{ effective(a.id) }}" aria-label="Modèle de {{ a.name }}"
            hx-post="/settings/agents/{{ a.id }}/model" hx-trigger="change"
@@ -14,4 +15,4 @@
     </button>
   </td>
 </tr>
-<tr class="skill-panel"><td colspan="4" id="skill-{{ slug }}" style="padding:0"></td></tr>
+<tr class="skill-panel"><td colspan="5" id="skill-{{ slug }}" style="padding:0"></td></tr>

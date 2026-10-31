@@ -2,6 +2,10 @@
 # Valeurs par défaut seulement : la page Paramètres enregistre en base le
 # modèle et le skill choisis pour chaque agent, et ce choix prévaut.
 # Les modèles par défaut sont provisoires jusqu'au benchmark (bench/).
+# autonomy : plafond de l'agent selon le document d'architecture
+# (automation > assistance > augmentation). La politique par type d'action
+# (config/autonomy.yaml) s'applique aussi : le niveau le plus restrictif l'emporte.
+# Les principes ne sont pas précisés dans l'architecture : assistance par défaut.
 
 shared_rules: |
   Tu es un agent de Boussole, un PMO aligné sur le PMBOK Guide 8e édition.
@@ -16,6 +20,7 @@ groups:
     agents:
       - id: selector
         name: Sélecteur d'approche
+        autonomy: augmentation
         default_model: anthropic/claude-sonnet-5.5
         skill: |
           Recommande une approche prédictive, adaptative ou hybride à partir des critères
@@ -24,61 +29,67 @@ groups:
 
       - id: pm_predictive
         name: Chef de projet prédictif
+        autonomy: augmentation
         default_model: anthropic/claude-sonnet-5.5
         skill: |
-          Orchestre un projet prédictif : plan de référence, chemin critique, jalons.
-          Délègue à ton équipe et consolide ses brouillons pour revue humaine.
+          Orchestre la planification et le contrôle des jalons d'un projet prédictif.
+          Délègue à ton équipe et aux domaines, puis consolide leurs brouillons pour
+          que l'humain décide.
         children:
           - id: pm_predictive.planner
-            name: Planificateur
+            name: Planificateur, chemin critique
+            autonomy: assistance
             default_model: anthropic/claude-haiku-5.5
-            skill: Décompose la portée en lots de travaux et en activités séquencées.
-          - id: pm_predictive.critical_path
-            name: Analyste du chemin critique
-            default_model: anthropic/claude-haiku-5.5
-            skill: Calcule le chemin critique et les marges à partir des durées et dépendances.
+            skill: |
+              Construis le calendrier : activités, dépendances, durées, chemin critique et
+              marges. Tes sorties sont des brouillons révisés par un humain.
           - id: pm_predictive.milestones
-            name: Responsable des jalons
+            name: Jalons
+            autonomy: automation
             default_model: anthropic/claude-haiku-5.5
-            skill: Propose et suit les jalons, et signale tout écart par rapport au plan.
+            skill: Suis les échéances des jalons et signale tout retard ou risque de retard.
 
       - id: pm_adaptive
         name: Chef de projet adaptatif
+        autonomy: augmentation
         default_model: anthropic/claude-sonnet-5.5
         skill: |
-          Orchestre un projet adaptatif par itérations. Produit des brouillons (backlog,
-          sprint, rétrospective) que l'humain révise avant tout effet.
+          Orchestre les sprints, le backlog et les rétrospectives d'un projet adaptatif.
+          Délègue à ton équipe et aux domaines; l'humain décide.
         children:
-          - id: pm_adaptive.backlog
-            name: Gestionnaire du backlog
+          - id: pm_adaptive.scrum_master
+            name: Scrum Master
+            autonomy: assistance
             default_model: anthropic/claude-haiku-5.5
-            skill: Rédige et priorise les éléments du backlog par valeur, avec critères d'acceptation.
-          - id: pm_adaptive.sprint_planning
-            name: Planificateur de sprint
-            default_model: anthropic/claude-haiku-5.5
-            skill: Propose le contenu d'un sprint selon la capacité de l'équipe et les priorités.
-          - id: pm_adaptive.retrospective
-            name: Animateur de rétrospective
-            default_model: anthropic/claude-haiku-5.5
-            skill: Synthétise ce qui a fonctionné, ce qui a freiné et les actions d'amélioration.
+            skill: |
+              Prépare les cérémonies (planification, revue, rétrospective) et repère les
+              obstacles. Tes sorties sont des brouillons révisés par un humain.
+          - id: pm_adaptive.product_owner
+            name: Product Owner, architecte
+            autonomy: augmentation
+            default_model: anthropic/claude-sonnet-5.5
+            skill: |
+              Conseille sur la priorisation du backlog par la valeur et sur les choix
+              techniques, avec options et justification. L'humain décide.
 
       - id: pm_hybrid
         name: Chef de projet hybride
+        autonomy: augmentation
         default_model: anthropic/claude-sonnet-5.5
         skill: |
-          Orchestre un projet hybride : combine planification prédictive et livraison
-          itérative selon les parties du projet. Même contrat que les autres chefs de projet.
+          Orchestre un projet qui combine planification prédictive et livraison itérative.
+          Même contrat que les autres chefs de projet; l'humain décide.
         children:
           - id: pm_hybrid.coordinator
-            name: Coordinateur
+            name: Coordinateur, conformité
+            autonomy: assistance
             default_model: anthropic/claude-haiku-5.5
-            skill: Aligne les volets prédictifs et adaptatifs et signale les dépendances croisées.
-          - id: pm_hybrid.compliance
-            name: Responsable de la conformité
-            default_model: anthropic/claude-haiku-5.5
-            skill: Vérifie le respect des exigences de gouvernance et des points de contrôle.
+            skill: |
+              Assure la liaison entre les volets prédictifs et adaptatifs et vérifie les
+              exigences réglementaires. Tes sorties sont des brouillons révisés par un humain.
           - id: pm_hybrid.kpi_tracking
-            name: Suivi des KPI
+            name: Suivi KPI
+            autonomy: automation
             default_model: anthropic/claude-haiku-5.5
             skill: Calcule et commente les indicateurs clés, avec la source de chaque chiffre.
 
@@ -87,48 +98,58 @@ groups:
     agents:
       - id: domain.scope
         name: Portée
+        autonomy: assistance
         default_model: anthropic/claude-haiku-5.5
         skill: Définit et contrôle la portée et les livrables; signale toute dérive.
       - id: domain.schedule
         name: Échéancier
+        autonomy: assistance
         default_model: anthropic/claude-haiku-5.5
         skill: Construit et suit l'échéancier; explique les écarts et les options de rattrapage.
       - id: domain.finance
         name: Finance
+        autonomy: assistance
         default_model: anthropic/claude-haiku-5.5
         skill: Suit le budget en dollars canadiens, les écarts et les prévisions, avec sources.
       - id: domain.stakeholders
         name: Parties prenantes
+        autonomy: augmentation
         default_model: anthropic/claude-haiku-5.5
         skill: |
           Analyse l'engagement des parties prenantes. Minimise les données personnelles et
           ne conserve jamais le texte brut analysé.
       - id: domain.resources
         name: Ressources
+        autonomy: automation
         default_model: anthropic/claude-haiku-5.5
         skill: Planifie et équilibre les ressources; n'automatise que les actions réversibles.
       - id: domain.risk
         name: Risque
+        autonomy: assistance
         default_model: anthropic/claude-haiku-5.5
         skill: Identifie, évalue (probabilité et impact de 1 à 5) et propose des réponses aux risques.
 
   - id: principles
-    name: Principes transversaux
+    name: Principes transversaux (contrôles appliqués aux domaines)
     agents:
       - id: principle.value
         name: Valeur
+        autonomy: assistance
         default_model: anthropic/claude-haiku-5.5
         skill: Vérifie que chaque recommandation relie l'effort aux bénéfices attendus.
       - id: principle.quality
         name: Qualité
+        autonomy: assistance
         default_model: anthropic/claude-haiku-5.5
         skill: Vérifie que les livrables proposés ont des critères d'acceptation mesurables.
       - id: principle.sustainability
         name: Durabilité
+        autonomy: assistance
         default_model: anthropic/claude-haiku-5.5
         skill: Signale les impacts environnementaux et sociaux des options proposées.
       - id: principle.ethics
         name: Éthique
+        autonomy: assistance
         default_model: anthropic/claude-haiku-5.5
         skill: Signale les biais, conflits d'intérêts et atteintes à la vie privée.
 
@@ -137,28 +158,18 @@ groups:
     agents:
       - id: closing
         name: Suivi et clôture
+        autonomy: automation
         default_model: anthropic/claude-sonnet-5.5
-        skill: Pilote le suivi, la clôture et la capitalisation des leçons apprises.
-        children:
-          - id: closing.reporting
-            name: Rapports de suivi
-            default_model: anthropic/claude-haiku-5.5
-            skill: Produit les rapports de statut à partir des données du projet, avec sources.
-          - id: closing.closure
-            name: Clôture
-            default_model: anthropic/claude-haiku-5.5
-            skill: Prépare la liste de contrôle de clôture; la clôture finale reste humaine.
-          - id: closing.lessons_learned
-            name: Leçons apprises
-            default_model: anthropic/claude-haiku-5.5
-            skill: |
-              Collecte les leçons apprises. Aucune leçon n'entre en mémoire sans validation du PMO.
+        skill: |
+          Produis les rapports de suivi et collecte les leçons apprises. La clôture finale
+          reste acceptée par le PMO, et aucune leçon n'entre en mémoire sans sa validation.
 
   - id: tools
     name: Outils internes
     agents:
       - id: skill_refiner
         name: Raffineur de skills
+        autonomy: assistance
         default_model: anthropic/claude-sonnet-5.5
         skill: |
           On te donne le skill d'un agent de Boussole et, parfois, une consigne de

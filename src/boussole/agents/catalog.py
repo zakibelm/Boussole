@@ -6,10 +6,13 @@ from pathlib import Path
 import yaml
 from pydantic import BaseModel, Field, model_validator
 
+from boussole.core.enums import Autonomy
+
 
 class AgentSpec(BaseModel):
     id: str = Field(pattern=r"^[a-z_]+(\.[a-z_]+)*$")
     name: str
+    autonomy: Autonomy
     default_model: str
     skill: str
     children: list["AgentSpec"] = []

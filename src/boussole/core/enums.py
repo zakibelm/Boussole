@@ -18,6 +18,14 @@ class ActionClass(StrEnum):
     IRREVERSIBLE = "irreversible"
 
 
+class Autonomy(StrEnum):
+    """Niveaux de l'annexe X3, du plus autonome au moins autonome."""
+
+    AUTOMATION = "automation"
+    ASSISTANCE = "assistance"
+    AUGMENTATION = "augmentation"
+
+
 class WorkStatus(StrEnum):
     TODO = "todo"
     IN_PROGRESS = "in_progress"
