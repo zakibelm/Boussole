@@ -87,3 +87,14 @@ def test_dry_run_writes_results(monkeypatch: pytest.MonkeyPatch, tmp_path: Path)
     payload = json.loads(result.read_text(encoding="utf-8"))
     assert set(payload["summary"]) == {"fake/small", "fake/large"}
     assert len(payload["rows"]) == 2 * sum(len(t.items()) for t in TASKS)
+
+
+def test_truncated_or_empty_answers_are_errors_not_zeros() -> None:
+    from boussole.platform.llm_gateway.port import GenerationResult, Usage
+
+    usage = Usage(1, 1, Decimal("0"))
+    truncated = GenerationResult('{"approche": "hyb', "m", usage, finish_reason="length")
+    empty = GenerationResult("", "m", usage, finish_reason="stop")
+    assert "tronquée" in (run._answer_problem(truncated) or "")
+    assert "vide" in (run._answer_problem(empty) or "")
+    assert run._answer_problem(GenerationResult("ok", "m", usage, finish_reason="stop")) is None

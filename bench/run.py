@@ -30,12 +30,18 @@ from boussole.platform.llm_gateway.budget import (
 )
 from boussole.platform.llm_gateway.fake import FakeGateway
 from boussole.platform.llm_gateway.openrouter import OpenRouterGateway
-from boussole.platform.llm_gateway.port import GatewayError, GenerationRequest, LLMGateway, Message
+from boussole.platform.llm_gateway.port import (
+    GatewayError,
+    GenerationRequest,
+    GenerationResult,
+    LLMGateway,
+    Message,
+)
 from boussole.platform.secrets import OPENROUTER_KEY, KeyringSecretStore
 
 RESULTS = Path(__file__).resolve().parent / "results"
 CHARS_PER_TOKEN = 4
-EXPECTED_OUTPUT_SHARE = Decimal("0.6")  # part de max_tokens réellement générée (estimation)
+EXPECTED_OUTPUT_SHARE = Decimal("0.5")  # part de max_tokens générée, raisonnement compris (prudent)
 TIE_MARGIN = 0.05
 
 
@@ -80,9 +86,21 @@ def _run_item(
         elapsed = time.perf_counter() - started
         return Row(model, task.name, str(item["id"]), 0.0, "0", round(elapsed, 3), "", str(exc))
     elapsed = time.perf_counter() - started
-    score = task.score(item, result.text)
+    error = _answer_problem(result)
+    score = 0.0 if error else task.score(item, result.text)
     cost = str(result.usage.cost_cad)
-    return Row(model, task.name, str(item["id"]), score, cost, round(elapsed, 3), result.text, None)
+    return Row(
+        model, task.name, str(item["id"]), score, cost, round(elapsed, 3), result.text, error
+    )
+
+
+def _answer_problem(result: GenerationResult) -> str | None:
+    """Une réponse tronquée ou vide est une erreur signalée, pas un simple zéro."""
+    if result.truncated:
+        return "réponse tronquée (limite de jetons atteinte, raisonnement compris)"
+    if not result.text.strip():
+        return f"réponse vide (fin : {result.finish_reason})"
+    return None
 
 
 def summarize(rows: list[Row]) -> dict[str, dict[str, float]]:

@@ -56,3 +56,8 @@ def test_budget_refuses_calls_once_cap_is_reached() -> None:
     with pytest.raises(BudgetExceededError, match="Budget d'essai atteint"):
         gateway.generate(REQUEST)
     assert len(ledger.entries) == 1
+
+
+def test_finish_reason_is_reported() -> None:
+    result = _openrouter().generate(REQUEST)
+    assert result.finish_reason == "stop" and not result.truncated

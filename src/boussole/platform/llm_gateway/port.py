@@ -50,6 +50,11 @@ class GenerationResult:
     usage: Usage
     parsed: dict[str, Any] | None = None
     tool_calls: tuple[ToolCall, ...] = field(default=())
+    finish_reason: str | None = None  # « length » : réponse tronquée par la limite de jetons
+
+    @property
+    def truncated(self) -> bool:
+        return self.finish_reason == "length"
 
 
 @dataclass(frozen=True)

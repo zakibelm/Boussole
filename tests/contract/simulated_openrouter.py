@@ -19,7 +19,8 @@ def _chat(payload: dict[str, Any]) -> dict[str, Any]:
             {"type": "function", "function": {"name": name, "arguments": "{}"}}
         ]
     usage = {"prompt_tokens": 10, "completion_tokens": 5, "cost": COST_USD}
-    return {"model": payload["model"], "choices": [{"message": message}], "usage": usage}
+    choice = {"message": message, "finish_reason": "stop"}
+    return {"model": payload["model"], "choices": [choice], "usage": usage}
 
 
 def _embeddings(payload: dict[str, Any]) -> dict[str, Any]:

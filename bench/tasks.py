@@ -14,6 +14,8 @@ from typing import Any
 
 DATASETS = Path(__file__).resolve().parent / "datasets"
 MAX_STATUS_WORDS = 150
+# Les modèles à raisonnement consomment cette limite avant d'écrire leur réponse.
+REASONING_ROOM = 4000
 
 APPROACHES = {
     "predictive": "predictive",
@@ -135,7 +137,7 @@ def _approach_score(item: dict[str, Any], answer: str) -> float:
 
 
 TASKS = (
-    Task("status", "closing", _status_prompt, _status_score, max_tokens=400),
-    Task("risks", "domain.risk", _risks_prompt, _risks_score, max_tokens=900),
-    Task("approach", "selector", _approach_prompt, _approach_score, max_tokens=400),
+    Task("status", "closing", _status_prompt, _status_score, max_tokens=REASONING_ROOM),
+    Task("risks", "domain.risk", _risks_prompt, _risks_score, max_tokens=REASONING_ROOM),
+    Task("approach", "selector", _approach_prompt, _approach_score, max_tokens=REASONING_ROOM),
 )

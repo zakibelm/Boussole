@@ -38,13 +38,14 @@ class OpenRouterGateway:
 
     def generate(self, request: GenerationRequest) -> GenerationResult:
         body = self._post("/chat/completions", _chat_body(request))
-        message = body["choices"][0]["message"]
+        choice = body["choices"][0]
+        message = choice["message"]
         text = message.get("content") or ""
         parsed = json.loads(text) if request.response_schema is not None and text else None
         calls = tuple(_tool_call(c) for c in message.get("tool_calls") or ())
-        return GenerationResult(
-            text, body.get("model", request.model), self._usage(body), parsed, calls
-        )
+        model = body.get("model", request.model)
+        finish = choice.get("finish_reason")
+        return GenerationResult(text, model, self._usage(body), parsed, calls, finish)
 
     def embed(self, model: str, texts: tuple[str, ...]) -> EmbeddingResult:
         body = self._post("/embeddings", {"model": model, "input": list(texts)})

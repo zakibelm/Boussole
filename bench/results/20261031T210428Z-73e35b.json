@@ -1,0 +1,1073 @@
+{
+  "run_at": "20261031T210428Z",
+  "label": "73e35b",
+  "tasks": {
+    "status": {
+      "agent": "closing",
+      "items": 5
+    },
+    "risks": {
+      "agent": "domain.risk",
+      "items": 5
+    },
+    "approach": {
+      "agent": "selector",
+      "items": 10
+    }
+  },
+  "summary": {
+    "anthropic/claude-haiku-5.5": {
+      "status": 0.55,
+      "risks": 0.6,
+      "approach": 0.0,
+      "global": 0.2875,
+      "cost_cad": 0.00825,
+      "latency_mean_s": 3.04265,
+      "latency_p95_s": 4.593,
+      "errors": 0.0
+    },
+    "anthropic/claude-sonnet-5.5": {
+      "status": 0.4,
+      "risks": 0.4,
+      "approach": 0.0,
+      "global": 0.2,
+      "cost_cad": 0.168591,
+      "latency_mean_s": 5.48215,
+      "latency_p95_s": 6.94,
+      "errors": 0.0
+    },
+    "google/gemini-3.8-flash": {
+      "status": 0.0,
+      "risks": 0.8,
+      "approach": 0.0,
+      "global": 0.2,
+      "cost_cad": 0.058772,
+      "latency_mean_s": 5.5958,
+      "latency_p95_s": 11.902,
+      "errors": 0.0
+    },
+    "mistralai/mistral-large-4-0": {
+      "status": 0.0,
+      "risks": 0.0,
+      "approach": 0.0,
+      "global": 0.0,
+      "cost_cad": 0.036453,
+      "latency_mean_s": 4.9506,
+      "latency_p95_s": 10.956,
+      "errors": 0.0
+    },
+    "openai/gpt-5.6-luna": {
+      "status": 1.0,
+      "risks": 1.0,
+      "approach": 0.9,
+      "global": 0.95,
+      "cost_cad": 0.010554,
+      "latency_mean_s": 3.4960499999999994,
+      "latency_p95_s": 4.417,
+      "errors": 0.0
+    }
+  },
+  "recommended_default": "openai/gpt-5.6-luna",
+  "rows": [
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "status",
+      "item": "s01",
+      "score": 0.0,
+      "cost_cad": "0.006980",
+      "latency_s": 6.629,
+      "answer": "",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "status",
+      "item": "s02",
+      "score": 0.5,
+      "cost_cad": "0.006877",
+      "latency_s": 4.477,
+      "answer": "**Rénovation de l'école Saint-Jean : statut pour la direction**\n\n- **Avancement :** la charpente est terminée et la toiture est à 70 %.\n- **Budget :** respecté « à 2 % près ». Les notes ne précisent pas si l'écart est un dépassement ou une économie, ni son montant en dollars.\n- **Échéancier :** l'échéance de",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "status",
+      "item": "s03",
+      "score": 0.0,
+      "cost_cad": "0.006843",
+      "latency_s": 4.784,
+      "answer": "",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "status",
+      "item": "s04",
+      "score": 0.5,
+      "cost_cad": "0.006840",
+      "latency_s": 3.905,
+      "answer": "**Projet Aurora : statut pour la direction** (source : notes fournies, aucune autre source en mémoire)\n\n- **Avancement** : les précommandes dépassent la prévision de 40 %. La demande est donc forte, mais les notes ne donnent pas l'état d'avancement des livrables.\n- **Budget** : non documenté dans les notes. Aucun chiffre n'est avancé, et l'impact financier des options reste à évalu",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "status",
+      "item": "s05",
+      "score": 1.0,
+      "cost_cad": "0.006874",
+      "latency_s": 4.649,
+      "answer": "**Statut ERP, phase finance (source : notes fournies)**\n\n- **Avancement** : les tests d'acceptation sont réussis à 92 %. Les 8 % restants portent sur la consolidation multidevise.\n- **Budget** : attendre le consultant expert coûterait environ 25 000 $ (estimation des notes). Les notes ne donnent ni budget de référence ni coût d'un consultant de remplacement, donc je ne peux pas évaluer l'écart.\n- **Échéancier** : la consolidation multidevise bloque la mise en production. Le consultant expert n'est disponible que dans 3 semaines, ce qui lais",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "risks",
+      "item": "r01",
+      "score": 0.0,
+      "cost_cad": "0.013782",
+      "latency_s": 6.94,
+      "answer": "```json\n[\n  {\n    \"titre\": \"Retard de livraison des serveurs\",\n    \"description\": \"Le fournisseur annonce six semaines au lieu de deux (+4 semaines, selon le compte rendu du 14 octobre). Les jalons qui dépendent des serveurs risquent de glisser. Probabilité et impact : estimation, aucune source en mémoire.\",\n    \"probabilite\": 5,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Dépendance à une personne clé : administratrice de bases de données\",\n    \"description\": \"Seule administratrice de bases de données, elle part en congé parental en décembre, et personne d'autre ne connaît la migration (compte rendu du 14 octobre). Risque de blocage ou d'erreurs sur la migration. Probabilité et impact : estimation, aucune source en mémoire.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Dérive du périmètre : deux nouveaux rapports sans révision du budget\",\n    \"description\": \"Le client a demandé deux rapports supplémentaires sans révision du budget (compte rendu du 14 octobre). Risque de dépassement de coûts et de charge, ou de conflit sur le périmètre, si la demande n'est pas traitée par le contrôle des changements. Probabilité et impact : estimation, aucune source en mémoire.\",\n    \"probabilite\": 4,\n    \"impact\": 3\n  }",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "risks",
+      "item": "r02",
+      "score": 1.0,
+      "cost_cad": "0.013423",
+      "latency_s": 6.712,
+      "answer": "```json\n[\n  {\n    \"titre\": \"Intempéries pendant le coulage des fondations\",\n    \"description\": \"Trois semaines de pluie sont prévues pendant le coulage (source : texte fourni). Cela peut retarder le calendrier et dégrader la qualité du béton. Probabilité et impact sont des estimations, sans source en mémoire, à valider par l'humain.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Dépassement de coût lié à la hausse du prix de l'acier\",\n    \"description\": \"Le prix de l'acier a augmenté de 18 % depuis la soumission (source : texte fourni). Cela fait craindre un dépassement budgétaire et un écart avec les prix contractuels. Une hausse supplémentaire reste possible. Le texte ne donne pas la part de l'acier dans le budget, donc l'impact est estimé, sans source en mémoire.\",\n    \"probabilite\": 4,\n    \"impact\": 3\n  },\n  {\n    \"titre\": \"Date de visite de l'inspecteur municipal non confirmée\",\n    \"description\": \"La visite conditionne la suite des travaux et n'est pas confirmée (source : texte fourni). Cela peut bloquer des activités successeures et créer un retard sur le chemin critique. Probabilité et impact sont des estimations, sans source en mémoire, à valider par l'humain.\",\n    \"probabilite\": 3,\n    \"impact\": 4\n  }\n]\n```",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "risks",
+      "item": "r03",
+      "score": 0.0,
+      "cost_cad": "0.013810",
+      "latency_s": 7.297,
+      "answer": "[\n  {\n    \"titre\": \"Baisse de capacité de livraison de l'équipe\",\n    \"description\": \"La vélocité a baissé de 30 % depuis la réaffectation de deux développeurs (source : texte fourni). Le risque est un retard sur le périmètre et les jalons si la capacité n'est pas rétablie. Le phénomène est déjà observé. Cotation = jugement, aucune source en mémoire.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Incompatibilité de l'intégration avec la nouvelle version de l'API de paiement\",\n    \"description\": \"L'API du partenaire change de version le mois prochain et l'intégration n'est pas testée sur cette version (source : texte fourni). Cela peut entraîner des échecs de paiement ou une rupture de service à la bascule. L'impact est aggravé par la capacité réduite de l'équipe. Cotation = jugement, aucune source en mémoire.\",\n    \"probabilite\": 4,\n    \"impact\": 5\n  },\n  {\n    \"titre\": \"Dégradation de l'expérience et de l'adoption due aux lenteurs de connexion\",\n    \"description\": \"Les utilisateurs pilotes signalent des lenteurs à chaque connexion (source : texte fourni). Cela peut nuire à l'adhésion, à la validation du pilote et à la qualité perçue. La cause n'est pas identifiée dans le texte. Cotation = jug",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "risks",
+      "item": "r04",
+      "score": 1.0,
+      "cost_cad": "0.010413",
+      "latency_s": 5.388,
+      "answer": "```json\n[\n  {\n    \"titre\": \"Départ du commanditaire principal sans successeur nommé\",\n    \"description\": \"Le commanditaire quitte l'entreprise à la fin du trimestre et son remplaçant n'est pas nommé (source : notes du comité directeur). Risque de vacance de gouvernance, de retards de décision, d'arbitrages et de financement, et de perte de soutien au projet. Cotation estimée par l'agent, sans source en mémoire.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Hébergement de données personnelles aux États-Unis non évalué au regard de la Loi 25\",\n    \"description\": \"Les données personnelles des clients seront hébergées aux États-Unis et le service juridique n'a pas encore évalué la conformité à la Loi 25 (source : notes du comité directeur). Risque de non-conformité, de sanctions, d'atteinte à la réputation et de reprise de l'architecture d'hébergement. Aucune source en mémoire sur les exigences précises. Cotation estimée par l'agent.\",\n    \"probabilite\": 3,\n    \"impact\": 5\n  }\n]\n```",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "risks",
+      "item": "r05",
+      "score": 0.0,
+      "cost_cad": "0.013712",
+      "latency_s": 6.84,
+      "answer": "```json\n[\n  {\n    \"titre\": \"Conflit de calendrier avec la clôture financière annuelle\",\n    \"description\": \"La formation de 300 employés est planifiée la même semaine que la clôture financière. Les employés (notamment ceux de la finance) risquent d'être indisponibles ou de privilégier la clôture, ce qui ferait baisser la participation et retarderait la clôture ou la formation. Réponse proposée (à valider par l'humain) : décaler la formation ou l'échelonner en cohortes, en excluant les équipes finance de cette semaine. Cotation : jugement d'analyste, sans source en mémoire.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Capacité non éprouvée du logiciel de formation en ligne\",\n    \"description\": \"Le logiciel n'a jamais été utilisé à cette échelle. Des lenteurs, des pannes ou des problèmes d'accès simultané pourraient perturber la formation de 300 personnes. Réponse proposée (à valider par l'humain) : test de charge préalable, confirmation écrite de la capacité par le fournisseur, sessions échelonnées et plan de repli (formation en présentiel ou en différé). Cotation : jugement d'analyste, sans source en mémoire.\",\n    \"probabilite\": 3,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Contestation syndicale des changements d'horaire\",\n    \"description\": \"Le syndicat exige d'être consulté avant tout changement d'horaire. Si la formation exige des ajustements d'horaire sans consultation préalable, cela peut entraîner un grief, un blocage ",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "approach",
+      "item": "a01",
+      "score": 0.0,
+      "cost_cad": "0.006899",
+      "latency_s": 4.472,
+      "answer": "```json\n{\n  \"approche\": \"predictive\",\n  \"justification\": \"Livrables : plans approuvés par la ville, exigences stables et coût de changement très élevé après le coulage du béton, donc portée définissable à l'avance et peu d'itération possible (sign",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "approach",
+      "item": "a02",
+      "score": 0.0,
+      "cost_cad": "0.006913",
+      "latency_s": 6.113,
+      "answer": "```json\n{\n  \"approche\": \"adaptive\",\n  \"justification\": \"Les trois groupes de critères convergent vers l'adaptatif, donc pas de raison de passer à l'hybride. (1) Livrables : les fonctions sont à découvrir avec",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "approach",
+      "item": "a03",
+      "score": 0.0,
+      "cost_cad": "0.006905",
+      "latency_s": 4.332,
+      "answer": "```json\n{\n  \"approche\": \"hybrid\",\n  \"justification\": \"Les signaux divergent, donc hybride. (1) Livrables : le paramétrage réglementaire",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "approach",
+      "item": "a04",
+      "score": 0.0,
+      "cost_cad": "0.006922",
+      "latency_s": 5.014,
+      "answer": "```json\n{\n  \"approche\": \"predictive\",\n  \"justification\": \"Les trois familles de critères (PMBOK 4.3) convergent vers le prédictif, donc l'hybride n'est pas nécessaire. (1)",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "approach",
+      "item": "a05",
+      "score": 0.0,
+      "cost_cad": "0.006902",
+      "latency_s": 5.394,
+      "answer": "```json\n{\n  \"approche\": \"adaptive\",\n  \"justification\": \"Livrables : la portée très instable et la forte innovation (prototype d'IA conversationnelle) demandent des exigences évolut",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "approach",
+      "item": "a06",
+      "score": 0.0,
+      "cost_cad": "0.006913",
+      "latency_s": 4.436,
+      "answer": "```json\n{\n  \"approche\": \"hybrid\",\n  \"justification\": \"Les signaux divergent, donc hybride. Livrables : l'usine et la chaîne logistique sont tangibles, coûteuses à modifier et à périmètre stable, ce qui favorise le prédictif. L'emballage, le site web et la campagne marketing sont validés par des tests clients et évoluent par itérations, ce qui favorise l'adaptatif. Projet : les jalons fermes et les longs délais d'",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "approach",
+      "item": "a07",
+      "score": 0.0,
+      "cost_cad": "0.006908",
+      "latency_s": 4.346,
+      "answer": "{\"approche\": \"predictive\", \"justification\": \"Les trois critères de la section 4.3 convergent, il n'y a donc aucun signal divergent justifiant l'hybride. (1) Livrables : l'inventaire complet est connu et les dépendances techniques, nombreuses mais documentées, sont stables et définissables d'avance, ce qui favorise le préd",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "approach",
+      "item": "a08",
+      "score": 0.0,
+      "cost_cad": "0.006899",
+      "latency_s": 6.285,
+      "answer": "```json\n{\n  \"approche\": \"adaptive\",\n  \"justification\": \"Livrables : les besoins sont flous, les utilisateurs veulent tester tôt et leurs commentaires font évoluer les priorités. Cela favorise une livraison incr",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "approach",
+      "item": "a09",
+      "score": 0.0,
+      "cost_cad": "0.006924",
+      "latency_s": 5.963,
+      "answer": "```json\n{\n  \"approche\": \"hybrid\",\n  \"justification\": \"Source : aucune source de la mémoire n'a été fournie pour cette demande. Les trois critères du PMBOK 4.3 s",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "approach",
+      "item": "a10",
+      "score": 0.0,
+      "cost_cad": "0.006852",
+      "latency_s": 5.667,
+      "answer": "```json\n{\n  \"approche\": \"predictive\",\n  \"justification\": \"Livrables : 200 bornes identiques, spécifications gelées et cahier des charges signé, donc exigences stables et peu d'incertitude (critère favorable au prédictif). Projet : certification électr",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "status",
+      "item": "s01",
+      "score": 0.0,
+      "cost_cad": "0.000349",
+      "latency_s": 2.753,
+      "answer": "",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "status",
+      "item": "s02",
+      "score": 0.75,
+      "cost_cad": "0.000344",
+      "latency_s": 2.862,
+      "answer": "- **Avancement :** charpente terminée, toiture à 70 %.\n- **Budget :** respecté, à 2 % près (écart à confirmer selon le sens de la variation).\n- **Échéancier :** rentrée de janvier maintenue, sous réserve des résultats de l'expertise sur l'aile B.\n- **Problèmes :** infiltration d'eau découverte dans l'aile B ; expertise demandée, résultats non disponibles. Risque structurel non écarté à ce stade.\n-",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "status",
+      "item": "s03",
+      "score": 0.75,
+      "cost_cad": "0.000342",
+      "latency_s": 2.547,
+      "answer": "- **Avancement :** MFA déployée sur 85 % des comptes. Objectif : 100 % au 30 novembre. Aucun incident de sécurité ce mois-ci.\n- **Budget :** Non précisé dans les notes. Le coût de remplacement des trois applications incompatibles est estimé à 120 000 $.\n- **Échéancier :** Déploiement complet visé pour le ",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "status",
+      "item": "s04",
+      "score": 0.5,
+      "cost_cad": "0.000342",
+      "latency_s": 2.374,
+      "answer": "- **Avancement** : Non précisé dans les notes. Aucun pourcentage d'avancement ni jalon atteint n'est fourni.\n- **Budget** : Non précisé dans les notes. Aucun écart budgétaire n'est chiffré.\n- **Échéancier** : Le marketing vise toujours le lancement du 1er décembre. La capacité de production du premier mois est de 8 ",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "status",
+      "item": "s05",
+      "score": 0.75,
+      "cost_cad": "0.000344",
+      "latency_s": 2.635,
+      "answer": "- **Avancement :** Les tests d'acceptation de la phase finance sont réussis à 92 %.\n- **Budget :** Attendre le consultant expert coûte environ 25 000 $ (estimation fournie dans les notes de statut). Le budget total du projet n'est pas indiqué ; je",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "risks",
+      "item": "r01",
+      "score": 0.0,
+      "cost_cad": "0.000689",
+      "latency_s": 5.386,
+      "answer": "```json\n[\n  {\n    \"titre\": \"Retard de livraison des serveurs\",\n    \"description\": \"Le fournisseur annonce six semaines de délai au lieu de deux, ce qui décale le calendrier des jalons dépendants du matériel. Réponse proposée : replanifier les jalons, avancer la commande, et évaluer un fournisseur alternatif.\",\n    \"probabilite\": 5,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Départ",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "risks",
+      "item": "r02",
+      "score": 1.0,
+      "cost_cad": "0.000574",
+      "latency_s": 3.61,
+      "answer": "```json\n[\n  {\n    \"titre\": \"Pluie prolongée pendant le coulage des fondations\",\n    \"description\": \"Les prévisions annoncent trois semaines de pluie pendant le coulage des fondations, ce qui peut compromettre la qualité du béton et retarder les travaux.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Hausse du prix de l'acier\",\n    \"description\": \"Le prix de l'acier a augmenté de 18 % depuis la soumission, ce qui peut dépasser le budget prévu pour les travaux.\",\n    \"probabilite\": 5,\n    \"impact\": 3\n  },\n  {\n    \"titre\": \"Date de visite de l'inspecteur municipal non confirmée\",\n    \"description\": \"L'inspecteur municipal n'a pas encore confirmé sa date de visite. Cette visite conditionne la suite des travaux, donc un retard de confirmation peut bloquer le calendrier.\",\n    \"probabilite\": 3,\n    \"impact\": 4\n  }\n]\n```",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "risks",
+      "item": "r03",
+      "score": 1.0,
+      "cost_cad": "0.000594",
+      "latency_s": 3.994,
+      "answer": "```json\n[\n  {\n    \"titre\": \"Baisse de vélocité après réaffectation de développeurs\",\n    \"description\": \"Deux développeurs ont été réaffectés à un autre projet, et la vélocité a baissé de 30 % depuis le Sprint 6. Le risque est que la capacité réduite retarde les livrables du projet.\",\n    \"probabilite\": 5,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Incompatibilité avec la nouvelle version de l'API du partenaire de paiement\",\n    \"description\": \"L'API du partenaire de paiement change de version le mois prochain, et l'intégration n'est pas testée sur cette nouvelle version. Le risque est une panne ou un dysfonctionnement des paiements à la bascule.\",\n    \"probabilite\": 4,\n    \"impact\": 5\n  },\n  {\n    \"titre\": \"Lenteurs de connexion signalées par les utilisateurs pilotes\",\n    \"description\": \"Les utilisateurs pilotes se plaignent de lenteurs à chaque connexion. Le risque est une dégradation de l'adoption et de la satisfaction pendant la phase pilote.\",\n    \"probabilite\": 5,\n    \"impact\": 3\n  }\n]\n```",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "risks",
+      "item": "r04",
+      "score": 1.0,
+      "cost_cad": "0.000534",
+      "latency_s": 3.961,
+      "answer": "```json\n[\n  {\n    \"titre\": \"Départ du commanditaire principal sans remplaçant\",\n    \"description\": \"Le commanditaire principal quitte l'entreprise à la fin du trimestre et son remplaçant n'est pas nommé, ce qui crée un vide de décision et de parrainage pour le projet.\",\n    \"probabilite\": 5,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Non-conformité à la Loi 25 pour l'hébergement aux États-Unis\",\n    \"description\": \"Les données personnelles des clients seront hébergées aux États-Unis sans évaluation juridique préalable au regard de la Loi 25, ce qui expose l'organisation à un risque de non-conformité en matière de protection des renseignements personnels.\",\n    \"probabilite\": 3,\n    \"impact\": 5\n  }\n]\n```",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "risks",
+      "item": "r05",
+      "score": 0.0,
+      "cost_cad": "0.000686",
+      "latency_s": 4.593,
+      "answer": "```json\n[\n  {\n    \"titre\": \"Conflit de calendrier avec la clôture financière\",\n    \"description\": \"La formation de 300 employés est planifiée la même semaine que la clôture financière annuelle. Les mêmes équipes risquent d'être sollicitées simultanément, ce qui peut réduire leur disponibilité, ralentir la clôture ou dégrader la qualité de la formation.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Capacité du logiciel de formation non éprouvée à grande échelle\",\n    \"description\": \"Le logiciel de formation en ligne n'a jamais été utilisé pour 300 utilisateurs simultanés. Risques de saturation, de panne, de lenteur ou de mauvaise expérience utilisateur pendant la session.\",\n    \"probabilite\": 3,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Non-respect de l'obligation de consultation syndicale\",\n    \"description\": \"Le syndicat demande à être consulté avant tout changement d'horaire. Si le calendrier doit être ajusté pour résoudre le conflit avec la clôture, un changement sans consultation préalable peut entraîner un grief, un retard ou une tension sociale.\",",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "approach",
+      "item": "a01",
+      "score": 0.0,
+      "cost_cad": "0.000345",
+      "latency_s": 2.54,
+      "answer": "",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "approach",
+      "item": "a02",
+      "score": 0.0,
+      "cost_cad": "0.000346",
+      "latency_s": 2.424,
+      "answer": "",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "approach",
+      "item": "a03",
+      "score": 0.0,
+      "cost_cad": "0.000345",
+      "latency_s": 2.719,
+      "answer": "{\"approche\": \"hybrid\", \"justification\": \"Signaux divergents, donc approche hybride. Livrables : le paramétrage réglementaire et la migration des données sont définis par la loi, avec des échéances fixes, ce qui favorise le prédictif ; les tableaux de",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "approach",
+      "item": "a04",
+      "score": 0.0,
+      "cost_cad": "0.000346",
+      "latency_s": 2.653,
+      "answer": "",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "approach",
+      "item": "a05",
+      "score": 0.0,
+      "cost_cad": "0.000345",
+      "latency_s": 2.636,
+      "answer": "",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "approach",
+      "item": "a06",
+      "score": 0.0,
+      "cost_cad": "0.000346",
+      "latency_s": 2.743,
+      "answer": "",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "approach",
+      "item": "a07",
+      "score": 0.0,
+      "cost_cad": "0.000345",
+      "latency_s": 2.478,
+      "answer": "{\"approche\": \"predictive\", \"justification\": \"Critère livrables (PMBOK 4.3) : inventaire complet connu, dépendances techniques nombreuses mais documentées, livrables stables et bien définis, donc favorables au prédictif. Critère projet :",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "approach",
+      "item": "a08",
+      "score": 0.0,
+      "cost_cad": "0.000345",
+      "latency_s": 2.754,
+      "answer": "",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "approach",
+      "item": "a09",
+      "score": 0.0,
+      "cost_cad": "0.000346",
+      "latency_s": 2.538,
+      "answer": "",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "approach",
+      "item": "a10",
+      "score": 0.0,
+      "cost_cad": "0.000343",
+      "latency_s": 2.653,
+      "answer": "",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "status",
+      "item": "s01",
+      "score": 0.0,
+      "cost_cad": "0.002414",
+      "latency_s": 3.29,
+      "answer": "Voici le résumé du statut du projet (source : notes fournies) :\n\n",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "status",
+      "item": "s02",
+      "score": 0.0,
+      "cost_cad": "0.002380",
+      "latency_s": 4.883,
+      "answer": "Voici le résumé du statut du projet pour la direction :",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "status",
+      "item": "s03",
+      "score": 0.0,
+      "cost_cad": "0.002370",
+      "latency_s": 4.368,
+      "answer": "Voici le résumé du statut du projet pour la",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "status",
+      "item": "s04",
+      "score": 0.0,
+      "cost_cad": "0.002377",
+      "latency_s": 4.105,
+      "answer": " attendue* : Arbitrage de la direction sur le schéma de distribution : val",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "status",
+      "item": "s05",
+      "score": 0.0,
+      "cost_cad": "0.002384",
+      "latency_s": 3.765,
+      "answer": "Voici le résumé du statut du projet pour la direction :\n\n* **Avancement",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "risks",
+      "item": "r01",
+      "score": 1.0,
+      "cost_cad": "0.004168",
+      "latency_s": 5.829,
+      "answer": "[\n  {\n    \"titre\": \"Retard de livraison des serveurs\",\n    \"description\": \"Le fournisseur annonce un délai de livraison de six semaines au lieu de deux, ce qui engendre un décalage potentiel sur les activités dépendantes du matériel.\",\n    \"probabilite\": 5,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Indisponibilité d'une compétence clé pour la migration\",\n    \"description\": \"L'unique administratrice de bases de données part en congé parental en décembre sans qu'aucun autre membre de l'équipe ne maîtrise la migration.\",\n    \"probabilite\": 5,\n    \"impact\": 5\n  },\n  {\n    \"titre\": \"Dérive du périmètre (Scope Creep) sans ajustement budgétaire\",\n    \"description\": \"Le client a requis l'ajout de deux nouveaux rapports sans revalorisation correspondante du budget du projet.\",\n    \"probabilite\": 5,\n    \"impact\": 3\n  }\n]",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "risks",
+      "item": "r02",
+      "score": 1.0,
+      "cost_cad": "0.004271",
+      "latency_s": 8.781,
+      "answer": "[\n  {\n    \"titre\": \"Retard et défauts de qualité dus aux intempéries (fondations)\",\n    \"description\": \"Prévisions de trois semaines de pluie continue pendant la phase critique de coulage des fondations, risquant de bloquer le chantier ou d'altérer la prise du béton.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Dépassement du budget lié à l'inflation de l'acier\",\n    \"description\": \"Hausse constatée de 18 % du coût de l'acier par rapport aux estimations initiales de la soumission, entraînant un risque de surcoût direct sur les approvisionnements.\",\n    \"probabilite\": 5,\n    \"impact\": 3\n  },\n  {\n    \"titre\": \"Arrêt des travaux par absence d'inspection municipale\",\n    \"description\": \"Défaut de confirmation de la date de visite de l'inspecteur municipal, constituant un point de blocage administratif pour le démarrage des phases subséquentes.\",\n    \"probabilite\": 3,\n    \"impact\": 4\n  }\n]",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "risks",
+      "item": "r03",
+      "score": 1.0,
+      "cost_cad": "0.004840",
+      "latency_s": 5.436,
+      "answer": "[\n  {\n    \"titre\": \"Retard sur les livrables par manque de capacité de l'équipe\",\n    \"description\": \"La réaffectation de deux développeurs a réduit la vélocité de 30 %, risquant de compromettre le respect des échéances et du périmètre des prochains sprints.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Dysfonctionnement du module de paiement suite à la montée de version de l'API\",\n    \"description\": \"L'API du partenaire de paiement change le mois prochain sans tests préalables sur notre intégration, ce qui peut bloquer les transactions financières.\",\n    \"probabilite\": 4,\n    \"impact\": 5\n  },\n  {\n    \"titre\": \"Rejet de la solution dû aux problèmes de performance d'authentification\",\n    \"description\": \"Les lenteurs récurrentes à la connexion signalées par les utilisateurs pilotes peuvent dégrader la satisfaction utilisateur et compromettre l'adoption du produit.\",\n    \"probabilite\": 4,\n    \"impact\": 3\n  }\n]",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "risks",
+      "item": "r04",
+      "score": 1.0,
+      "cost_cad": "0.004717",
+      "latency_s": 6.664,
+      "answer": "[\n  {\n    \"titre\": \"Perte de gouvernance liée au départ du commanditaire\",\n    \"description\": \"Le commanditaire principal quitte l'entreprise sans remplaçant nommé, ce qui risque de créer un vide décisionnel, un désalignement stratégique ou un retard dans les approbations clés.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Non-conformité réglementaire (Loi 25) pour hébergement transfrontalier\",\n    \"description\": \"L'hébergement de données personnelles de clients aux États-Unis sans validation juridique préalable risque d'enfreindre la Loi 25 (Québec), entraînant des sanctions financières, des litiges ou l'arrêt des déploiements.\",\n    \"probabilite\": 4,\n    \"impact\": 5\n  }\n]",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "risks",
+      "item": "r05",
+      "score": 0.0,
+      "cost_cad": "0.004970",
+      "latency_s": 11.902,
+      "answer": "[\n  {\n    \"titre\": \"Conflit de disponibilité avec la clôture financière annuelle\",\n    \"description\": \"La concomitance de la formation de 300 employés et de la clôture annuelle risque d'engendrer un fort taux d'absentéisme à la formation ou des retards dans les opérations comptables critiques.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Défaut de montée en charge de la plateforme de formation\",\n    \"description\": \"L'outil de formation en ligne n'ayant jamais été testé à l'échelle de 300 utilisateurs simultanés, un risque d'instabilité, de",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "approach",
+      "item": "a01",
+      "score": 0.0,
+      "cost_cad": "0.002392",
+      "latency_s": 5.016,
+      "answer": "{\n  \"approche\": \"predictive\",\n  \"justification\": \"Tous les critères du PMBOK convergent vers une approche prédictive : 1) Livrables : portée tangible et définie, plans validés,",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "approach",
+      "item": "a02",
+      "score": 0.0,
+      "cost_cad": "0.002382",
+      "latency_s": 3.837,
+      "answer": "{\n  \"approche\": \"adaptive\",\n  ",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "approach",
+      "item": "a03",
+      "score": 0.0,
+      "cost_cad": "0.002396",
+      "latency_s": 3.418,
+      "answer": "```json\n{\n  \"approche\": \"hybrid\",\n  \"",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "approach",
+      "item": "a04",
+      "score": 0.0,
+      "cost_cad": "0.002390",
+      "latency_s": 4.996,
+      "answer": "```json\n{\n  \"approche\": \"predictive",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "approach",
+      "item": "a05",
+      "score": 0.0,
+      "cost_cad": "0.002392",
+      "latency_s": 4.015,
+      "answer": "{\n  \"approche\": \"adaptive\",\n  \"",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "approach",
+      "item": "a06",
+      "score": 0.0,
+      "cost_cad": "0.002391",
+      "latency_s": 4.41,
+      "answer": "{\n  \"approche\": \"hybrid\",\n  \"justification\": \"Les signaux divergent selon",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "approach",
+      "item": "a07",
+      "score": 0.0,
+      "cost_cad": "0.002384",
+      "latency_s": 14.788,
+      "answer": "```json\n{\n  \"approche\": \"predictive\",",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "approach",
+      "item": "a08",
+      "score": 0.0,
+      "cost_cad": "0.002381",
+      "latency_s": 5.118,
+      "answer": "{\n  \"approche\": \"adaptive\",\n  \"justification",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "approach",
+      "item": "a09",
+      "score": 0.0,
+      "cost_cad": "0.002394",
+      "latency_s": 3.735,
+      "answer": "```json\n{\n  \"approche\": \"hybrid\",\n  \"just",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "approach",
+      "item": "a10",
+      "score": 0.0,
+      "cost_cad": "0.002379",
+      "latency_s": 3.56,
+      "answer": "```json\n{\n  \"approche\": \"predictive\",\n",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "status",
+      "item": "s01",
+      "score": 1.0,
+      "cost_cad": "0.000435",
+      "latency_s": 3.054,
+      "answer": "- **Avancement :** 60 % du travail réalisé ; import des contacts terminé et 2 des 5 intégrations livrées.\n- **Budget :** 410 000 $ dépensés sur 500 000 $ prévus (82 % du budget), selon les notes fournies.\n- **Échéancier :** la migration des historiques accuse un retard de 3 semaines en raison de la livraison tardive de l’extraction par le fournisseur.\n- **Problèmes :** dépendance au fournisseur ; risque de pression accrue sur le budget et le calendrier.\n- **Décision attendue :** confirmer s’il faut réduire la portée des rapports. Prochaine étape : tests avec les ventes le 4 novembre.",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "status",
+      "item": "s02",
+      "score": 1.0,
+      "cost_cad": "0.000458",
+      "latency_s": 3.082,
+      "answer": "- **Avancement :** Charpente terminée; toiture réalisée à 70 %.\n- **Budget :** Respecté à environ 2 % près, selon les notes de suivi.\n- **Échéancier :** Échéance de la rentrée de janvier maintenue, sous réserve des conclusions de l’expertise.\n- **Problème :** Infiltration d’eau découverte dans l’aile B; expertise demandée pour écarter un problème structurel.\n- **Décision attendue :** Confirmer le maintien de la visite des parents prévue le 12 décembre, sous réserve des résultats de l’expertise.",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "status",
+      "item": "s03",
+      "score": 1.0,
+      "cost_cad": "0.000514",
+      "latency_s": 3.361,
+      "answer": "- **Avancement :** MFA déployée sur **85 % des comptes**; aucun incident signalé ce mois-ci. *(Source : notes de statut.)*\n- **Budget :** coût estimé du remplacement des trois applications incompatibles : **120 000 $**; budget global non précisé. *(Source : notes de statut.)*\n- **Échéancier :** objectif de couverture MFA à **100 % au 30 novembre**; audit externe prévu en janvier. *(Source : notes de statut.)*\n- **Problèmes :** trois applications anciennes ne prennent pas en charge la MFA, créant un risque de conformité et de sécurité.\n- **Décision attendue :** arbitrer entre le remplacement des applications (**120 000 $**) et l’octroi d’une exception temporaire.",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "status",
+      "item": "s04",
+      "score": 1.0,
+      "cost_cad": "0.000415",
+      "latency_s": 2.443,
+      "answer": "- **Avancement :** Les précommandes dépassent de **40 %** la prévision, signalant une demande supérieure aux attentes.\n- **Budget :** Aucune donnée budgétaire n’est fournie dans les notes.\n- **Échéancier :** Le marketing souhaite maintenir le lancement au **1er décembre**.\n- **Problèmes / risques :** La capacité de production du premier mois est limitée à **8 000 unités**, contre **11 000 prévues**, avec un risque de ruptures de stock et d’insatisfaction client.\n- **Décision attendue :** Valider ou non une **livraison en deux vagues** afin de maintenir la date du 1er décembre malgré la capacité réduite.",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "status",
+      "item": "s05",
+      "score": 1.0,
+      "cost_cad": "0.000412",
+      "latency_s": 2.587,
+      "answer": "- **Avancement :** Phase finance de l’implantation ERP; tests d’acceptation réussis à **92 %**.  \n- **Budget :** Coût d’attente estimé à **25 000 $** (selon les notes fournies).  \n- **Échéancier :** Les **8 %** restants portent sur la consolidation multidevise; mise en production bloquée jusqu’à résolution. Le consultant expert sera disponible dans **trois semaines**.  \n- **Problème :** La consolidation multidevise demeure non résolue et bloque la mise en production.  \n- **Décision attendue :** La direction financière doit choisir entre attendre le consultant actuel ou en embaucher un autre.",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "risks",
+      "item": "r01",
+      "score": 1.0,
+      "cost_cad": "0.000559",
+      "latency_s": 3.19,
+      "answer": "[\n  {\n    \"titre\": \"Retard de livraison des serveurs\",\n    \"description\": \"Le délai annoncé passe de deux à six semaines, ce qui peut retarder les activités dépendantes de la disponibilité des serveurs et l'échéancier global.\",\n    \"probabilite\": 5,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Dépendance à une administratrice de bases de données\",\n    \"description\": \"Le départ en congé parental de l'unique administratrice compétente en migration peut entraîner une perte de capacité, des retards et des erreurs lors de la migration.\",\n    \"probabilite\": 4,\n    \"impact\": 5\n  },\n  {\n    \"titre\": \"Demandes de rapports sans budget révisé\",\n    \"description\": \"L'ajout de deux rapports sans augmentation du budget peut provoquer une surcharge de travail, un dépassement des coûts ou une réduction du périmètre et de la qualité.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  }\n]",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "risks",
+      "item": "r02",
+      "score": 1.0,
+      "cost_cad": "0.000603",
+      "latency_s": 3.548,
+      "answer": "[\n  {\n    \"titre\": \"Retard du coulage des fondations dû aux intempéries\",\n    \"description\": \"Trois semaines de pluie prévues pourraient perturber ou retarder le coulage des fondations et les travaux associés.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Dépassement du budget lié à l'augmentation du prix de l'acier\",\n    \"description\": \"L'augmentation de 18 % du prix de l'acier depuis la soumission pourrait entraîner un surcoût du projet.\",\n    \"probabilite\": 5,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Retard de la visite de l'inspecteur municipal\",\n    \"description\": \"L'absence de confirmation de la date de visite pourrait retarder la validation réglementaire et la poursuite des travaux.\",\n    \"probabilite\": 4,\n    \"impact\": 5\n  }\n]",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "risks",
+      "item": "r03",
+      "score": 1.0,
+      "cost_cad": "0.000570",
+      "latency_s": 3.424,
+      "answer": "[\n  {\n    \"titre\": \"Baisse de capacité de développement\",\n    \"description\": \"La réaffectation de deux développeurs a entraîné une baisse de 30 % de la vélocité, ce qui peut retarder la réalisation du périmètre prévu.\",\n    \"probabilite\": 5,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Incompatibilité avec la nouvelle version de l’API de paiement\",\n    \"description\": \"La version de l’API du partenaire de paiement change le mois prochain et l’intégration n’a pas encore été testée sur cette version, avec un risque de dysfonctionnement ou d’interruption des paiements.\",\n    \"probabilite\": 4,\n    \"impact\": 5\n  },\n  {\n    \"titre\": \"Dégradation de l’expérience utilisateur\",\n    \"description\": \"Les lenteurs signalées par les utilisateurs pilotes à chaque connexion peuvent entraîner une insatisfaction, une faible adoption ou des abandons.\",\n    \"probabilite\": 5,\n    \"impact\": 4\n  }\n]",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "risks",
+      "item": "r04",
+      "score": 1.0,
+      "cost_cad": "0.000446",
+      "latency_s": 2.627,
+      "answer": "[\n  {\n    \"titre\": \"Départ du commanditaire principal sans remplaçant nommé\",\n    \"description\": \"Le départ du commanditaire à la fin du trimestre peut entraîner une perte de soutien, des retards de décision et une gouvernance affaiblie jusqu'à la nomination de son remplaçant.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Hébergement de données personnelles aux États-Unis non évalué au regard de la Loi 25\",\n    \"description\": \"L'absence d'évaluation juridique préalable peut entraîner une non-conformité réglementaire, des retards d'approbation ou la nécessité de modifier la solution d'hébergement.\",\n    \"probabilite\": 4,\n    \"impact\": 5\n  }\n]",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "risks",
+      "item": "r05",
+      "score": 1.0,
+      "cost_cad": "0.000670",
+      "latency_s": 4.417,
+      "answer": "[\n  {\n    \"titre\": \"Conflit entre la formation et la clôture financière annuelle\",\n    \"description\": \"La simultanéité des deux activités peut entraîner une indisponibilité des employés, des retards ou une baisse de qualité dans la formation et la clôture. Évaluation fondée sur le texte fourni; aucune source externe.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Défaillance du logiciel de formation à grande échelle\",\n    \"description\": \"Le logiciel, jamais testé avec 300 employés simultanément, pourrait rencontrer des problèmes de capacité, de performance ou d'accès. Évaluation fondée sur le texte fourni; aucune source externe.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Retard lié à la consultation syndicale\",\n    \"description\": \"L'absence de consultation préalable pourrait empêcher ou retarder tout changement d'horaire nécessaire à la formation. Évaluation fondée sur le texte fourni; aucune source externe.\",\n    \"probabilite\": 3,\n    \"impact\": 3\n  }\n]",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "approach",
+      "item": "a01",
+      "score": 1.0,
+      "cost_cad": "0.000457",
+      "latency_s": 2.978,
+      "answer": "{\"approche\":\"predictive\",\"justification\":\"Selon les critères PMBOK 4.3 : livrables définis et exigences stables (plans approuvés, périmètre d’un entrepôt de 12 000 m²) ; projet soumis à une date contractuelle fixe et à un coût élevé des modifications après le coulage du béton, ce qui favorise une planification séquentielle et un contrôle formel des changements ; organisation hiérarchique coordonnant 40 sous-traitants, compatible avec une gouvernance, des responsabilités et des jalons prédéfinis. L’ensemble des signaux converge vers une approche prédictive plutôt qu’adaptative ou hybride.\"}",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "approach",
+      "item": "a02",
+      "score": 1.0,
+      "cost_cad": "0.000477",
+      "latency_s": 3.404,
+      "answer": "{\"approche\":\"adaptive\",\"justification\":\"Selon les critères du PMBOK Guide, 8e édition, section 4.3 : livrables — les fonctions restent à découvrir et doivent évoluer selon les retours des premiers utilisateurs, ce qui favorise des livraisons et ajustements itératifs ; projet — le marché est nouveau pour l’entreprise, le financement dépend des résultats et les retours clients ont lieu toutes les deux semaines, ce qui exige une forte adaptation face à l’incertitude ; organisation — l’équipe est autogérée, ce qui est compatible avec une organisation adaptative favorisant l’autonomie et la prise de décision rapide. Les trois critères convergent vers une approche adaptive.\"}",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "approach",
+      "item": "a03",
+      "score": 1.0,
+      "cost_cad": "0.000545",
+      "latency_s": 3.587,
+      "answer": "{\"approche\":\"hybrid\",\"justification\":\"Selon les critères PMBOK 4.3 : Livrables — le paramétrage réglementaire et la migration des données sont imposés, datés par la loi et donc adaptés à une approche prédictive ; les tableaux de bord sont à découvrir avec les gestionnaires, ce qui favorise une approche adaptative. Projet — la coexistence d’échéances et de contraintes réglementaires fixes avec des besoins fonctionnels évolutifs justifie de planifier les lots réglementaires de manière prédictive et de développer les tableaux de bord par itérations. Organisation — le déploiement dans 8 usines nécessite une coordination et une gouvernance communes, tout en permettant une collaboration progressive avec les gestionnaires pour affiner les tableaux de bord. Les signaux divergent entre les critères et les livrables : l’approche hybride est donc recommandée, avec un pilotage prédictif pour la conformité et la migration, et adaptatif pour les tableaux de bord.\"}",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "approach",
+      "item": "a04",
+      "score": 1.0,
+      "cost_cad": "0.000445",
+      "latency_s": 3.128,
+      "answer": "{\"approche\":\"predictive\",\"justification\":\"Selon les critères du PMBOK 4.3, l'approche prédictive est recommandée. Livrables : les exigences réglementaires, les audits à dates fixes et la documentation de validation sont entièrement définis et vérifiables en amont. Projet : la mise en conformité suit des étapes obligatoires, avec des contrôles et validations planifiés, et une très faible tolérance aux changements ou à l'improvisation. Organisation : le cadre réglementaire impose une gouvernance formelle, une traçabilité documentaire et des décisions conformes aux prescriptions de l'autorité. Les trois critères convergent donc vers une approche prédictive plutôt qu'adaptive ou hybride.\"}",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "approach",
+      "item": "a05",
+      "score": 1.0,
+      "cost_cad": "0.000601",
+      "latency_s": 4.369,
+      "answer": "{\"approche\":\"adaptive\",\"justification\":\"Selon le PMBOK Guide, 8e édition, section 4.3 : livrables — le prototype et la valeur peuvent être livrés progressivement, avec une portée appelée à évoluer ; projet — l’innovation et la forte instabilité de la portée rendent l’apprentissage et l’ajustement prioritaires ; organisation — la décision de poursuivre après un mois, l’implication élevée des parties prenantes et l’équipe en réseau favorisent des cycles courts avec feedback fréquent. Les trois critères convergent vers une approche adaptative.\"}",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "approach",
+      "item": "a06",
+      "score": 1.0,
+      "cost_cad": "0.000651",
+      "latency_s": 4.38,
+      "answer": "{\"approche\":\"hybrid\",\"justification\":\"Selon le PMBOK Guide, 8e édition, section 4.3, l’approche se détermine selon les critères des livrables, du projet et de l’organisation. Livrables : l’usine et la chaîne logistique exigent une planification prédictive, avec des jalons fermes, tandis que l’emballage, le site web et la campagne marketing bénéficient d’itérations fondées sur les tests clients, ce qui favorise une approche adaptative. Projet : il combine des activités nécessitant stabilité et anticipation avec des activités comportant de l’incertitude et un besoin d’apprentissage rapide. Organisation : aucune information n’est fournie sur les capacités, la gouvernance ou la maturité de l’organisation; ce critère ne permet donc pas de modifier la recommandation. Une approche hybride est recommandée afin d’appliquer une gestion prédictive aux éléments industriels et logistiques, et une gestion adaptative aux éléments marketing et de communication.\"}",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "approach",
+      "item": "a07",
+      "score": 1.0,
+      "cost_cad": "0.000510",
+      "latency_s": 3.702,
+      "answer": "{\"approche\":\"predictive\",\"justification\":\"Selon les critères PMBOK Guide, 8e édition, section 4.3 : les livrables sont entièrement connus et les dépendances techniques sont documentées, ce qui favorise une planification détaillée; le projet est exécuté à une date fixe, avec un retour arrière très coûteux, ce qui exige un séquencement, une validation et des contrôles stricts; l’organisation est fonctionnelle et classique, ce qui s’aligne avec une gouvernance et des responsabilités planifiées. Les trois critères convergent vers une approche prédictive.\"}",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "approach",
+      "item": "a08",
+      "score": 1.0,
+      "cost_cad": "0.000554",
+      "latency_s": 4.026,
+      "answer": "{\"approche\":\"adaptive\",\"justification\":\"Selon les critères du PMBOK 4.3 : livrables — besoins flous, tests précoces et priorités ajustées selon les retours, ce qui favorise des incréments fréquents et une adaptation continue ; projet — budget fixe avec portée variable, ce qui permet de préserver la contrainte budgétaire en re-priorisant le contenu ; organisation — équipe de 7 personnes livrant en continu, configuration compatible avec des cycles courts, des retours fréquents et une collaboration étroite. Les trois critères convergent vers une approche adaptative plutôt qu’hybride.\"}",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "approach",
+      "item": "a09",
+      "score": 1.0,
+      "cost_cad": "0.000479",
+      "latency_s": 3.45,
+      "answer": "{\"approche\":\"hybrid\",\"justification\":\"Les livrables présentent des profils divergents : le garage municipal est prédictif, car les permis, appels d’offres et la date fixe exigent une planification et un contrôle séquentiels ; la plateforme numérique est adaptative, car sa conception doit évoluer selon la co-conception et les retours des citoyens. Le projet est globalement hybride en raison des interdépendances entre les deux volets, qui nécessitent une coordination intégrée, des points de synchronisation et une gestion commune des interfaces. L’organisation municipale devra donc combiner une gouvernance prédictive pour les engagements réglementaires, contractuels et calendaires avec une gouvernance adaptative pour les décisions de produit numérique et la collaboration avec les parties prenantes.\"}",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "approach",
+      "item": "a10",
+      "score": 0.0,
+      "cost_cad": "0.000753",
+      "latency_s": 5.164,
+      "answer": "{\"approche\":\"predictive\",\"justification\":\"Livrables : les 200 bornes sont identiques et définies par un cahier des charges signé, avec des spécifications techniques gelées ; le périmètre est donc stable et planifiable. Projet : la certification électrique préalable à la livraison et les pénalités contractuelles de retard favorisent une planification séquentielle, un contrôle formel des exigences et une maîtrise stricte des délais. Organisation : aucune information n’est fournie sur la structure ou les préférences de l’organisation ; ce critère ne permet donc pas d’identifier un signal divergent. Conformément à l’évaluation des caractéristiques des livrables, du projet et de l’organisation prévue par le PMBOK Guide, 8e édition, section 4.3,",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "status",
+      "item": "s01",
+      "score": 0.0,
+      "cost_cad": "0.001478",
+      "latency_s": 2.608,
+      "answer": "",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "status",
+      "item": "s02",
+      "score": 0.0,
+      "cost_cad": "0.001454",
+      "latency_s": 2.336,
+      "answer": "",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "status",
+      "item": "s03",
+      "score": 0.0,
+      "cost_cad": "0.001443",
+      "latency_s": 3.898,
+      "answer": "",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "status",
+      "item": "s04",
+      "score": 0.0,
+      "cost_cad": "0.001450",
+      "latency_s": 2.777,
+      "answer": "",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "status",
+      "item": "s05",
+      "score": 0.0,
+      "cost_cad": "0.001454",
+      "latency_s": 4.651,
+      "answer": "",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "risks",
+      "item": "r01",
+      "score": 0.0,
+      "cost_cad": "0.002907",
+      "latency_s": 10.956,
+      "answer": "",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "risks",
+      "item": "r02",
+      "score": 0.0,
+      "cost_cad": "0.002908",
+      "latency_s": 6.965,
+      "answer": "",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "risks",
+      "item": "r03",
+      "score": 0.0,
+      "cost_cad": "0.002917",
+      "latency_s": 5.59,
+      "answer": "```json\n[\n  {\n    \"titre\": \"Perte de vélocité due à la réaffectation de ressources\",\n    \"description\": \"Deux développeurs ont été réaffectés à un autre projet, entraînant une baisse de 30 % de la vélocité du sprint 6.\",\n",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "risks",
+      "item": "r04",
+      "score": 0.0,
+      "cost_cad": "0.002906",
+      "latency_s": 6.454,
+      "answer": "",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "risks",
+      "item": "r05",
+      "score": 0.0,
+      "cost_cad": "0.002895",
+      "latency_s": 5.125,
+      "answer": "",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "approach",
+      "item": "a01",
+      "score": 0.0,
+      "cost_cad": "0.001468",
+      "latency_s": 2.508,
+      "answer": "",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "approach",
+      "item": "a02",
+      "score": 0.0,
+      "cost_cad": "0.001460",
+      "latency_s": 3.648,
+      "answer": "",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "approach",
+      "item": "a03",
+      "score": 0.0,
+      "cost_cad": "0.001472",
+      "latency_s": 7.687,
+      "answer": "",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "approach",
+      "item": "a04",
+      "score": 0.0,
+      "cost_cad": "0.001464",
+      "latency_s": 2.55,
+      "answer": "",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "approach",
+      "item": "a05",
+      "score": 0.0,
+      "cost_cad": "0.001468",
+      "latency_s": 3.11,
+      "answer": "",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "approach",
+      "item": "a06",
+      "score": 0.0,
+      "cost_cad": "0.001466",
+      "latency_s": 3.432,
+      "answer": "",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "approach",
+      "item": "a07",
+      "score": 0.0,
+      "cost_cad": "0.001459",
+      "latency_s": 3.346,
+      "answer": "",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "approach",
+      "item": "a08",
+      "score": 0.0,
+      "cost_cad": "0.001461",
+      "latency_s": 6.109,
+      "answer": "",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "approach",
+      "item": "a09",
+      "score": 0.0,
+      "cost_cad": "0.001470",
+      "latency_s": 12.149,
+      "answer": "",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "approach",
+      "item": "a10",
+      "score": 0.0,
+      "cost_cad": "0.001453",
+      "latency_s": 3.113,
+      "answer": "",
+      "error": null
+    }
+  ]
+}
