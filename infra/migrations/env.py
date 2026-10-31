@@ -5,6 +5,7 @@ import os
 from alembic import context
 from sqlalchemy import create_engine
 
+import boussole.platform.settings_store.models  # noqa: F401  (enregistre les tables)
 from boussole.core.models import Base
 
 target_metadata = Base.metadata
