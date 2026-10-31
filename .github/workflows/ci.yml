@@ -1,0 +1,82 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main, "phase-*/**"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  qualite:
+    name: Lint et types
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+      - run: uv sync --frozen
+      - name: Formatage
+        run: uv run ruff format --check .
+      - name: Lint
+        run: uv run ruff check .
+      - name: Types (mypy strict)
+        run: uv run mypy
+
+  tests:
+    name: Tests (unitaires, contrat, intégration, red team)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: boussole
+          POSTGRES_DB: boussole_test
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U boussole"
+          --health-interval 2s
+          --health-retries 20
+    env:
+      BOUSSOLE_TEST_DATABASE_URL: postgresql+psycopg://boussole@localhost:5432/boussole_test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+      - run: uv sync --frozen
+      - name: Tests et couverture globale (80 %)
+        run: uv run pytest --cov --cov-report=term-missing
+      - name: Couverture du domaine et des garde-fous (80 %)
+        run: >-
+          uv run coverage report --fail-under=80
+          --include="src/boussole/core/*,src/boussole/platform/guardrails/*,src/boussole/platform/audit/*"
+
+  securite:
+    name: Dépendances, secrets et fichiers interdits
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+      - run: uv sync --frozen
+      - name: Vulnérabilités des dépendances (pip-audit)
+        run: |
+          uv export --frozen --format requirements-txt --no-hashes --no-emit-project > requirements-audit.txt
+          uv run pip-audit --strict -r requirements-audit.txt
+      - name: Secrets dans l'historique (gitleaks)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Aucun PDF, donnée locale ni .env suivi
+        run: bash infra/ci/check_forbidden_files.sh
