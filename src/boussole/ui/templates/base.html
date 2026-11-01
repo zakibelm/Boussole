@@ -66,10 +66,22 @@
     .badge-automation { background: var(--accent-soft); }
     .badge-assistance { background: var(--warn-soft); }
     .badge-augmentation { background: var(--bg); font-weight: 600; }
+    header nav a { color: var(--accent); margin-right: 14px; text-decoration: none; }
+    a { color: var(--accent); }
+    .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+    .tile { border: 1px solid var(--line); border-radius: 8px; padding: 12px; font-size: 13px; color: var(--muted); }
+    .tile .big { display: block; font-size: 22px; font-weight: 700; color: var(--text); }
+    .tile.alert .big { color: var(--err); }
+    .answer-text { white-space: pre-wrap; background: var(--bg); border-radius: 6px; padding: 12px; font-size: 14px; }
+    .answer { border-top: 1px solid var(--line); padding-top: 12px; margin-top: 12px; }
+    ol.sources { font-size: 13px; margin-top: 0; }
+    ol.sources li.cited { font-weight: 600; }
+    .htmx-indicator { display: none; } .htmx-request .htmx-indicator, .htmx-request.htmx-indicator { display: inline; }
+    label select { margin-left: 6px; }
   </style>
 </head>
 <body>
-  <header><span class="logo">🧭 Boussole</span><nav>Opérateur : {{ operator }}</nav></header>
+  <header><span class="logo">🧭 Boussole</span><nav><a href="/projects">Projets</a><a href="/settings">Paramètres</a>Opérateur : {{ operator }}</nav></header>
   <main>{% block content %}{% endblock %}</main>
 </body>
 </html>
