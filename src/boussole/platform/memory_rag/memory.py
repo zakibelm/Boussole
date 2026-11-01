@@ -11,7 +11,7 @@ from boussole.platform.memory_rag.chunking import (
     outline_sections,
     read_pages,
 )
-from boussole.platform.memory_rag.port import Embedder, Hit, VectorStore
+from boussole.platform.memory_rag.port import Embedder, Hit, PageRange, VectorStore
 
 log = logging.getLogger(__name__)
 
@@ -58,9 +58,16 @@ class RagMemory:
         log.info("ingestion %s", report)
         return report
 
-    def search(self, question: str, k: int = 5, project_id: uuid.UUID | None = None) -> list[Hit]:
+    def search(
+        self,
+        question: str,
+        k: int = 5,
+        project_id: uuid.UUID | None = None,
+        pages: tuple[PageRange, ...] | None = None,
+    ) -> list[Hit]:
+        """`pages` : parties du livre propres à l'agent (voir agents/pmbok_skills.py)."""
         vector = self._embedder.embed_query(question)
-        hits = self._store.search(vector, k, self._embedder.model_name, project_id)
+        hits = self._store.search(vector, k, self._embedder.model_name, project_id, pages)
         log.info("recherche k=%d citations=%s", k, [h.chunk.citation() for h in hits])
         return hits
 
