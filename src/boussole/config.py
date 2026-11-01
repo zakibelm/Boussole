@@ -15,6 +15,7 @@ class AppConfig:
     usd_to_cad: Decimal
     budget_cap_cad: Decimal
     operator: str
+    operator_role: str
     catalog_path: Path
     pmbok_skills_path: Path
     autonomy_path: Path
@@ -32,6 +33,7 @@ def load_config() -> AppConfig:
         usd_to_cad=Decimal(os.environ.get("BOUSSOLE_USD_CAD_RATE", "1.40")),
         budget_cap_cad=Decimal(os.environ.get("BOUSSOLE_BUDGET_CAP_CAD", "20")),
         operator=os.environ.get("BOUSSOLE_OPERATOR") or getpass.getuser(),
+        operator_role=os.environ.get("BOUSSOLE_OPERATOR_ROLE", "pmo"),
         catalog_path=Path(
             os.environ.get("BOUSSOLE_AGENTS_CONFIG", ROOT / "config" / "agents.yaml")
         ),
