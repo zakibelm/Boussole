@@ -50,9 +50,18 @@ def _bind(handler: Handler | None, arguments: dict[str, Any]) -> Callable[[], ob
     return run
 
 
+_UNKNOWN_PROJECT = uuid.UUID(int=0)  # ne correspond à aucun projet : le portail refuse
+
+
 def _target(arguments: dict[str, Any], default: uuid.UUID | None) -> uuid.UUID | None:
+    """Un identifiant illisible est refusé et journalisé par le portail, pas levé ici."""
     raw = arguments.get("project_id")
-    return uuid.UUID(str(raw)) if raw else default
+    if not raw:
+        return default
+    try:
+        return uuid.UUID(str(raw))
+    except ValueError:
+        return _UNKNOWN_PROJECT
 
 
 def _str_or_none(value: object) -> str | None:

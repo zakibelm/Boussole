@@ -95,6 +95,27 @@ def test_same_safe_action_without_external_content_runs() -> None:
     assert results[0].executed and effects == ["update_task_status"]
 
 
+def test_unreadable_project_id_is_denied_and_logged_without_stopping_the_batch() -> None:
+    audit = make_audit()
+    effects: list[str] = []
+    calls = (
+        ToolCall("update_task_status", {"project_id": "pas-un-uuid"}),
+        ToolCall("update_task_status", {"task": "t1"}),
+    )
+    results = run_tool_calls(
+        make_gate(audit),
+        "closing",
+        PROJECT_A,
+        calls,
+        _effects_handlers(effects),  # type: ignore[arg-type]
+        external_sources=(),
+        correlation_id=CID,
+    )
+    assert [r.decision.verdict for r in results] == [Verdict.DENY, Verdict.ALLOW]
+    assert effects == ["update_task_status"]
+    assert audit.verify().entries == 2
+
+
 # --- Test 2 : fuite --------------------------------------------------------
 
 
