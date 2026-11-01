@@ -23,6 +23,10 @@ actions:
     class: read
     level: automation
     description: Chercher dans la mémoire RAG (sources citées)
+  answer_question:
+    class: read
+    level: automation
+    description: Répondre à une question à partir des sources citées (aucun effet)
   update_task_status:
     class: reversible_write
     level: automation
