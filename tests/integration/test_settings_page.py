@@ -24,6 +24,7 @@ from tests.contract import simulated_openrouter
 CATALOG = load_catalog(Path(__file__).resolve().parents[2] / "config" / "agents.yaml")
 VALID_KEY = "sk-or-test"
 MODEL = "anthropic/claude-sonnet-5.5"
+FREE_MODEL = "meta-llama/llama-4-scout:free"
 
 
 @pytest.fixture
@@ -101,7 +102,26 @@ def test_agents_choose_from_a_menu_grouped_by_provider(
     services.secrets.set(OPENROUTER_KEY, VALID_KEY)
     page = client.get("/settings").text
     assert 'class="model-select"' in page and "<datalist" not in page
-    assert f'<optgroup label="{MODEL.split("/")[0]}">' in page
+    assert f'<optgroup label="Payants · {MODEL.split("/")[0]}">' in page
+
+
+def test_free_models_come_first_in_their_own_group(client: TestClient, services: Services) -> None:
+    services.secrets.set(OPENROUTER_KEY, VALID_KEY)
+    page = client.get("/settings").text
+    free, paid = page.index('<optgroup label="Gratuits'), page.index('<optgroup label="Payants')
+    assert free < page.index(FREE_MODEL) < paid < page.index(MODEL, paid)
+
+
+def test_model_menus_come_with_a_search_field(client: TestClient, services: Services) -> None:
+    services.secrets.set(OPENROUTER_KEY, VALID_KEY)
+    page = client.get("/settings").text
+    assert "Rechercher un modèle" in page and "model-search" in page
+
+
+def test_a_free_model_can_be_chosen(client: TestClient, services: Services) -> None:
+    services.secrets.set(OPENROUTER_KEY, VALID_KEY)
+    client.post("/settings/agents/domain.risk/model", data={"model": FREE_MODEL})
+    assert services.repo.effective_model("domain.risk") == FREE_MODEL
 
 
 def test_without_key_the_model_stays_a_text_field(client: TestClient) -> None:
