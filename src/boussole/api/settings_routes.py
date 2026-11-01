@@ -23,6 +23,7 @@ AUTONOMY_LABELS = {
     Autonomy.AUGMENTATION: "Augmentation",
 }
 KEY_PREFIX = "sk-or-"
+FREE_LABEL = "Gratuits (0 $ CA, pour tester les fonctions)"
 
 router = APIRouter(prefix="/settings")
 
@@ -53,8 +54,18 @@ def _models(services: Services) -> tuple[tuple[ModelInfo, ...], str | None]:
 
 
 def _by_provider(models: tuple[ModelInfo, ...]) -> list[tuple[str, list[ModelInfo]]]:
-    """Menu des modèles regroupé par fournisseur (la liste arrive triée par identifiant)."""
-    return [(name, list(group)) for name, group in groupby(models, key=_provider)]
+    """Gratuits d'abord (pour tester les fonctions), puis payants par fournisseur.
+
+    La liste arrive triée par identifiant, donc chaque fournisseur reste groupé.
+    """
+    free = [m for m in models if _is_free(m)]
+    paid = [m for m in models if not _is_free(m)]
+    groups = [(f"Payants · {name}", list(group)) for name, group in groupby(paid, key=_provider)]
+    return ([(FREE_LABEL, free)] if free else []) + groups
+
+
+def _is_free(model: ModelInfo) -> bool:
+    return model.prompt_cad_per_mtok == 0 and model.completion_cad_per_mtok == 0
 
 
 def _provider(model: ModelInfo) -> str:
