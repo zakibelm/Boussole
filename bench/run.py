@@ -21,7 +21,7 @@ from decimal import Decimal
 from functools import partial
 from pathlib import Path
 
-from bench.tasks import TASKS, Task
+from bench.tasks import SUITES, TASKS, Task
 from boussole.agents.catalog import Catalog, load_catalog
 from boussole.config import AppConfig, load_config
 from boussole.platform.llm_gateway.budget import (
@@ -69,12 +69,14 @@ class NetworkDownError(RuntimeError):
     """Trop d'échecs réseau d'affilée : on arrête plutôt que d'enchaîner les erreurs."""
 
 
-def run_model(gateway: BudgetedGateway, catalog: Catalog, model: str) -> list[Row]:
+def run_model(
+    gateway: BudgetedGateway, catalog: Catalog, model: str, suite: str = "base"
+) -> list[Row]:
     rows: list[Row] = []
     failures_in_a_row = 0
     for task in TASKS:
         system = system_prompt(catalog, task.agent_id)
-        for item in task.items():
+        for item in task.items(suite):
             row = _with_retries(partial(_run_item, gateway, task, item, model, system))
             rows.append(row)
             failures_in_a_row = failures_in_a_row + 1 if _network(row) else 0
@@ -153,7 +155,7 @@ def recommend(summary: dict[str, dict[str, float]]) -> str:
 
 
 def estimate_cost_cad(
-    gateway: LLMGateway, catalog: Catalog, models: list[str]
+    gateway: LLMGateway, catalog: Catalog, models: list[str], suite: str = "base"
 ) -> dict[str, Decimal]:
     prices = {m.id: m for m in gateway.list_models()}
     estimates: dict[str, Decimal] = {}
@@ -164,7 +166,7 @@ def estimate_cost_cad(
         total = Decimal(0)
         for task in TASKS:
             system = system_prompt(catalog, task.agent_id)
-            for item in task.items():
+            for item in task.items(suite):
                 prompt_tokens = Decimal(len(system) + len(task.prompt(item))) / CHARS_PER_TOKEN
                 output_tokens = task.max_tokens * EXPECTED_OUTPUT_SHARE
                 total += (
@@ -175,14 +177,17 @@ def estimate_cost_cad(
     return estimates
 
 
-def write_results(rows: list[Row], summary: dict[str, dict[str, float]], label: str) -> Path:
+def write_results(
+    rows: list[Row], summary: dict[str, dict[str, float]], label: str, suite: str = "base"
+) -> Path:
     RESULTS.mkdir(exist_ok=True)
     stamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
     path = RESULTS / f"{stamp}-{label}.json"
     payload = {
         "run_at": stamp,
         "label": label,
-        "tasks": {t.name: {"agent": t.agent_id, "items": len(t.items())} for t in TASKS},
+        "suite": suite,
+        "tasks": {t.name: {"agent": t.agent_id, "items": len(t.items(suite))} for t in TASKS},
         "summary": summary,
         "recommended_default": recommend(summary),
         "rows": [asdict(r) for r in rows],
@@ -234,6 +239,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument("--dry-run", action="store_true", help="Modèle factice, aucun appel payant")
     parser.add_argument("--estimate", action="store_true", help="Coût estimé seulement")
+    parser.add_argument("--suite", choices=SUITES, default="base", help="Jeu de cas")
     args = parser.parse_args(argv)
     config = load_config()
     catalog = load_catalog(config.catalog_path)
@@ -248,22 +254,22 @@ def main(argv: list[str] | None = None) -> int:
             raise SystemExit("Indique au moins deux modèles avec --models.")
         real = _real_gateway(config)
         if args.estimate:
-            for model, cost in estimate_cost_cad(real, catalog, models).items():
+            for model, cost in estimate_cost_cad(real, catalog, models, args.suite).items():
                 print(f"{model} : environ {cost} $ CA")
             return 0
         gateway = BudgetedGateway(real, _ledger(config), config.budget_cap_cad)
-        label = uuid.uuid4().hex[:6]
+        label = f"{args.suite}-{uuid.uuid4().hex[:6]}"
 
     rows: list[Row] = []
     try:
         for model in models:
-            rows.extend(run_model(gateway, catalog, model))
+            rows.extend(run_model(gateway, catalog, model, args.suite))
     except (BudgetExceededError, NetworkDownError) as exc:
         print(f"Arrêt : {exc}", file=sys.stderr)
     if not rows:
         return 1
     summary = summarize(rows)
-    path = write_results(rows, summary, label)
+    path = write_results(rows, summary, label, args.suite)
     print(render_table(summary))
     print(f"\nModèle par défaut recommandé : {recommend(summary)}")
     print(f"Résultats : {path}")
