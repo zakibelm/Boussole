@@ -9,6 +9,7 @@ from fastapi.templating import Jinja2Templates
 from boussole.api import project_routes, settings_routes
 from boussole.api.services import Services, build_services
 from boussole.config import load_config
+from boussole.ui import markdown
 
 TEMPLATES = Path(__file__).resolve().parents[1] / "ui" / "templates"
 
@@ -17,6 +18,7 @@ def create_app(services: Services) -> FastAPI:
     app = FastAPI(title="Boussole", docs_url=None, redoc_url=None)
     app.state.services = services
     app.state.templates = Jinja2Templates(directory=TEMPLATES)
+    app.state.templates.env.filters["md"] = markdown.render
     app.include_router(settings_routes.router)
     app.include_router(project_routes.router)
 
