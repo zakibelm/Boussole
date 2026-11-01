@@ -20,6 +20,7 @@ from boussole.platform.secrets import OPENROUTER_KEY, InMemorySecretStore
 from boussole.platform.settings_store.models import SETTINGS_TABLES
 from boussole.platform.settings_store.repository import SettingsRepository
 from tests.contract import simulated_openrouter
+from tests.guardrails_support import make_audit
 
 CATALOG = load_catalog(Path(__file__).resolve().parents[2] / "config" / "agents.yaml")
 VALID_KEY = "sk-or-test"
@@ -44,6 +45,7 @@ def services() -> Services:
         ),
         cap_cad=Decimal("20"),
         operator="Zakaria",
+        audit=make_audit(),
     )
 
 

@@ -211,6 +211,7 @@ def _services(assistant: ProjectAssistant, **extra: object) -> Services:
         cap_cad=Decimal("20"),
         operator="Zakaria",
         projects=assistant,
+        audit=make_audit(),
         **extra,  # type: ignore[arg-type]
     )
 

@@ -1,6 +1,7 @@
 """Assemblage des dépendances de l'API (injectées, donc remplaçables en test)."""
 
 import time
+import uuid
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from decimal import Decimal
@@ -15,8 +16,14 @@ from boussole.agents.catalog import Catalog, load_catalog
 from boussole.agents.pmbok_skills import PmbokSkills, load_pmbok_skills
 from boussole.config import AppConfig
 from boussole.core.database import make_engine
+from boussole.core.enums import ActionClass
 from boussole.core.models import Base
-from boussole.platform.audit.log import AuditLog, create_audit_table
+from boussole.platform.audit.log import (
+    AuditEvent,
+    AuditLog,
+    MissingSigningKeyError,
+    create_audit_table,
+)
 from boussole.platform.guardrails.gate import ActionGate
 from boussole.platform.guardrails.policy import load_policy
 from boussole.platform.llm_gateway.budget import BudgetedGateway, UsageLedger
@@ -46,7 +53,31 @@ class Services:
     trust_proxy_user: bool = False
     roles: dict[str, str] = field(default_factory=dict)
     default_role: str = "pmo"
+    audit: AuditLog | None = None
     _models_cache: tuple[float, tuple[ModelInfo, ...]] | None = field(default=None, repr=False)
+
+    def record_settings_change(
+        self, request: Request, action: str, details: dict[str, object]
+    ) -> None:
+        """Journalise une écriture de Paramètres AVANT son effet (échec fermé) :
+        qui, avec quel rôle, sur quoi. Jamais la clé elle-même."""
+        if self.audit is None:
+            raise MissingSigningKeyError("Journal d'audit indisponible : modification refusée.")
+        payload: dict[str, object] = {
+            "by": self.operator_for(request),
+            "role": self.role_for(request),
+            **details,
+        }
+        self.audit.append(
+            AuditEvent(
+                uuid.uuid4(),
+                "settings",
+                f"settings.{action}",
+                ActionClass.REVERSIBLE_WRITE,
+                None,
+                payload,
+            )
+        )
 
     def operator_for(self, request: Request) -> str:
         """Compte authentifié par nginx (en-tête posé par nginx, jamais par le client),
@@ -114,9 +145,8 @@ def build_services(config: AppConfig) -> Services:
         roles=dict(config.roles),
         default_role=config.operator_role,
     )
-    gate = ActionGate(
-        load_policy(config.autonomy_path), catalog, AuditLog(sessions, services.secrets)
-    )
+    services.audit = AuditLog(sessions, services.secrets)
+    gate = ActionGate(load_policy(config.autonomy_path), catalog, services.audit)
     services.projects = ProjectAssistant(
         ProjectRepository(sessions),
         gate,
