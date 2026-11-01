@@ -17,6 +17,7 @@ class AppConfig:
     operator: str
     catalog_path: Path
     pmbok_skills_path: Path
+    autonomy_path: Path
 
     @property
     def is_lightweight(self) -> bool:
@@ -36,5 +37,8 @@ def load_config() -> AppConfig:
         ),
         pmbok_skills_path=Path(
             os.environ.get("BOUSSOLE_PMBOK_SKILLS", ROOT / "config" / "pmbok_skills.yaml")
+        ),
+        autonomy_path=Path(
+            os.environ.get("BOUSSOLE_AUTONOMY_CONFIG", ROOT / "config" / "autonomy.yaml")
         ),
     )
