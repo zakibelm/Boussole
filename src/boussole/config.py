@@ -19,6 +19,10 @@ class AppConfig:
     catalog_path: Path
     pmbok_skills_path: Path
     autonomy_path: Path
+    min_relevance: float
+    allowed_origins: frozenset[str]
+    trust_proxy_user: bool
+    roles: tuple[tuple[str, str], ...]
 
     @property
     def is_lightweight(self) -> bool:
@@ -43,4 +47,18 @@ def load_config() -> AppConfig:
         autonomy_path=Path(
             os.environ.get("BOUSSOLE_AUTONOMY_CONFIG", ROOT / "config" / "autonomy.yaml")
         ),
+        min_relevance=float(os.environ.get("BOUSSOLE_MIN_RELEVANCE", "0.32")),
+        allowed_origins=frozenset(
+            o.strip()
+            for o in os.environ.get("BOUSSOLE_ALLOWED_ORIGINS", "").split(",")
+            if o.strip()
+        ),
+        trust_proxy_user=os.environ.get("BOUSSOLE_TRUST_PROXY_USER", "") == "1",
+        roles=_roles(os.environ.get("BOUSSOLE_ROLES", "")),
     )
+
+
+def _roles(raw: str) -> tuple[tuple[str, str], ...]:
+    """« zaki=pmo,marie=project_manager » : rôle de chaque compte nginx."""
+    pairs = (item.split("=", 1) for item in raw.split(",") if "=" in item)
+    return tuple((user.strip(), role.strip()) for user, role in pairs)
