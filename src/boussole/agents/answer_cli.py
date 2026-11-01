@@ -9,7 +9,6 @@ que vers des fournisseurs sans rétention (ADR 0008).
 import argparse
 import sys
 
-from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from boussole.agents.answer import (
@@ -21,6 +20,7 @@ from boussole.agents.answer import (
 from boussole.agents.catalog import load_catalog
 from boussole.agents.pmbok_skills import load_pmbok_skills
 from boussole.config import load_config
+from boussole.core.database import make_engine
 from boussole.core.models import Base
 from boussole.platform.audit.log import AuditLog, MissingSigningKeyError, create_audit_table
 from boussole.platform.guardrails.gate import ActionGate
@@ -36,7 +36,7 @@ from boussole.platform.settings_store.repository import SettingsRepository, SqlU
 
 def build_answerer() -> Answerer:
     config = load_config()
-    engine = create_engine(config.database_url)
+    engine = make_engine(config.database_url)
     if config.is_lightweight:
         Base.metadata.create_all(engine, tables=list(SETTINGS_TABLES))
         create_audit_table(engine)
