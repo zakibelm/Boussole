@@ -6,7 +6,7 @@ prochaine étape) est validé. Les dates se fixent à la fin de la phase 0.
 Les ajouts issus de l'ADR 0003 (forces de monday.com) sont marqués ★; ceux de
 l'ADR 0005 (écarts relevés par l'analyse d'octobre 2026) sont marqués ◆.
 
-## Phase 0 : fondations (en cours)
+## Phase 0 : fondations (terminée, rapport : docs/rapports/phase-0.md)
 
 Critère de sortie : une réponse sourcée et journalisée de bout en bout.
 
@@ -21,6 +21,8 @@ Critère de sortie : une réponse sourcée et journalisée de bout en bout.
 - [x] CI : lint, types, tests, couverture, pip-audit, gitleaks, fichiers interdits (GitHub Actions)
 - [x] Tests red team 1 à 3
 - [x] Tests d'intégration PostgreSQL exécutés (dans la CI, service pgvector)
+- [x] Critère de sortie démontré le 1er novembre : réponse sourcée et journalisée de bout en bout, extraits envoyés sans rétention (ADR 0008)
+- [x] Modèle par défaut choisi par benchmark : GPT-5.6 Luna pour tous les agents
 
 ## Phase 1 : pilote
 
