@@ -65,6 +65,7 @@ def _skill(request: Request, agent_id: str, **extra: Any) -> HTMLResponse:
         agent_name=_agent_name(services, agent_id),
         skill=services.repo.current_skill(agent_id),
         history=services.repo.skill_history(agent_id),
+        pmbok_note=services.repo.pmbok_note(agent_id),
         **extra,
     )
 
