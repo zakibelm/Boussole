@@ -14,6 +14,7 @@ class AppConfig:
     database_url: str
     usd_to_cad: Decimal
     budget_cap_cad: Decimal
+    task_cap_cad: Decimal
     operator: str
     operator_role: str
     catalog_path: Path
@@ -36,6 +37,7 @@ def load_config() -> AppConfig:
         database_url=os.environ.get("BOUSSOLE_DATABASE_URL", default_db),
         usd_to_cad=Decimal(os.environ.get("BOUSSOLE_USD_CAD_RATE", "1.40")),
         budget_cap_cad=Decimal(os.environ.get("BOUSSOLE_BUDGET_CAP_CAD", "20")),
+        task_cap_cad=Decimal(os.environ.get("BOUSSOLE_TASK_CAP_CAD", "0.50")),
         operator=os.environ.get("BOUSSOLE_OPERATOR") or getpass.getuser(),
         operator_role=os.environ.get("BOUSSOLE_OPERATOR_ROLE", "pmo"),
         catalog_path=Path(

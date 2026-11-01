@@ -54,6 +54,7 @@ class Services:
     roles: dict[str, str] = field(default_factory=dict)
     default_role: str = "pmo"
     audit: AuditLog | None = None
+    task_cap_cad: Decimal | None = None
     _models_cache: tuple[float, tuple[ModelInfo, ...]] | None = field(default=None, repr=False)
 
     def record_settings_change(
@@ -97,7 +98,9 @@ class Services:
 
     def budgeted_gateway(self) -> BudgetedGateway | None:
         inner = self.gateway()
-        return BudgetedGateway(inner, self.ledger, self.cap_cad) if inner else None
+        if inner is None:
+            return None
+        return BudgetedGateway(inner, self.ledger, self.cap_cad, self.task_cap_cad)
 
     def models(self) -> tuple[ModelInfo, ...]:
         """Liste des modèles OpenRouter, mise en cache une heure (appel gratuit)."""
@@ -140,6 +143,7 @@ def build_services(config: AppConfig) -> Services:
         secrets=KeyringSecretStore(),
         gateway_factory=lambda key: OpenRouterGateway(key, config.usd_to_cad),
         cap_cad=config.budget_cap_cad,
+        task_cap_cad=config.task_cap_cad,
         operator=config.operator,
         trust_proxy_user=config.trust_proxy_user,
         roles=dict(config.roles),
