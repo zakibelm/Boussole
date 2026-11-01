@@ -28,6 +28,9 @@ class GenerationRequest:
     max_tokens: int = 1024
     response_schema: dict[str, Any] | None = None
     tools: tuple[ToolSpec, ...] = ()
+    # Données protégées (extraits du PMBOK, ADR 0008) : seulement des fournisseurs sans
+    # rétention ni entraînement; sinon l'appel échoue plutôt que de fuir.
+    private: bool = False
 
 
 @dataclass(frozen=True)
