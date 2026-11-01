@@ -11,7 +11,14 @@ import pytest
 from sqlalchemy import select
 from sqlalchemy.orm import Session, sessionmaker
 
-from boussole.agents.answer import ANSWER, ANSWER_RULES, SEARCH, Answerer, AnswerRefusedError
+from boussole.agents.answer import (
+    ANSWER,
+    ANSWER_RULES,
+    COPY_BLOCKED,
+    SEARCH,
+    Answerer,
+    AnswerRefusedError,
+)
 from boussole.agents.answer_cli import render
 from boussole.core.models import AgentLogEntry
 from boussole.platform.audit.log import AuditLog
@@ -155,3 +162,31 @@ def test_citations_are_detected_in_every_format(
     assert (
         _answerer(audit, model).answer("domain.risk", "Que contient le registre ?").cited == cited
     )
+
+
+def test_off_topic_questions_cost_nothing(audit: AuditLog, model: ScriptedGateway) -> None:
+    answerer = replace(_answerer(audit, model), min_score=1.01)
+    answer = answerer.answer("domain.risk", "Recette de la poutine")
+    assert answer.text == NO_SOURCE and not model.requests
+
+
+def test_a_task_can_target_other_parts_of_the_book(audit: AuditLog, model: ScriptedGateway) -> None:
+    answer = _answerer(audit, model).answer("domain.risk", "calendrier", pages=((155, 155),))
+    assert answer.citations == ("Guide test, section 2.3 « Échéancier », p. 155",)
+
+
+LONG_EXCERPT = (
+    "Le plan de réponse aux risques précise pour chaque menace la stratégie retenue le "
+    "responsable les actions prévues le budget associé les déclencheurs observables et la "
+    "date de revue afin que l'équipe puisse agir sans attendre."
+)
+
+
+def test_an_answer_copying_the_book_is_withheld(audit: AuditLog, model: ScriptedGateway) -> None:
+    chunk = Chunk("long", "Guide test", "2.7", "Risque", 200, 200, LONG_EXCERPT)
+    model.reply = f"Voici le texte : {LONG_EXCERPT} [1]"
+    answer = _answerer(audit, model, chunks=[chunk]).answer("domain.risk", "plan de réponse")
+    assert answer.text == COPY_BLOCKED and answer.cited == ()
+    model.reply = "Le plan fixe stratégie, responsable et déclencheurs pour chaque menace [1]."
+    kept = _answerer(audit, model, chunks=[chunk]).answer("domain.risk", "plan de réponse")
+    assert kept.cited == (1,)
