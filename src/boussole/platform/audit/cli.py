@@ -1,7 +1,8 @@
 """Gestion de la clé de signature du journal : lancée par un humain seulement.
 
 python -m boussole.platform.audit.cli init-key
-python -m boussole.platform.audit.cli verify
+python -m boussole.platform.audit.cli verify [--expect NUMÉRO:EMPREINTE]
+python -m boussole.platform.audit.cli anchor
 python -m boussole.platform.audit.cli resume --reason "…"
 """
 
@@ -45,8 +46,9 @@ def _audit() -> AuditLog:
     return AuditLog(sessionmaker(engine), KeyringSecretStore())
 
 
-def _verify(_: argparse.Namespace) -> int:
-    report = _audit().verify()
+def _verify(args: argparse.Namespace) -> int:
+    expected = _parse_anchor(args.expect) if args.expect else None
+    report = _audit().verify(expected)
     if report.ok:
         forks = report.documented_forks
         note = f" (embranchements documentés : {list(forks)})" if forks else ""
@@ -54,6 +56,21 @@ def _verify(_: argparse.Namespace) -> int:
         return 0
     print(f"Journal ALTÉRÉ à l'entrée {report.first_broken_id} : {report.reason}.", file=sys.stderr)
     return 3
+
+
+def _parse_anchor(raw: str) -> tuple[int, str]:
+    entry, _, digest = raw.partition(":")
+    if not entry.isdigit() or len(digest) != 64:
+        raise SystemExit("Ancre attendue sous la forme NUMÉRO:EMPREINTE (64 caractères).")
+    return int(entry), digest
+
+
+def _anchor(_: argparse.Namespace) -> int:
+    entry, digest = _audit().anchor(load_config().operator)
+    print(f"Ancre signée (entrée {entry}). À conserver HORS du serveur :")
+    print(f"{entry}:{digest}")
+    print("Vérification : python -m boussole.platform.audit.cli verify --expect <cette ligne>")
+    return 0
 
 
 def _resume(args: argparse.Namespace) -> int:
@@ -84,7 +101,12 @@ def main(argv: list[str] | None = None) -> int:
     commands.add_parser("init-key", help="Créer la clé de signature (une seule fois)").set_defaults(
         run=_init_key
     )
-    commands.add_parser("verify", help="Vérifier chaînage et signatures").set_defaults(run=_verify)
+    verify = commands.add_parser("verify", help="Vérifier chaînage, signatures et ancres")
+    verify.add_argument("--expect", help="Ancre conservée hors du serveur (NUMÉRO:EMPREINTE)")
+    verify.set_defaults(run=_verify)
+    commands.add_parser(
+        "anchor", help="Écrire une ancre signée et l'afficher pour la garder ailleurs"
+    ).set_defaults(run=_anchor)
     resume = commands.add_parser("resume", help="Documenter des embranchements (humain)")
     resume.add_argument("--reason", required=True, help="Cause de l'incident")
     resume.set_defaults(run=_resume)

@@ -23,6 +23,7 @@ from boussole.platform.secrets import SecretStore
 
 AUDIT_KEY = "audit_signing_key"
 RESUME_ACTION = "audit_resume"
+ANCHOR_ACTION = "audit_anchor"
 # Une seule écriture à la fois dans ce processus : sans cela, deux requêtes
 # simultanées lisent la même entrée précédente et le chaînage se ramifie.
 _WRITE_LOCK = threading.Lock()
@@ -91,10 +92,11 @@ class AuditLog:
             session.flush()
             return row.id
 
-    def verify(self) -> VerifyReport:
+    def verify(self, expected: tuple[int, str] | None = None) -> VerifyReport:
         """Chaînage, contenu et signature. Un embranchement n'est accepté que s'il est
         documenté par une entrée de reprise signée et pointe vers une entrée existante
-        (rien n'a été supprimé)."""
+        (rien n'a été supprimé). Chaque ancre doit correspondre aux entrées qu'elle couvre;
+        `expected` (ancre conservée hors du serveur) doit être présente et identique."""
         key = self._key()
         with self._sessions() as session:
             rows = list(session.scalars(select(AgentLogEntry).order_by(AgentLogEntry.id)))
@@ -111,7 +113,24 @@ class AuditLog:
                 accepted.append(row.id)
             seen.add(row.entry_hash)
             prev = row.entry_hash
+        broken = _broken_anchor(rows, expected)
+        if broken:
+            return VerifyReport(len(rows), broken[0], broken[1], tuple(accepted))
         return VerifyReport(len(rows), None, None, tuple(accepted))
+
+    def anchor(self, by: str) -> tuple[int, str]:
+        """Ancre signée : empreinte de toutes les entrées présentes, branches mortes
+        comprises. Toute suppression antérieure devient détectable; l'ancre affichée,
+        conservée hors du serveur, rend aussi détectable la suppression de la fin."""
+        with _WRITE_LOCK:
+            with self._sessions() as session:
+                rows = list(session.scalars(select(AgentLogEntry).order_by(AgentLogEntry.id)))
+            through = rows[-1].id if rows else 0
+            payload = {"through_id": through, "count": len(rows), "digest": _digest(rows), "by": by}
+        entry = self.append(
+            AuditEvent(uuid.uuid4(), f"humain:{by}", ANCHOR_ACTION, ActionClass.READ, None, payload)
+        )
+        return entry, str(payload["digest"])
 
     def forks(self) -> list[int]:
         """Entrées dont le précédent n'est pas l'entrée juste avant, mais une entrée qui
@@ -148,6 +167,33 @@ def _documented_forks(rows: list[AgentLogEntry], key: bytes) -> set[int]:
         if row.action == RESUME_ACTION and _check(row, row.prev_hash, key) is None:
             documented.update(int(i) for i in row.payload.get("forks", []))
     return documented
+
+
+def _digest(rows: list[AgentLogEntry]) -> str:
+    joined = "\n".join(f"{row.id}:{row.entry_hash}" for row in rows)
+    return hashlib.sha256(joined.encode()).hexdigest()
+
+
+def _broken_anchor(
+    rows: list[AgentLogEntry], expected: tuple[int, str] | None
+) -> tuple[int, str] | None:
+    """(identifiant, raison) de la première ancre contredite par les entrées présentes."""
+    anchors = {row.id: row for row in rows if row.action == ANCHOR_ACTION}
+    for anchor_id, anchor in anchors.items():
+        through = int(anchor.payload["through_id"])
+        covered = [row for row in rows if row.id <= through]
+        if len(covered) != anchor.payload["count"] or _digest(covered) != anchor.payload["digest"]:
+            return anchor_id, f"entrée supprimée avant l'ancre {anchor_id}"
+    if expected is not None:
+        anchor_id, digest = expected
+        found = anchors.get(anchor_id)
+        if found is None or found.payload["digest"] != digest:
+            last = rows[-1].id if rows else 0
+            return (
+                last,
+                f"ancre externe {anchor_id} absente ou différente : fin du journal supprimée",
+            )
+    return None
 
 
 def _check(row: AgentLogEntry, prev: str | None, key: bytes) -> str | None:
