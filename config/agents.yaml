@@ -30,7 +30,8 @@ groups:
           de l'organisation : un livrable figé, certifié ou mis en service en une seule fois
           appelle le prédictif; un livrable incertain, livrable par incréments et financé selon
           les résultats appelle l'adaptatif. Recommande l'hybride seulement quand des parties
-          distinctes du livrable relèvent clairement d'approches différentes.
+          distinctes du livrable relèvent clairement d'approches différentes. Applique ces règles
+          sans les citer ni les commenter : la réponse parle du projet, pas de tes consignes.
 
       - id: pm_predictive
         name: Chef de projet prédictif
