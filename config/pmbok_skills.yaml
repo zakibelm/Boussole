@@ -1,0 +1,100 @@
+# Le PMBOK 8 en skills : quelles parties du livre chaque agent consulte.
+# Aucun texte du livre ici : seulement des repères (partie, section, pages du PDF).
+# L'agent cherche dans l'index local (data/local/) limité à ses pages, et cite
+# section et page (ADR 0004 : le texte ne quitte jamais le serveur).
+# « all » : tout le livre (orchestrateurs). Pages = numéros de page du PDF indexé.
+# Bornes relevées sur l'index du 2026-10-31 ; à revalider si le PDF change.
+
+source: PMBOK 8
+
+parts:
+  standard.foundations:
+    label: Standard, sections 1 et 2 (concepts, création de valeur, environnement)
+    pages: [26, 57]
+  standard.principle_value:
+    label: Standard, 3.4 Se concentrer sur la valeur
+    pages: [63, 65]
+  standard.principle_quality:
+    label: Standard, 3.5 Intégrer la qualité
+    pages: [66, 68]
+  standard.principle_leadership:
+    label: Standard, 3.6 Être un leader responsable
+    pages: [69, 70]
+  standard.principle_sustainability:
+    label: Standard, 3.7 Intégrer la durabilité
+    pages: [71, 75]
+  standard.principle_culture:
+    label: Standard, 3.8 Bâtir une culture d'autonomisation
+    pages: [76, 79]
+  standard.approaches:
+    label: Standard, 4.2 Approches de développement (prédictive, adaptative, hybride)
+    pages: [82, 91]
+  guide.governance:
+    label: Guide, 2.1 Domaine Gouvernance
+    pages: [113, 138]
+  guide.scope:
+    label: Guide, 2.2 Domaine Portée
+    pages: [139, 151]
+  guide.schedule:
+    label: Guide, 2.3 Domaine Échéancier
+    pages: [152, 162]
+  guide.finance:
+    label: Guide, 2.4 Domaine Finance
+    pages: [163, 171]
+  guide.stakeholders:
+    label: Guide, 2.5 Domaine Parties prenantes
+    pages: [172, 183]
+  guide.resources:
+    label: Guide, 2.6 Domaine Ressources
+    pages: [184, 196]
+  guide.risk:
+    label: Guide, 2.7 Domaine Risque
+    pages: [197, 207]
+  guide.tailoring:
+    label: Guide, section 3 (adaptation)
+    pages: [208, 217]
+  guide.inputs_outputs:
+    label: Guide, section 4 (intrants et extrants)
+    pages: [218, 249]
+  guide.tools:
+    label: Guide, section 5 (outils et techniques)
+    pages: [250, 321]
+  appendix.pmo:
+    label: Annexe X2 (PMO)
+    pages: [337, 341]
+  appendix.ai_ethics:
+    label: Annexe X3 (IA, usage responsable et éthique)
+    pages: [342, 349]
+  appendix.procurement:
+    label: Annexe X4 (approvisionnement)
+    pages: [350, 359]
+  glossary:
+    label: Glossaire
+    pages: [370, 401]
+
+agents:
+  selector: all
+  pm_predictive: all
+  pm_adaptive: all
+  pm_hybrid: all
+
+  pm_predictive.planner: [guide.schedule, guide.tools, glossary]
+  pm_predictive.milestones: [guide.schedule, glossary]
+  pm_adaptive.scrum_master: [standard.approaches, guide.resources, standard.principle_culture, glossary]
+  pm_adaptive.product_owner: [guide.scope, standard.principle_value, standard.approaches, glossary]
+  pm_hybrid.coordinator: [guide.governance, guide.tailoring, standard.approaches, glossary]
+  pm_hybrid.kpi_tracking: [guide.finance, guide.schedule, guide.governance, glossary]
+
+  domain.scope: [guide.scope, guide.inputs_outputs, guide.tools, glossary]
+  domain.schedule: [guide.schedule, guide.inputs_outputs, guide.tools, glossary]
+  domain.finance: [guide.finance, appendix.procurement, guide.inputs_outputs, guide.tools, glossary]
+  domain.stakeholders: [guide.stakeholders, guide.inputs_outputs, guide.tools, glossary]
+  domain.resources: [guide.resources, appendix.procurement, guide.inputs_outputs, guide.tools, glossary]
+  domain.risk: [guide.risk, guide.inputs_outputs, guide.tools, glossary]
+
+  principle.value: [standard.principle_value, standard.foundations, glossary]
+  principle.quality: [standard.principle_quality, glossary]
+  principle.sustainability: [standard.principle_sustainability, glossary]
+  principle.ethics: [standard.principle_leadership, appendix.ai_ethics, glossary]
+
+  closing: [guide.governance, guide.inputs_outputs, appendix.pmo, glossary]
