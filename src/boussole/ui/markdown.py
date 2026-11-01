@@ -23,6 +23,8 @@ def render(text: str) -> Markup:
         line = lines[i].strip()
         if not line:
             i += 1
+        elif line.startswith("```"):
+            i = _code(lines, i, blocks)
         elif heading := _HEADING.match(line):
             blocks.append(f"<h4>{_inline(heading.group(1))}</h4>")
             i += 1
@@ -33,6 +35,17 @@ def render(text: str) -> Markup:
         else:
             i = _paragraph(lines, i, blocks)
     return Markup("\n".join(blocks))  # noqa: S704 (texte échappé ci-dessus)
+
+
+def _code(lines: list[str], i: int, blocks: list[str]) -> int:
+    """Bloc de code : rendu tel quel (déjà échappé), sans autre mise en forme."""
+    body: list[str] = []
+    i += 1
+    while i < len(lines) and not lines[i].strip().startswith("```"):
+        body.append(lines[i])
+        i += 1
+    blocks.append(f'<pre class="code">{chr(10).join(body)}</pre>')
+    return i + 1
 
 
 def _inline(text: str) -> str:
@@ -77,5 +90,8 @@ def _paragraph(lines: list[str], i: int, blocks: list[str]) -> int:
 
 def _starts_block(line: str) -> bool:
     return bool(
-        _HEADING.match(line) or line.startswith("|") or _BULLET.match(line) or _NUMBERED.match(line)
+        _HEADING.match(line)
+        or line.startswith(("|", "```"))
+        or _BULLET.match(line)
+        or _NUMBERED.match(line)
     )
