@@ -3,7 +3,7 @@
 {% else %}
 <div class="answer">
   <p class="muted">Question : {{ question }}</p>
-  <div class="answer-text">{{ answer.text }}</div>
+  <div class="answer-md">{{ answer.text | md }}</div>
   <p class="muted" style="margin-bottom:4px">Sources fournies, citées en gras ({{ answer.cited | length }} sur {{ answer.citations | length }}) :</p>
   <ol class="sources">
     {% for c in answer.citations %}<li class="{{ 'cited' if loop.index in answer.cited else '' }}">{{ c }}</li>{% endfor %}

@@ -30,7 +30,7 @@
   <h2>Approche du projet</h2>
   {% if pending %}
     <p><strong>Proposition du sélecteur : {{ pending.title }}</strong> <span class="muted">— en attente de ta décision</span></p>
-    <div class="answer-text">{{ pending.rationale }}</div>
+    <div class="answer-md">{{ pending.rationale | md }}</div>
     <form method="post" action="/projects/{{ project.id }}/decisions/{{ pending.id }}" class="decision">
       <div class="row">
         <label>Approche retenue
