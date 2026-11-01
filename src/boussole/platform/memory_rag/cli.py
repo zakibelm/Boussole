@@ -18,14 +18,14 @@ from boussole.platform.memory_rag.memory import LOCAL_DATA, OutsideLocalDataErro
 INDEX_PATH = LOCAL_DATA / "rag_index.jsonl"
 
 
-def _memory() -> RagMemory:
+def memory() -> RagMemory:
     model = os.environ.get("BOUSSOLE_EMBEDDING_MODEL", DEFAULT_LOCAL_MODEL)
     return RagMemory(LocalEmbedder(model), LocalVectorStore(INDEX_PATH))
 
 
 def _ingest(args: argparse.Namespace) -> int:
     try:
-        report = _memory().ingest_pdf(Path(args.pdf), args.source)
+        report = memory().ingest_pdf(Path(args.pdf), args.source)
     except OutsideLocalDataError as exc:
         print(f"Refusé : {exc}", file=sys.stderr)
         return 2
@@ -40,7 +40,7 @@ def _search(args: argparse.Namespace) -> int:
     pages = None
     if args.agent:
         pages = load_pmbok_skills(load_config().pmbok_skills_path).pages_for(args.agent)
-    hits = _memory().search(args.question, k=args.k, pages=pages)
+    hits = memory().search(args.question, k=args.k, pages=pages)
     if not hits:
         print("Aucune source trouvée.")
     for i, hit in enumerate(hits, start=1):

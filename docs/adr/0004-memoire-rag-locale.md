@@ -1,6 +1,6 @@
 # ADR 0004 : mémoire RAG indexée en local
 
-- **Statut :** accepté le 2026-10-31 par Zakaria Belmeddah
+- **Statut :** accepté le 2026-10-31 par Zakaria Belmeddah; point 1 amendé par l'ADR 0008
 - **Date :** 2026-10-31
 
 ## Contexte

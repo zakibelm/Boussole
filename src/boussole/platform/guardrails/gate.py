@@ -70,6 +70,25 @@ class ActionGate:
             raise
         return GateResult(decision, audit_id, value)
 
+    def record(
+        self, request: ActionRequest, correlation_id: uuid.UUID, outcome: dict[str, object]
+    ) -> int:
+        """Journalise le résultat d'une action exécutée : repères et compteurs, jamais de texte
+        protégé (citations, modèle, coût, empreinte de la réponse)."""
+        policy = self._policy.actions.get(request.action)
+        action_class = policy.class_ if policy else ActionClass.READ
+        payload: dict[str, object] = {"verdict": "done", **outcome}
+        return self._audit.append(
+            AuditEvent(
+                correlation_id,
+                request.agent_id,
+                request.action,
+                action_class,
+                request.project_id,
+                payload,
+            )
+        )
+
     def _decide(self, request: ActionRequest, approval: Approval | None) -> Decision:
         try:
             ceiling = self._catalog.get(request.agent_id).autonomy

@@ -34,3 +34,5 @@ réponse brute et note de chaque cas). Les exécutions à blanc ne sont pas vers
   sur la préférence de l'équipe), soit étiqueter ces cas « hybrid ». Sans ces deux cas, Luna,
   Haiku et Sonnet obtiennent 4 sur 4 en approche.
 - Coût cumulé du benchmark : 1,40 $ CA sur le budget d'essai de 20 $ CA.
+- **Décision (1er novembre 2026)** : GPT-5.6 Luna devient le modèle par défaut des 22 agents
+  (`config/agents.yaml`), modifiable par agent dans la page Paramètres.

@@ -123,6 +123,8 @@ def _chat_body(request: GenerationRequest) -> dict[str, Any]:
         "max_tokens": request.max_tokens,
         "usage": {"include": True},
     }
+    if request.private:
+        body["provider"] = {"data_collection": "deny", "zdr": True}
     if request.response_schema is not None:
         body["response_format"] = {
             "type": "json_schema",

@@ -1,7 +1,8 @@
 # Le PMBOK 8 en skills : quelles parties du livre chaque agent consulte.
 # Aucun texte du livre ici : seulement des repères (partie, section, pages du PDF).
 # L'agent cherche dans l'index local (data/local/) limité à ses pages, et cite
-# section et page (ADR 0004 : le texte ne quitte jamais le serveur).
+# section et page. Le livre et l'index restent sur le serveur (ADR 0004); seuls les
+# extraits trouvés partent vers un fournisseur sans rétention pour répondre (ADR 0008).
 # « all » : tout le livre (orchestrateurs). Pages = numéros de page du PDF indexé.
 # Bornes relevées sur l'index du 2026-10-31 ; à revalider si le PDF change.
 
