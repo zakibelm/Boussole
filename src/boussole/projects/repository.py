@@ -81,6 +81,27 @@ class Dashboard:
             return None
         return round(self.budget_actual_cad / self.budget_planned_cad * 100)
 
+    def summary(self) -> str:
+        """Les chiffres du tableau de bord, en texte, pour les agents."""
+        if not (
+            self.deliverables_total
+            or self.tasks_total
+            or self.risks_open
+            or self.budget_planned_cad
+        ):
+            return "Aucune donnée saisie (livrables, tâches, risques, budget)."
+        statuses = ", ".join(f"{s.value} {n}" for s, n in sorted(self.tasks_by_status.items()))
+        risks = "; ".join(f"{r.title} (score {r.score})" for r in self.top_risks) or "aucun"
+        pct = self.budget_consumed_pct
+        return (
+            f"Livrables terminés : {self.deliverables_done} sur {self.deliverables_total}\n"
+            f"Tâches : {self.tasks_total} ({statuses or 'aucune'}), en retard : "
+            f"{self.tasks_overdue}\n"
+            f"Risques ouverts : {self.risks_open}; critiques : {risks}\n"
+            f"Budget : {self.budget_actual_cad} $ CA réels sur {self.budget_planned_cad} $ CA "
+            f"prévus ({pct if pct is not None else '—'} %)"
+        )
+
 
 class ProjectRepository:
     def __init__(self, sessions: sessionmaker[Session]) -> None:
