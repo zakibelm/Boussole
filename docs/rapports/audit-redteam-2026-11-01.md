@@ -30,11 +30,22 @@
 | 1 | Corrigé | Toute écriture de Paramètres exige le rôle `pmo` (refus 403) | `tests/redteam/test_redteam_settings.py` |
 | 2 | Corrigé | Chaque écriture de Paramètres est journalisée avant son effet (auteur, rôle, cible, empreinte de la clé); sans journal, aucun changement | idem |
 | 3 | Corrigé, sous condition | Ancres signées (`audit.cli anchor`) et ancre externe (`verify --expect`). **La protection n'existe qu'à partir d'une ancre** : ancrer chaque jour et garder la ligne hors du serveur (`docs/runbooks/journal-audit.md`) | `tests/redteam/test_redteam_audit_anchor.py` |
-| 4 | Corrigé | Réservation du plafond par tâche avant chaque appel (`BOUSSOLE_TASK_CAP_CAD`, 0,50 $ CA); plafond 1 $ CA et 8 appels simultanés : au plus 1 $ CA | `tests/redteam/test_redteam_budget.py` |
+| 4 | Corrigé (complété par la revue, points 1 et 2) | Coût maximal estimé avant chaque appel au prix du modèle, refus au-delà de `BOUSSOLE_TASK_CAP_CAD` ou si le prix est inconnu; réservations en base (`llm_reservations`) sous le verrou du journal, expirant après 10 minutes; plafond 1 $ CA et 8 appels sur deux workers : au plus 1 $ CA | `tests/redteam/test_redteam_budget.py`, `test_redteam_budget_db.py`, `tests/integration/test_budget_reservations.py` |
 | 5 | Corrigé | HTMX 2.0.3 servi par Boussole (archive npm vérifiée), contrôle d'intégrité SHA-384 | `tests/redteam/test_redteam_scripts.py` |
 | 6 | Corrigé | `outbound: true` : action sortante refusée sans destination déclarée | `tests/redteam/test_redteam_outbound_csrf.py` |
-| 7 | Corrigé | Provenance limitée à « manuelle » ou « raffinée par l'IA » depuis le formulaire | `tests/redteam/test_redteam_settings.py` |
+| 7 | Corrigé (complété par la revue, point 4) | Provenance limitée à « manuelle » ou « raffinée par l'IA »; « raffinée par l'IA » acceptée seulement si le texte est identique à une proposition générée par le serveur pour cette personne (une fois, dans l'heure), sinon version manuelle signalée | `tests/redteam/test_redteam_settings.py` |
 | 8 | Corrigé | `X-Forwarded-Host` du client ignoré; l'origine publique vient de `BOUSSOLE_ALLOWED_ORIGINS` | `tests/redteam/test_redteam_outbound_csrf.py` |
+
+### Revue de l'audit (1er novembre 2026)
+
+Une revue des corrections a relevé quatre insuffisances, corrigées sur `feat/deploiement` :
+
+| # | Insuffisance | Correction |
+|---|---|---|
+| 1 | Le plafond par tâche réservait un forfait, sans borner le coût réel d'un appel | Coût maximal estimé avant l'envoi : (jetons du prompt, surestimés, + `max_tokens`) au prix du modèle; refus au-delà du plafond par tâche ou si le prix est inconnu |
+| 2 | Les réservations de budget étaient propres au processus : deux workers pouvaient dépasser le plafond ensemble | Table `llm_reservations` (migration 0004), sous le même verrou que le journal; expiration après 10 minutes |
+| 3 | L'ancre quotidienne restait sur le serveur | `infra/anchor-cron.sh` l'envoie en HTTPS vers `BOUSSOLE_ANCHOR_URL`; erreur signalée à cron si l'envoi échoue ou si l'adresse manque |
+| 4 | « Raffinée par l'IA » restait déclarable pour n'importe quel texte | Acceptée seulement pour un texte identique à une proposition générée par le serveur |
 
 Contre-vérification : les 7 preuves de concept d'origine relancées après correction.
 5 échouent (faille fermée); les 2 du journal réussissent encore, car elles visent un

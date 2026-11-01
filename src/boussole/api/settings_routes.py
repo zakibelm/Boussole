@@ -210,6 +210,14 @@ def save_skill(
         return _skill(
             request, agent_id, error="Provenance refusée : manuelle ou raffinée par l'IA."
         )
+    notice = "Nouvelle version enregistrée."
+    if source is SkillSource.AI_REFINED and not services.take_proposal(request, agent_id, text):
+        # Seul un texte identique à une proposition générée ici garde « raffinée par l'IA »
+        source = SkillSource.MANUAL
+        notice = (
+            "Nouvelle version enregistrée comme manuelle : le texte diffère de la "
+            "proposition de l'IA (ou aucune proposition récente)."
+        )
     details: dict[str, object] = {
         "agent": agent_id,
         "source": str(source),
@@ -224,7 +232,7 @@ def save_skill(
         )
     except ValueError as exc:
         return _skill(request, agent_id, error=str(exc))
-    return _skill(request, agent_id, notice="Nouvelle version enregistrée.")
+    return _skill(request, agent_id, notice=notice)
 
 
 @router.post("/agents/{agent_id}/skill/refine", response_class=HTMLResponse, dependencies=PMO_ONLY)
@@ -243,6 +251,7 @@ def refine(
         proposal = refine_skill(services.repo, gateway, agent_id, text, instruction, name)
     except (GatewayError, BudgetExceededError) as exc:
         return _skill(request, agent_id, error=str(exc))
+    services.remember_proposal(request, agent_id, proposal)
     return _skill(request, agent_id, draft=text, proposal=proposal, instruction=instruction)
 
 

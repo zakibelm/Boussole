@@ -101,3 +101,75 @@ def test_skill_provenance_cannot_be_forged_from_the_form(
         headers=PMO,
     )
     assert services.repo.current_skill("selector").version == 0
+
+
+# --- Revue de l'audit, point 4 : provenance « raffinée par l'IA » vérifiée --------------
+
+
+def _refine(client: TestClient, headers: dict[str, str]) -> str:
+    from tests.integration.test_settings_page import VALID_KEY, proposal_in
+
+    svc: Services = client.app.state.services  # type: ignore[attr-defined]
+    svc.secrets.set(OPENROUTER_KEY, VALID_KEY)  # clé acceptée par OpenRouter simulé
+    response = client.post(
+        "/settings/agents/selector/skill/refine", data={"text": "Brouillon"}, headers=headers
+    )
+    return proposal_in(response)
+
+
+def _save_as_ai(client: TestClient, text: str, headers: dict[str, str]) -> str:
+    response = client.post(
+        "/settings/agents/selector/skill",
+        data={"text": text, "source": "ai_refined"},
+        headers=headers,
+    )
+    text_: str = response.text
+    return text_
+
+
+def test_exact_server_proposal_keeps_ai_provenance(
+    accounts: TestClient,
+    services: Services,  # noqa: F811
+) -> None:
+    proposal = _refine(accounts, PMO)
+    _save_as_ai(accounts, proposal, PMO)
+    assert services.repo.current_skill("selector").source == "ai_refined"
+
+
+def test_edited_proposal_is_saved_as_manual_with_a_notice(
+    accounts: TestClient,
+    services: Services,  # noqa: F811
+) -> None:
+    proposal = _refine(accounts, PMO)
+    page = _save_as_ai(accounts, proposal + " Ajout humain.", PMO)
+    assert services.repo.current_skill("selector").source == "manual"
+    assert "comme manuelle" in page
+
+
+def test_ai_provenance_without_any_proposal_is_manual(
+    accounts: TestClient,
+    services: Services,  # noqa: F811
+) -> None:
+    _save_as_ai(accounts, "Texte jamais proposé par l'IA", PMO)
+    assert services.repo.current_skill("selector").source == "manual"
+
+
+def test_a_proposal_cannot_be_reused_by_another_person(
+    accounts: TestClient,
+    services: Services,  # noqa: F811
+) -> None:
+    services.roles = {"zaki": "pmo", "marie": "pmo"}
+    proposal = _refine(accounts, PMO)
+    _save_as_ai(accounts, proposal, {"X-Remote-User": "marie"})
+    assert services.repo.current_skill("selector").source == "manual"
+
+
+def test_a_proposal_is_accepted_only_once(
+    accounts: TestClient,
+    services: Services,  # noqa: F811
+) -> None:
+    proposal = _refine(accounts, PMO)
+    _save_as_ai(accounts, proposal, PMO)
+    _save_as_ai(accounts, proposal, PMO)
+    sources = [s.source for s in services.repo.skill_history("selector")]
+    assert sources == ["manual", "ai_refined"]

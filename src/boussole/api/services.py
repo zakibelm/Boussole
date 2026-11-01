@@ -1,5 +1,6 @@
 """Assemblage des dépendances de l'API (injectées, donc remplaçables en test)."""
 
+import hashlib
 import time
 import uuid
 from collections.abc import Callable
@@ -36,6 +37,8 @@ from boussole.projects.assistant import ProjectAssistant
 from boussole.projects.repository import ProjectRepository
 
 MODELS_TTL_S = 3600
+# Durée pendant laquelle une proposition du raffineur peut être acceptée telle quelle
+PROPOSAL_TTL_S = 3600
 # Parties du livre sur le choix de l'approche, pour la proposition du sélecteur
 INTAKE_PARTS = ("standard.approaches", "guide.tailoring")
 
@@ -56,6 +59,22 @@ class Services:
     audit: AuditLog | None = None
     task_cap_cad: Decimal | None = None
     _models_cache: tuple[float, tuple[ModelInfo, ...]] | None = field(default=None, repr=False)
+    # Propositions de l'IA générées par ce serveur : (personne, agent) -> {empreinte: date}
+    _proposals: dict[tuple[str, str], dict[str, float]] = field(default_factory=dict, repr=False)
+
+    def remember_proposal(self, request: Request, agent_id: str, text: str) -> None:
+        """Garde l'empreinte d'une proposition du raffineur, pour cette personne et cet agent."""
+        key = (self.operator_for(request), agent_id)
+        now = time.monotonic()
+        recent = {h: t for h, t in self._proposals.get(key, {}).items() if now - t < PROPOSAL_TTL_S}
+        recent[_digest(text)] = now
+        self._proposals[key] = recent
+
+    def take_proposal(self, request: Request, agent_id: str, text: str) -> bool:
+        """Vrai si `text` est identique à une proposition récente (consommée au passage)."""
+        recent = self._proposals.get((self.operator_for(request), agent_id), {})
+        stamp = recent.pop(_digest(text), None)
+        return stamp is not None and time.monotonic() - stamp < PROPOSAL_TTL_S
 
     def record_settings_change(
         self, request: Request, action: str, details: dict[str, object]
@@ -180,3 +199,7 @@ def _answerer_factory(
         )
 
     return build
+
+
+def _digest(text: str) -> str:
+    return hashlib.sha256(text.strip().encode()).hexdigest()
