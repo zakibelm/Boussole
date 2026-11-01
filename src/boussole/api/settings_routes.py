@@ -120,7 +120,7 @@ def save_key(request: Request, api_key: Annotated[str, Form()]) -> HTMLResponse:
     services = _services(request)
     services.secrets.set(OPENROUTER_KEY, key)
     services.forget_models()
-    return _key(request, notice="Clé enregistrée dans le coffre Windows.")
+    return _key(request, notice="Clé enregistrée dans le coffre du système.")
 
 
 @router.post("/api-key/delete", response_class=HTMLResponse)
