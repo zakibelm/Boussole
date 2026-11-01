@@ -17,7 +17,7 @@ Critère de sortie : une réponse sourcée et journalisée de bout en bout.
 - [x] Mémoire RAG : découpage par section, embeddings locaux, citations, droits par projet (ADR 0004)
 - [x] Indexation du PMBOK 8 (401 pages, 847 extraits, sur le VPS) et PMBOK en skills par agent (ADR 0007)
 - [x] Garde-fous : politique d'autonomie (config/autonomy.yaml), journal d'audit signé, séparation lecture et action (ADR 0006)
-- [ ] Benchmark reproductible (3 tâches PMO, au moins 2 modèles via OpenRouter)
+- [x] Benchmark reproductible (3 tâches PMO, 5 modèles via OpenRouter; jeu de base saturé, jeu difficile le 1er novembre)
 - [x] CI : lint, types, tests, couverture, pip-audit, gitleaks, fichiers interdits (GitHub Actions)
 - [x] Tests red team 1 à 3
 - [x] Tests d'intégration PostgreSQL exécutés (dans la CI, service pgvector)
