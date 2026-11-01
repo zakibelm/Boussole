@@ -14,7 +14,7 @@ from boussole.core.enums import Approach
 from boussole.platform.audit.log import MissingSigningKeyError
 from boussole.platform.llm_gateway.budget import BudgetExceededError
 from boussole.platform.llm_gateway.port import GatewayError
-from boussole.projects.assistant import DecisionRefusedError, ProjectAssistant
+from boussole.projects.assistant import DecisionRefusedError, ProjectAssistant, Signer
 from boussole.projects.repository import APPROACH_LABELS
 
 router = APIRouter(prefix="/projects")
@@ -38,7 +38,7 @@ def _assistant(request: Request) -> ProjectAssistant:
 def _render(request: Request, name: str, **context: Any) -> HTMLResponse:
     templates: Jinja2Templates = request.app.state.templates
     services: Services = request.app.state.services
-    context.setdefault("operator", services.operator)
+    context.setdefault("operator", services.operator_for(request))
     return templates.TemplateResponse(request, name, context)
 
 
@@ -95,11 +95,13 @@ def decide(
     reason: Annotated[str, Form()] = "",
 ) -> HTMLResponse:
     assistant = _assistant(request)
+    services: Services = request.app.state.services
+    signer = Signer(services.operator_for(request), services.role_for(request))
     try:
         if verdict == "reject":
-            assistant.reject(project_id, decision_id, reason)
+            assistant.reject(project_id, decision_id, reason, signer)
         else:
-            assistant.decide(project_id, decision_id, approach, reason)
+            assistant.decide(project_id, decision_id, approach, reason, signer)
     except KeyError:
         raise HTTPException(404, "Décision inconnue") from None
     except (ValueError, DecisionRefusedError, MissingSigningKeyError) as exc:

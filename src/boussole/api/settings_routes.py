@@ -35,7 +35,7 @@ def _services(request: Request) -> Services:
 
 def _render(request: Request, name: str, **context: Any) -> HTMLResponse:
     templates: Jinja2Templates = request.app.state.templates
-    context.setdefault("operator", _services(request).operator)
+    context.setdefault("operator", _services(request).operator_for(request))
     return templates.TemplateResponse(request, name, context)
 
 
@@ -150,7 +150,7 @@ def save_model(request: Request, agent_id: str, model: Annotated[str, Form()]) -
     known = {m.id for m in _models(services)[0]}
     if not MODEL_ID.match(model) or (known and model not in known):
         return _render(request, "_status.html", ok=False, message="Modèle inconnu d'OpenRouter.")
-    services.repo.set_model(agent_id, model, services.operator)
+    services.repo.set_model(agent_id, model, services.operator_for(request))
     return _render(request, "_status.html", ok=True, message="Enregistré")
 
 
@@ -170,7 +170,9 @@ def save_skill(
     services = _services(request)
     _agent_name(services, agent_id)
     try:
-        services.repo.save_skill(agent_id, text, services.operator, source, reason.strip() or None)
+        services.repo.save_skill(
+            agent_id, text, services.operator_for(request), source, reason.strip() or None
+        )
     except ValueError as exc:
         return _skill(request, agent_id, error=str(exc))
     return _skill(request, agent_id, notice="Nouvelle version enregistrée.")
@@ -200,7 +202,7 @@ def revert(request: Request, agent_id: str, version: int) -> HTMLResponse:
     services = _services(request)
     _agent_name(services, agent_id)
     try:
-        services.repo.revert_skill(agent_id, version, services.operator)
+        services.repo.revert_skill(agent_id, version, services.operator_for(request))
     except KeyError:
         raise HTTPException(404, "Version inconnue") from None
     return _skill(request, agent_id, notice=f"Version {version} rétablie.")

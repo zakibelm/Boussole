@@ -7,13 +7,14 @@ from decimal import Decimal
 from functools import cache
 from pathlib import Path
 
-from sqlalchemy import create_engine
+from fastapi import Request
 from sqlalchemy.orm import Session, sessionmaker
 
 from boussole.agents.answer import Answerer, MissingApiKeyError
 from boussole.agents.catalog import Catalog, load_catalog
 from boussole.agents.pmbok_skills import PmbokSkills, load_pmbok_skills
 from boussole.config import AppConfig
+from boussole.core.database import make_engine
 from boussole.core.models import Base
 from boussole.platform.audit.log import AuditLog, create_audit_table
 from boussole.platform.guardrails.gate import ActionGate
@@ -28,6 +29,8 @@ from boussole.projects.assistant import ProjectAssistant
 from boussole.projects.repository import ProjectRepository
 
 MODELS_TTL_S = 3600
+# Parties du livre sur le choix de l'approche, pour la proposition du sélecteur
+INTAKE_PARTS = ("standard.approaches", "guide.tailoring")
 
 
 @dataclass
@@ -40,7 +43,22 @@ class Services:
     cap_cad: Decimal
     operator: str
     projects: ProjectAssistant | None = None
+    trust_proxy_user: bool = False
+    roles: dict[str, str] = field(default_factory=dict)
+    default_role: str = "pmo"
     _models_cache: tuple[float, tuple[ModelInfo, ...]] | None = field(default=None, repr=False)
+
+    def operator_for(self, request: Request) -> str:
+        """Compte authentifié par nginx (en-tête posé par nginx, jamais par le client),
+        sinon l'opérateur configuré."""
+        user = request.headers.get("x-remote-user", "").strip()
+        return user if self.trust_proxy_user and user else self.operator
+
+    def role_for(self, request: Request) -> str:
+        """Avec des comptes nginx, un compte sans rôle déclaré ne peut rien valider."""
+        if not self.trust_proxy_user:
+            return self.default_role
+        return self.roles.get(self.operator_for(request), "observer")
 
     def gateway(self) -> OpenRouterGateway | None:
         key = self.secrets.get(OPENROUTER_KEY)
@@ -72,7 +90,7 @@ def open_database(config: AppConfig) -> sessionmaker[Session]:
         Path(config.database_url.removeprefix("sqlite:///")).parent.mkdir(
             parents=True, exist_ok=True
         )
-    engine = create_engine(config.database_url)
+    engine = make_engine(config.database_url)
     if config.is_lightweight:
         Base.metadata.create_all(engine)
         create_audit_table(engine)
@@ -92,6 +110,9 @@ def build_services(config: AppConfig) -> Services:
         gateway_factory=lambda key: OpenRouterGateway(key, config.usd_to_cad),
         cap_cad=config.budget_cap_cad,
         operator=config.operator,
+        trust_proxy_user=config.trust_proxy_user,
+        roles=dict(config.roles),
+        default_role=config.operator_role,
     )
     gate = ActionGate(
         load_policy(config.autonomy_path), catalog, AuditLog(sessions, services.secrets)
@@ -99,15 +120,14 @@ def build_services(config: AppConfig) -> Services:
     services.projects = ProjectAssistant(
         ProjectRepository(sessions),
         gate,
-        _answerer_factory(services, gate, pmbok),
-        config.operator,
-        config.operator_role,
+        _answerer_factory(services, gate, pmbok, config.min_relevance),
+        pmbok.pages_of(INTAKE_PARTS),
     )
     return services
 
 
 def _answerer_factory(
-    services: Services, gate: ActionGate, pmbok: PmbokSkills
+    services: Services, gate: ActionGate, pmbok: PmbokSkills, min_relevance: float
 ) -> Callable[[], Answerer]:
     @cache
     def memory() -> RagMemory:
@@ -119,6 +139,8 @@ def _answerer_factory(
         gateway = services.budgeted_gateway()
         if gateway is None:
             raise MissingApiKeyError("Clé OpenRouter absente : saisis-la dans la page Paramètres.")
-        return Answerer(gate, memory(), gateway, services.repo, pmbok.pages_for)
+        return Answerer(
+            gate, memory(), gateway, services.repo, pmbok.pages_for, min_score=min_relevance
+        )
 
     return build
