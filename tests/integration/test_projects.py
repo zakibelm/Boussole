@@ -269,7 +269,7 @@ def test_agents_receive_the_project_figures(
     assistant: ProjectAssistant, model: ScriptedGateway, sessions: Sessions
 ) -> None:
     project_id = seed_demo(sessions, date.today())
-    assistant.ask(project_id, "domain.finance", "Budget consommé ?")
+    assistant.ask(project_id, "domain.risk", "Registre des risques et budget consommé ?")
     sent = model.requests[0].messages[1].content
     assert "Livrables terminés : 1 sur 4" in sent and "en retard : 2" in sent
     assert "82500" in sent and "(46 %)" in sent
