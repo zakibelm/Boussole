@@ -95,6 +95,20 @@ def test_models_come_from_openrouter_with_cad_prices(
     assert MODEL in page and "4.20 / 21.00 $ CA" in page
 
 
+def test_agents_choose_from_a_menu_grouped_by_provider(
+    client: TestClient, services: Services
+) -> None:
+    services.secrets.set(OPENROUTER_KEY, VALID_KEY)
+    page = client.get("/settings").text
+    assert 'class="model-select"' in page and "<datalist" not in page
+    assert f'<optgroup label="{MODEL.split("/")[0]}">' in page
+
+
+def test_without_key_the_model_stays_a_text_field(client: TestClient) -> None:
+    page = client.get("/settings").text
+    assert 'class="model-select"' not in page and 'name="model"' in page
+
+
 def test_model_choice_is_saved(client: TestClient, services: Services) -> None:
     services.secrets.set(OPENROUTER_KEY, VALID_KEY)
     response = client.post("/settings/agents/domain.risk/model", data={"model": MODEL})
