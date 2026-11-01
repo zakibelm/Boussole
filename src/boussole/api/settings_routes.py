@@ -1,6 +1,7 @@
 """Page Paramètres : clé OpenRouter, modèle et skill de chaque agent."""
 
 import re
+from itertools import groupby
 from typing import Annotated, Any
 
 from fastapi import APIRouter, Form, HTTPException, Request
@@ -51,6 +52,15 @@ def _models(services: Services) -> tuple[tuple[ModelInfo, ...], str | None]:
         return (), str(exc)
 
 
+def _by_provider(models: tuple[ModelInfo, ...]) -> list[tuple[str, list[ModelInfo]]]:
+    """Menu des modèles regroupé par fournisseur (la liste arrive triée par identifiant)."""
+    return [(name, list(group)) for name, group in groupby(models, key=_provider)]
+
+
+def _provider(model: ModelInfo) -> str:
+    return model.id.split("/", 1)[0]
+
+
 def _key(request: Request, **extra: Any) -> HTMLResponse:
     masked = mask(_services(request).secrets.get(OPENROUTER_KEY))
     return _render(request, "_key.html", masked_key=masked, **extra)
@@ -82,6 +92,7 @@ def settings_page(request: Request) -> HTMLResponse:
         effective=services.repo.effective_model,
         skill_version=lambda agent_id: services.repo.current_skill(agent_id).version,
         models=models,
+        model_groups=_by_provider(models),
         models_error=models_error,
         spent=services.ledger.total_spent_cad(),
         cap=services.cap_cad,
