@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 
-from boussole.api import settings_routes
+from boussole.api import project_routes, settings_routes
 from boussole.api.services import Services, build_services
 from boussole.config import load_config
 
@@ -18,10 +18,11 @@ def create_app(services: Services) -> FastAPI:
     app.state.services = services
     app.state.templates = Jinja2Templates(directory=TEMPLATES)
     app.include_router(settings_routes.router)
+    app.include_router(project_routes.router)
 
     @app.get("/", include_in_schema=False)
     def home() -> RedirectResponse:
-        return RedirectResponse("/settings")
+        return RedirectResponse("/projects")
 
     return app
 
