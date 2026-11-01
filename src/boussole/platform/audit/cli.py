@@ -24,7 +24,7 @@ def _init_key(_: argparse.Namespace) -> int:
         )
         return 1
     store.set(AUDIT_KEY, secrets.token_hex(32))
-    print("Clé de signature créée dans le Gestionnaire d'identifiants Windows (boussole).")
+    print("Clé de signature créée dans le trousseau du système (boussole), jamais affichée.")
     return 0
 
 
