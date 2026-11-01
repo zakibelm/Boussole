@@ -10,6 +10,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from boussole.agents.catalog import Catalog, load_catalog
+from boussole.agents.pmbok_skills import load_pmbok_skills
 from boussole.config import AppConfig
 from boussole.core.models import Base
 from boussole.platform.llm_gateway.budget import BudgetedGateway, UsageLedger
@@ -66,9 +67,11 @@ def build_services(config: AppConfig) -> Services:
         Base.metadata.create_all(engine, tables=list(SETTINGS_TABLES))
     sessions = sessionmaker(engine, expire_on_commit=False)
     catalog = load_catalog(config.catalog_path)
+    pmbok = load_pmbok_skills(config.pmbok_skills_path)
+    pmbok.check_agents(catalog)
     return Services(
         catalog=catalog,
-        repo=SettingsRepository(sessions, catalog),
+        repo=SettingsRepository(sessions, catalog, pmbok),
         ledger=SqlUsageLedger(sessions),
         secrets=KeyringSecretStore(),
         gateway_factory=lambda key: OpenRouterGateway(key, config.usd_to_cad),

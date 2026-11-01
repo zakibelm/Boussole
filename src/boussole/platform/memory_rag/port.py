@@ -4,6 +4,8 @@ import uuid
 from dataclasses import dataclass
 from typing import Protocol
 
+PageRange = tuple[int, int]  # pages du PDF, bornes incluses
+
 
 @dataclass(frozen=True)
 class Chunk:
@@ -50,7 +52,14 @@ class VectorStore(Protocol):
     def remove_source(self, source: str) -> int: ...
 
     def search(
-        self, vector: list[float], k: int, model: str, project_id: uuid.UUID | None
-    ) -> list[Hit]: ...
+        self,
+        vector: list[float],
+        k: int,
+        model: str,
+        project_id: uuid.UUID | None,
+        pages: tuple[PageRange, ...] | None = None,
+    ) -> list[Hit]:
+        """`pages` : None = tout; sinon seuls les extraits qui chevauchent ces pages."""
+        ...
 
     def count(self) -> int: ...

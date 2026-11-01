@@ -9,6 +9,8 @@ import os
 import sys
 from pathlib import Path
 
+from boussole.agents.pmbok_skills import load_pmbok_skills
+from boussole.config import load_config
 from boussole.platform.memory_rag.embedders import DEFAULT_LOCAL_MODEL, LocalEmbedder
 from boussole.platform.memory_rag.local_store import LocalVectorStore
 from boussole.platform.memory_rag.memory import LOCAL_DATA, OutsideLocalDataError, RagMemory
@@ -35,7 +37,10 @@ def _ingest(args: argparse.Namespace) -> int:
 
 
 def _search(args: argparse.Namespace) -> int:
-    hits = _memory().search(args.question, k=args.k)
+    pages = None
+    if args.agent:
+        pages = load_pmbok_skills(load_config().pmbok_skills_path).pages_for(args.agent)
+    hits = _memory().search(args.question, k=args.k, pages=pages)
     if not hits:
         print("Aucune source trouvée.")
     for i, hit in enumerate(hits, start=1):
@@ -56,6 +61,7 @@ def main(argv: list[str] | None = None) -> int:
     search.add_argument("question")
     search.add_argument("-k", type=int, default=5)
     search.add_argument("--show-text", action="store_true")
+    search.add_argument("--agent", help="Limiter aux parties du PMBOK de cet agent")
     search.set_defaults(run=_search)
     args = parser.parse_args(argv)
     code: int = args.run(args)

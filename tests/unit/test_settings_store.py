@@ -8,6 +8,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
 from boussole.agents.catalog import load_catalog
+from boussole.agents.pmbok_skills import load_pmbok_skills
 from boussole.core.models import Base
 from boussole.platform.llm_gateway.budget import UsageRecord
 from boussole.platform.llm_gateway.port import Usage
@@ -83,6 +84,17 @@ def test_system_prompt_combines_shared_rules_and_skill(repo: SettingsRepository)
     prompt = repo.system_prompt("selector")
     assert prompt.startswith(CATALOG.shared_rules.strip())
     assert prompt.endswith("Mon skill")
+
+
+def test_pmbok_note_follows_the_skill_even_after_an_edit(
+    sessions: sessionmaker[Session],
+) -> None:
+    pmbok = load_pmbok_skills(Path(__file__).resolve().parents[2] / "config" / "pmbok_skills.yaml")
+    repo = SettingsRepository(sessions, CATALOG, pmbok)
+    repo.save_skill("domain.risk", "Mon skill", "Zakaria", SkillSource.MANUAL, None)
+    prompt = repo.system_prompt("domain.risk")
+    assert prompt.index("Mon skill") < prompt.index("Guide, 2.7 Domaine Risque")
+    assert repo.system_prompt("skill_refiner").endswith(repo.current_skill("skill_refiner").text)
 
 
 def test_usage_ledger_sums_costs(sessions: sessionmaker[Session]) -> None:

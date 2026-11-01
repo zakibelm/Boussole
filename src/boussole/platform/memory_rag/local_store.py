@@ -6,7 +6,7 @@ import uuid
 from dataclasses import asdict
 from pathlib import Path
 
-from boussole.platform.memory_rag.port import Chunk, Hit
+from boussole.platform.memory_rag.port import Chunk, Hit, PageRange
 
 
 class LocalVectorStore:
@@ -36,13 +36,20 @@ class LocalVectorStore:
         return before - len(self._rows)
 
     def search(
-        self, vector: list[float], k: int, model: str, project_id: uuid.UUID | None
+        self,
+        vector: list[float],
+        k: int,
+        model: str,
+        project_id: uuid.UUID | None,
+        pages: tuple[PageRange, ...] | None = None,
     ) -> list[Hit]:
         query = _normalized(vector)
         hits = [
             Hit(chunk, _dot(query, v))
             for chunk, v, row_model in self._rows
-            if row_model == model and chunk.project_id in (None, project_id)
+            if row_model == model
+            and chunk.project_id in (None, project_id)
+            and _within(chunk, pages)
         ]
         return sorted(hits, key=lambda h: h.score, reverse=True)[:k]
 
@@ -66,6 +73,13 @@ class LocalVectorStore:
                 project = data.pop("project_id")
                 chunk = Chunk(**data, project_id=uuid.UUID(project) if project else None)
                 self._rows.append((chunk, row["vector"], row["model"]))
+
+
+def _within(chunk: Chunk, pages: tuple[PageRange, ...] | None) -> bool:
+    """Un extrait de projet n'a pas de pages du livre : le filtre ne vise que les sources."""
+    if pages is None or chunk.project_id is not None:
+        return True
+    return any(chunk.page_start <= end and chunk.page_end >= start for start, end in pages)
 
 
 def _normalized(vector: list[float]) -> list[float]:

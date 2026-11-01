@@ -15,7 +15,7 @@ Critère de sortie : une réponse sourcée et journalisée de bout en bout.
 - [x] Passerelle LLM : port commun, adaptateur OpenRouter, adaptateur factice, plafond de budget (ADR 0002)
 - [x] ★ Page Paramètres : clé OpenRouter, modèle et skill versionné par agent, plafond de coût IA visible
 - [x] Mémoire RAG : découpage par section, embeddings locaux, citations, droits par projet (ADR 0004)
-- [ ] Indexation du PMBOK 8 et skills par agent (en attente du PDF)
+- [x] Indexation du PMBOK 8 (401 pages, 847 extraits, sur le VPS) et PMBOK en skills par agent (ADR 0007)
 - [x] Garde-fous : politique d'autonomie (config/autonomy.yaml), journal d'audit signé, séparation lecture et action (ADR 0006)
 - [ ] Benchmark reproductible (3 tâches PMO, au moins 2 modèles via OpenRouter)
 - [x] CI : lint, types, tests, couverture, pip-audit, gitleaks, fichiers interdits (GitHub Actions)
