@@ -78,6 +78,7 @@ class Project(_Entity, Base):
         ForeignKey("portfolios.id", ondelete="SET NULL"), index=True
     )
     name: Mapped[str] = mapped_column(String(200))
+    description: Mapped[str | None] = mapped_column(Text)
     approach: Mapped[Approach] = mapped_column(_enum(Approach), default=Approach.UNDECIDED)
 
 
