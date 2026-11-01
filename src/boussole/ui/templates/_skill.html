@@ -5,6 +5,13 @@
     <span class="muted">{{ "Valeur par défaut du catalogue" if skill.version == 0 else "Version " ~ skill.version ~ " · " ~ skill.author }}</span>
   </div>
 
+  {% if pmbok_note %}
+  <div class="pmbok-note">
+    <strong>PMBOK en skill</strong> <span class="muted">— ajouté automatiquement après le skill, modifiable dans config/pmbok_skills.yaml.</span>
+    <pre class="rules">{{ pmbok_note }}</pre>
+  </div>
+  {% endif %}
+
   <form hx-post="/settings/agents/{{ agent_id }}/skill" hx-target="#skill-{{ slug }}" hx-swap="innerHTML">
     <textarea name="text" id="skill-text-{{ slug }}" aria-label="Texte du skill">{{ draft if draft is defined else skill.text }}</textarea>
     <div class="row" style="margin-top: 8px">
