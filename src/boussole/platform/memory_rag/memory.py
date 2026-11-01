@@ -1,6 +1,7 @@
 """Mémoire RAG : ingestion et recherche avec citations."""
 
 import logging
+import re
 import uuid
 from dataclasses import dataclass
 from pathlib import Path
@@ -17,6 +18,12 @@ log = logging.getLogger(__name__)
 
 LOCAL_DATA = Path(__file__).resolve().parents[4] / "data" / "local"
 NO_SOURCE = "Aucune source trouvée dans la mémoire pour cette question."
+# Pages liminaires (table des matières, liste des figures, mentions légales, index) :
+# elles ressemblent à tout et n'enseignent rien. Constat des tests du 1er novembre.
+_FRONT_MATTER = re.compile(
+    r"^(table of contents|contents|list of figures.*|notice|index|table des matières)$",
+    re.IGNORECASE,
+)
 
 
 @dataclass(frozen=True)
@@ -67,9 +74,14 @@ class RagMemory:
     ) -> list[Hit]:
         """`pages` : parties du livre propres à l'agent (voir agents/pmbok_skills.py)."""
         vector = self._embedder.embed_query(question)
-        hits = self._store.search(vector, k, self._embedder.model_name, project_id, pages)
+        found = self._store.search(vector, k * 3, self._embedder.model_name, project_id, pages)
+        hits = [h for h in found if not is_front_matter(h.chunk.section_title)][:k]
         log.info("recherche k=%d citations=%s", k, [h.chunk.citation() for h in hits])
         return hits
+
+
+def is_front_matter(title: str) -> bool:
+    return bool(_FRONT_MATTER.match(title.strip()))
 
 
 def format_sources(hits: list[Hit]) -> str:
