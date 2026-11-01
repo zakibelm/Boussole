@@ -24,11 +24,23 @@ passe, courriel à soi-même, dépôt privé) : c'est elle qui rend la suppressi
 du journal détectable. Après une ancre, toute suppression antérieure est détectée par
 `verify`, même sans `--expect`.
 
-Planification suggérée sur le VPS (cron, chaque jour à 2 h), avec envoi de la ligne
-vers un endroit extérieur :
+### Ancre quotidienne envoyée hors du serveur
+
+`infra/anchor-cron.sh` crée l'ancre et l'envoie en HTTPS (POST, texte brut) vers
+`BOUSSOLE_ANCHOR_URL` (variable de `/srv/boussole/boussole.env`) : un service que le VPS
+ne contrôle pas (point de réception d'un outil d'automatisation, webhook vers une boîte
+courriel, stockage d'un autre fournisseur). Il est lancé chaque jour par
+`/etc/cron.d/boussole` (fichier `infra/deploy/boussole.cron`), avec une copie locale dans
+`/var/log/boussole/anchors.log`.
+
+Le script sort en erreur si l'adresse est vide, n'est pas en HTTPS ou si l'envoi
+échoue : cron le signale (MAILTO). L'ancre est créée malgré tout et sa ligne figure dans
+la copie locale; l'envoyer à la main dès que possible.
+
+Pour vérifier avec l'ancre reçue à l'extérieur :
 
 ```bash
-0 2 * * * docker exec boussole python -m boussole.platform.audit.cli anchor
+docker exec boussole-prod-app-1 python -m boussole.platform.audit.cli verify --expect NUMÉRO:EMPREINTE
 ```
 
 ## Documenter des embranchements
