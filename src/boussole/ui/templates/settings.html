@@ -35,15 +35,35 @@
     {% endfor %}
   </template>
   <script>
+    // Chaque menu reçoit la liste complète, plus un champ de recherche qui la filtre
+    // (nom, identifiant ou fournisseur). Le modèle choisi reste toujours visible.
     document.addEventListener("DOMContentLoaded", () => {
       const options = document.getElementById("model-options").content;
-      for (const select of document.querySelectorAll("select.model-select")) {
-        const current = select.dataset.current;
-        select.replaceChildren(options.cloneNode(true));
+      const fill = (select, query) => {
+        const current = select.value || select.dataset.current;
+        const list = options.cloneNode(true);
+        const words = query.toLowerCase().split(/\s+/).filter(Boolean);
+        for (const option of list.querySelectorAll("option")) {
+          const text = (option.value + " " + option.textContent + " "
+            + option.parentElement.label).toLowerCase();
+          if (option.value !== current && !words.every((w) => text.includes(w))) option.remove();
+        }
+        list.querySelectorAll("optgroup:empty").forEach((group) => group.remove());
+        select.replaceChildren(list);
         if (![...select.options].some((o) => o.value === current)) {
           select.prepend(new Option(current + " (absent d'OpenRouter)", current));
         }
         select.value = current;
+      };
+      for (const select of document.querySelectorAll("select.model-select")) {
+        const search = document.createElement("input");
+        search.type = "search";
+        search.className = "model-search";
+        search.placeholder = "Rechercher un modèle (ex. gratuit, claude, luna)…";
+        search.setAttribute("aria-label", "Rechercher un modèle");
+        search.addEventListener("input", () => fill(select, search.value));
+        select.before(search);
+        fill(select, "");
       }
     });
   </script>
