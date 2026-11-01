@@ -1,6 +1,7 @@
 """Page Paramètres : clé OpenRouter, modèle et skill de chaque agent."""
 
 import re
+from itertools import groupby
 from typing import Annotated, Any
 
 from fastapi import APIRouter, Form, HTTPException, Request
@@ -22,6 +23,7 @@ AUTONOMY_LABELS = {
     Autonomy.AUGMENTATION: "Augmentation",
 }
 KEY_PREFIX = "sk-or-"
+FREE_LABEL = "Gratuits (0 $ CA, pour tester les fonctions)"
 
 router = APIRouter(prefix="/settings")
 
@@ -49,6 +51,25 @@ def _models(services: Services) -> tuple[tuple[ModelInfo, ...], str | None]:
         return services.models(), None
     except GatewayError as exc:
         return (), str(exc)
+
+
+def _by_provider(models: tuple[ModelInfo, ...]) -> list[tuple[str, list[ModelInfo]]]:
+    """Gratuits d'abord (pour tester les fonctions), puis payants par fournisseur.
+
+    La liste arrive triée par identifiant, donc chaque fournisseur reste groupé.
+    """
+    free = [m for m in models if _is_free(m)]
+    paid = [m for m in models if not _is_free(m)]
+    groups = [(f"Payants · {name}", list(group)) for name, group in groupby(paid, key=_provider)]
+    return ([(FREE_LABEL, free)] if free else []) + groups
+
+
+def _is_free(model: ModelInfo) -> bool:
+    return model.prompt_cad_per_mtok == 0 and model.completion_cad_per_mtok == 0
+
+
+def _provider(model: ModelInfo) -> str:
+    return model.id.split("/", 1)[0]
 
 
 def _key(request: Request, **extra: Any) -> HTMLResponse:
@@ -82,6 +103,7 @@ def settings_page(request: Request) -> HTMLResponse:
         effective=services.repo.effective_model,
         skill_version=lambda agent_id: services.repo.current_skill(agent_id).version,
         models=models,
+        model_groups=_by_provider(models),
         models_error=models_error,
         spent=services.ledger.total_spent_cad(),
         cap=services.cap_cad,

@@ -3,9 +3,18 @@
   <td>{{ a.name }}<br><span class="muted">{{ a.id }}</span></td>
   <td><span class="badge badge-{{ a.autonomy.value }}">{{ autonomy_labels[a.autonomy] }}</span></td>
   <td class="model">
-    <input list="models" name="model" value="{{ effective(a.id) }}" aria-label="Modèle de {{ a.name }}"
+    {% set current = effective(a.id) %}
+    {% if model_groups %}
+    <select name="model" class="model-select" data-current="{{ current }}" aria-label="Modèle de {{ a.name }}"
+            hx-post="/settings/agents/{{ a.id }}/model" hx-trigger="change"
+            hx-target="#status-{{ slug }}" hx-swap="innerHTML">
+      <option value="{{ current }}" selected>{{ current }}</option>
+    </select>
+    {% else %}
+    <input type="text" name="model" value="{{ current }}" aria-label="Modèle de {{ a.name }}"
            hx-post="/settings/agents/{{ a.id }}/model" hx-trigger="change"
            hx-target="#status-{{ slug }}" hx-swap="innerHTML">
+    {% endif %}
   </td>
   <td><span class="status" id="status-{{ slug }}"></span></td>
   <td>

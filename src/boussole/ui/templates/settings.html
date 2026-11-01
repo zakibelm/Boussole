@@ -25,9 +25,49 @@
   {% else %}<p class="muted">{{ models | length }} modèles disponibles. Prix en $ CA par million de jetons (entrée / sortie).</p>
   {% endif %}
 
-  <datalist id="models">
-    {% for m in models %}<option value="{{ m.id }}">{{ m.name }} · {{ m.prompt_cad_per_mtok }} / {{ m.completion_cad_per_mtok }} $ CA</option>{% endfor %}
-  </datalist>
+  {% if model_groups %}
+  {# Une seule copie de la liste (plusieurs centaines de modèles), recopiée dans chaque menu. #}
+  <template id="model-options">
+    {% for provider, group in model_groups %}
+    <optgroup label="{{ provider }}">
+      {% for m in group %}<option value="{{ m.id }}">{{ m.name }} · {{ m.prompt_cad_per_mtok }} / {{ m.completion_cad_per_mtok }} $ CA</option>{% endfor %}
+    </optgroup>
+    {% endfor %}
+  </template>
+  <script>
+    // Chaque menu reçoit la liste complète, plus un champ de recherche qui la filtre
+    // (nom, identifiant ou fournisseur). Le modèle choisi reste toujours visible.
+    document.addEventListener("DOMContentLoaded", () => {
+      const options = document.getElementById("model-options").content;
+      const fill = (select, query) => {
+        const current = select.value || select.dataset.current;
+        const list = options.cloneNode(true);
+        const words = query.toLowerCase().split(/\s+/).filter(Boolean);
+        for (const option of list.querySelectorAll("option")) {
+          const text = (option.value + " " + option.textContent + " "
+            + option.parentElement.label).toLowerCase();
+          if (option.value !== current && !words.every((w) => text.includes(w))) option.remove();
+        }
+        list.querySelectorAll("optgroup:empty").forEach((group) => group.remove());
+        select.replaceChildren(list);
+        if (![...select.options].some((o) => o.value === current)) {
+          select.prepend(new Option(current + " (absent d'OpenRouter)", current));
+        }
+        select.value = current;
+      };
+      for (const select of document.querySelectorAll("select.model-select")) {
+        const search = document.createElement("input");
+        search.type = "search";
+        search.className = "model-search";
+        search.placeholder = "Rechercher un modèle (ex. gratuit, claude, luna)…";
+        search.setAttribute("aria-label", "Rechercher un modèle");
+        search.addEventListener("input", () => fill(select, search.value));
+        select.before(search);
+        fill(select, "");
+      }
+    });
+  </script>
+  {% endif %}
 
   <p class="muted">Autonomie (annexe X3) : <strong>Automatisation</strong> agit seule sur le faible risque ·
     <strong>Assistance</strong> produit un brouillon révisé · <strong>Augmentation</strong> conseille, l'humain décide.

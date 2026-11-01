@@ -35,7 +35,13 @@ _MODELS = {
             "name": "Claude Sonnet 5.5",
             "context_length": 200000,
             "pricing": {"prompt": "0.000003", "completion": "0.000015"},
-        }
+        },
+        {
+            "id": "meta-llama/llama-4-scout:free",
+            "name": "Llama 4 Scout (free)",
+            "context_length": 128000,
+            "pricing": {"prompt": "0", "completion": "0"},
+        },
     ]
 }
 
