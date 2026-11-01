@@ -87,7 +87,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Scripts (shellcheck)
-        run: shellcheck -x infra/deploy/*.sh infra/ci/*.sh
+        run: shellcheck -x infra/*.sh infra/deploy/*.sh infra/ci/*.sh
       - name: Construction de l'image
         run: docker build -f infra/deploy/Dockerfile -t boussole:ci .
       - name: Démarrage comme en production (lecture seule, non root) et sonde de santé
@@ -105,3 +105,19 @@ jobs:
           docker logs bs
           test "$status" = healthy
           test "$(docker exec bs id -u)" = 10001
+      - name: Configuration nginx validée par nginx 1.24 (version du VPS)
+        run: |
+          le=/tmp/le && mkdir -p $le/live/boussole.optigenius.pro
+          openssl req -x509 -newkey rsa:2048 -nodes -days 1 -subj /CN=boussole.optigenius.pro \
+            -keyout $le/live/boussole.optigenius.pro/privkey.pem \
+            -out $le/live/boussole.optigenius.pro/fullchain.pem 2>/dev/null
+          openssl dhparam -dsaparam -out $le/ssl-dhparams.pem 2048 2>/dev/null
+          printf '%s\n' 'ssl_session_cache shared:le_nginx_SSL:10m;' 'ssl_session_timeout 1440m;' \
+            'ssl_session_tickets off;' 'ssl_protocols TLSv1.2 TLSv1.3;' \
+            'ssl_prefer_server_ciphers off;' > $le/options-ssl-nginx.conf
+          touch /tmp/boussole.htpasswd
+          docker run --rm \
+            -v "$PWD/infra/deploy/nginx/boussole.conf:/etc/nginx/conf.d/boussole.conf:ro" \
+            -v "$le:/etc/letsencrypt:ro" \
+            -v /tmp/boussole.htpasswd:/etc/nginx/boussole.htpasswd:ro \
+            nginx:1.24 nginx -t

@@ -15,9 +15,11 @@ déploiement n'était dans le dépôt : montage manuel, sans retour arrière tes
 ## Décision
 
 1. **Image Docker** (`infra/deploy/Dockerfile`) : Python 3.12, dépendances figées par
-   `uv.lock`, compte non root (uid 10001), sonde `/health`, **un seul processus** (le verrou
-   du journal et les réservations de budget sont propres au processus).
-2. **Compose de production** (`infra/deploy/compose.prod.yml`) : port lié à `127.0.0.1`
+   `uv.lock`, compte non root (uid 10001), sonde `/health`, **un seul processus** : sous
+   SQLite, le verrou du journal sérialise les écritures du fichier. Les réservations de
+   budget sont en base (table `llm_reservations`) et tiendraient entre workers.
+2. **Compose de production** (`infra/deploy/compose.prod.yml`, projet `boussole-prod`,
+   distinct de l'ancien montage `boussole` qu'il ne touche jamais) : port lié à `127.0.0.1`
    seulement, système de fichiers en lecture seule, aucun privilège, mémoire plafonnée,
    journaux bornés. Données et secrets dans `/srv/boussole/{data,secrets}` sur l'hôte.
 3. **Base : SQLite en mode léger**, comme aujourd'hui, pour ne pas toucher au journal signé
