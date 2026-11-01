@@ -12,7 +12,12 @@ import sys
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from boussole.agents.answer import Answerer, AnswerRefusedError, SourcedAnswer
+from boussole.agents.answer import (
+    Answerer,
+    AnswerRefusedError,
+    MissingApiKeyError,
+    SourcedAnswer,
+)
 from boussole.agents.catalog import load_catalog
 from boussole.agents.pmbok_skills import load_pmbok_skills
 from boussole.config import load_config
@@ -27,10 +32,6 @@ from boussole.platform.memory_rag.cli import memory
 from boussole.platform.secrets import OPENROUTER_KEY, KeyringSecretStore
 from boussole.platform.settings_store.models import SETTINGS_TABLES
 from boussole.platform.settings_store.repository import SettingsRepository, SqlUsageLedger
-
-
-class MissingApiKeyError(RuntimeError):
-    """La clé OpenRouter se saisit dans la page Paramètres."""
 
 
 def build_answerer() -> Answerer:
