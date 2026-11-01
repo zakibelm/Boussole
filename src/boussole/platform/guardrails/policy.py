@@ -20,6 +20,7 @@ class ActionPolicy(BaseModel):
     class_: ActionClass
     level: Autonomy
     approvers: list[str] = []
+    outbound: bool = False
     description: str = ""
 
     model_config = {"populate_by_name": True}
@@ -97,7 +98,7 @@ def decide(
     policy = config.actions.get(request.action)
     if policy is None:
         return Decision(Verdict.DENY, f"Action inconnue : {request.action}")
-    denial = _scope_denial(config, request)
+    denial = _scope_denial(config, policy, request)
     if denial:
         return Decision(Verdict.DENY, denial, policy.class_)
     level = policy.level
@@ -130,9 +131,13 @@ def _with_human(
     return Decision(Verdict.ALLOW, reason, policy.class_, level, approvers)
 
 
-def _scope_denial(config: AutonomyConfig, request: ActionRequest) -> str | None:
+def _scope_denial(
+    config: AutonomyConfig, policy: ActionPolicy, request: ActionRequest
+) -> str | None:
     if request.target_project_id is not None and request.target_project_id != request.project_id:
         return "Hors du projet de l'agent"
+    if policy.outbound and request.destination is None:
+        return "Action sortante sans destination déclarée"
     if request.destination is not None and not _allowed(
         request.destination, config.network_allowlist
     ):
