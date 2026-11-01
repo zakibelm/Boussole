@@ -16,6 +16,7 @@ class AppConfig:
     budget_cap_cad: Decimal
     operator: str
     catalog_path: Path
+    pmbok_skills_path: Path
 
     @property
     def is_lightweight(self) -> bool:
@@ -32,5 +33,8 @@ def load_config() -> AppConfig:
         operator=os.environ.get("BOUSSOLE_OPERATOR") or getpass.getuser(),
         catalog_path=Path(
             os.environ.get("BOUSSOLE_AGENTS_CONFIG", ROOT / "config" / "agents.yaml")
+        ),
+        pmbok_skills_path=Path(
+            os.environ.get("BOUSSOLE_PMBOK_SKILLS", ROOT / "config" / "pmbok_skills.yaml")
         ),
     )
