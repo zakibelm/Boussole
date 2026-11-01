@@ -5,6 +5,7 @@ from pathlib import Path
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.exceptions import HTTPException
 
@@ -15,6 +16,8 @@ from boussole.config import load_config
 from boussole.ui import markdown
 
 TEMPLATES = Path(__file__).resolve().parents[1] / "ui" / "templates"
+# Scripts servis par Boussole même : aucun CDN tiers sur les pages (clé API comprise).
+STATIC = Path(__file__).resolve().parents[1] / "ui" / "static"
 
 
 def create_app(services: Services, allowed_origins: frozenset[str] = frozenset()) -> FastAPI:
@@ -23,6 +26,7 @@ def create_app(services: Services, allowed_origins: frozenset[str] = frozenset()
     app.state.services = services
     app.state.templates = Jinja2Templates(directory=TEMPLATES)
     app.state.templates.env.filters["md"] = markdown.render
+    app.mount("/static", StaticFiles(directory=STATIC), name="static")
     app.include_router(settings_routes.router)
     app.include_router(project_routes.router)
 
