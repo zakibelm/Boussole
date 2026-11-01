@@ -4,7 +4,7 @@ from pathlib import Path
 
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, PlainTextResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.exceptions import HTTPException
@@ -33,6 +33,11 @@ def create_app(services: Services, allowed_origins: frozenset[str] = frozenset()
     @app.get("/", include_in_schema=False)
     def home() -> RedirectResponse:
         return RedirectResponse("/projects")
+
+    @app.get("/health", include_in_schema=False)
+    def health() -> PlainTextResponse:
+        """Sonde du conteneur : l'application répond. Aucune donnée, aucun appel externe."""
+        return PlainTextResponse("ok")
 
     @app.exception_handler(HTTPException)
     async def http_error(request: Request, exc: HTTPException) -> HTMLResponse:

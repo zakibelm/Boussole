@@ -80,3 +80,28 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Aucun PDF, donnée locale ni .env suivi
         run: bash infra/ci/check_forbidden_files.sh
+
+  deploiement:
+    name: Image de production et scripts de déploiement
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Scripts (shellcheck)
+        run: shellcheck -x infra/deploy/*.sh infra/ci/*.sh
+      - name: Construction de l'image
+        run: docker build -f infra/deploy/Dockerfile -t boussole:ci .
+      - name: Démarrage comme en production (lecture seule, non root) et sonde de santé
+        run: |
+          mkdir -p /tmp/bs/data /tmp/bs/secrets && sudo chown -R 10001:10001 /tmp/bs
+          docker run -d --name bs --read-only --tmpfs /tmp --cap-drop ALL \
+            --security-opt no-new-privileges:true \
+            -v /tmp/bs/data:/app/data/local -v /tmp/bs/secrets:/app/secrets \
+            -e BOUSSOLE_ALLOWED_ORIGINS=https://boussole.example boussole:ci
+          for i in $(seq 1 30); do
+            status=$(docker inspect --format '{{.State.Health.Status}}' bs)
+            [ "$status" = healthy ] && break
+            sleep 3
+          done
+          docker logs bs
+          test "$status" = healthy
+          test "$(docker exec bs id -u)" = 10001

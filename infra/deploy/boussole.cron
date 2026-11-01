@@ -1,0 +1,10 @@
+# /etc/cron.d/boussole : sauvegarde et ancre du journal, chaque jour (UTC).
+# L'ancre affichée doit être conservée HORS du serveur (docs/runbooks/journal-audit.md).
+# Avec MAILTO (et un envoi de courriel configuré sur le VPS), cron envoie la sortie de la
+# tâche, donc l'ancre, par courriel; sinon, récupérer /var/log/boussole/anchors.log à la main.
+# MAILTO=adresse@exemple.com
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+0 2 * * * root /opt/boussole/src/infra/deploy/backup.sh >> /var/log/boussole/backup.log 2>&1
+15 2 * * * root docker exec boussole-app-1 python -m boussole.platform.audit.cli anchor | tee -a /var/log/boussole/anchors.log

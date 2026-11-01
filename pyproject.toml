@@ -20,6 +20,11 @@ dependencies = [
     "fastembed>=0.9.1",
 ]
 
+[project.optional-dependencies]
+server = [
+    "keyrings-alt>=5.0",
+]
+
 [dependency-groups]
 dev = [
     "ruff>=0.6",
