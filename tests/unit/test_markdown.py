@@ -22,3 +22,9 @@ def test_tables_skip_the_rule_row() -> None:
     assert "<th>Risque</th><th>Score</th>" in html
     assert "<td>Migration</td><td><strong>16</strong></td>" in html
     assert "---" not in html
+
+
+def test_code_blocks_are_kept_verbatim_and_escaped() -> None:
+    html = render("Avant\n```markdown\n# Titre\n- <b>item</b>\n```\nAprès")
+    assert '<pre class="code"># Titre\n- &lt;b&gt;item&lt;/b&gt;</pre>' in html
+    assert "<h4>" not in html and "<p>Avant</p>" in html and "<p>Après</p>" in html
