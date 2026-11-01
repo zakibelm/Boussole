@@ -86,6 +86,6 @@
 
 <section class="card">
   <h2>Fiche du projet</h2>
-  <div class="answer-text">{{ project.description or 'Aucune description.' }}</div>
+  <div class="answer-md">{{ (project.description or 'Aucune description.') | md }}</div>
 </section>
 {% endblock %}
