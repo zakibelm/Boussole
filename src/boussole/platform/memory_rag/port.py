@@ -27,8 +27,11 @@ class Chunk:
             if self.page_start == self.page_end
             else f"p. {self.page_start}-{self.page_end}"
         )
-        title = f" « {self.section_title} »" if self.section_title else ""
-        return f"{self.source}, section {self.section}{title}, {pages}"
+        named = self.section.lower().startswith(("section", "appendix", "annexe"))
+        where = self.section if named else f"section {self.section}"
+        same = self.section_title.strip().lower() == self.section.strip().lower()
+        title = f" « {self.section_title} »" if self.section_title and not same else ""
+        return f"{self.source}, {where}{title}, {pages}"
 
 
 @dataclass(frozen=True)

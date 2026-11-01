@@ -54,6 +54,13 @@ class PmbokSkills(BaseModel):
             return None
         return tuple(self.parts[ref].pages for ref in self._refs(refs))
 
+    def pages_of(self, part_ids: tuple[str, ...]) -> tuple[PageRange, ...]:
+        """Pages de parties nommées; une partie inconnue fait échouer le chargement."""
+        unknown = sorted(set(part_ids) - self.parts.keys())
+        if unknown:
+            raise ValueError(f"Parties inconnues : {unknown}")
+        return tuple(self.parts[p].pages for p in part_ids)
+
     def note_for(self, agent_id: str) -> str:
         """Paragraphe ajouté au skill : ce que l'agent consulte et comment il cite."""
         refs = self.agents.get(agent_id, [])

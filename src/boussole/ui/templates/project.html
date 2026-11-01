@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}{{ project.name }} · Boussole{% endblock %}
+{% block content %}
+<p class="muted"><a href="/projects">← Projets</a></p>
+<h1>{{ project.name }}</h1>
+<p class="lead">Approche : <span class="badge">{{ project.approach_label }}</span></p>
+{% if notice %}<p class="notice">{{ notice }}</p>{% endif %}
+{% if error %}<p class="error">{{ error }}</p>{% endif %}
+
+<section class="card">
+  <h2>Tableau de bord</h2>
+  <p class="muted">Chiffres calculés à partir des données du projet, jamais par un modèle.</p>
+  <div class="tiles">
+    <div class="tile"><span class="big">{{ board.deliverables_done }} / {{ board.deliverables_total }}</span>livrables terminés</div>
+    <div class="tile"><span class="big">{{ board.tasks_by_status.get('done', 0) }} / {{ board.tasks_total }}</span>tâches terminées</div>
+    <div class="tile {{ 'alert' if board.tasks_overdue else '' }}"><span class="big">{{ board.tasks_overdue }}</span>tâches en retard</div>
+    <div class="tile"><span class="big">{{ board.risks_open }}</span>risques ouverts</div>
+    <div class="tile">
+      <span class="big">{{ board.budget_consumed_pct if board.budget_consumed_pct is not none else '—' }}{{ ' %' if board.budget_consumed_pct is not none else '' }}</span>
+      budget consommé ({{ "{:,.0f}".format(board.budget_actual_cad).replace(',', ' ') }} sur {{ "{:,.0f}".format(board.budget_planned_cad).replace(',', ' ') }} $ CA)
+    </div>
+  </div>
+  {% if board.top_risks %}
+  <h3>Risques critiques (probabilité × impact ≥ 15)</h3>
+  <ul>{% for r in board.top_risks %}<li>{{ r.title }} <span class="badge">{{ r.score }}</span></li>{% endfor %}</ul>
+  {% endif %}
+</section>
+
+<section class="card">
+  <h2>Approche du projet</h2>
+  {% if pending %}
+    <p><strong>Proposition du sélecteur : {{ pending.title }}</strong> <span class="muted">— en attente de ta décision</span></p>
+    <div class="answer-md">{{ pending.rationale | md }}</div>
+    <form method="post" action="/projects/{{ project.id }}/decisions/{{ pending.id }}" class="decision">
+      <div class="row">
+        <label>Approche retenue
+          <select name="approach">
+            {% for a in approaches %}<option value="{{ a.value }}" {{ 'selected' if labels[a] in pending.title else '' }}>{{ labels[a] }}</option>{% endfor %}
+          </select>
+        </label>
+        <input type="text" name="reason" placeholder="Raison (obligatoire si tu changes ou refuses)" style="flex:1; min-width:240px">
+      </div>
+      <div class="row" style="margin-top:8px">
+        <button class="primary" type="submit" name="verdict" value="approve">Valider</button>
+        <button class="danger" type="submit" name="verdict" value="reject">Refuser</button>
+      </div>
+      <p class="muted">Tu valides en tant que {{ operator }} : ta décision est signée dans le journal d'audit.</p>
+    </form>
+  {% else %}
+    <form method="post" action="/projects/{{ project.id }}/approach" onsubmit="this.querySelector('button').disabled=true;this.querySelector('.wait').hidden=false">
+      <div class="row">
+        <button type="submit">Demander une proposition au sélecteur</button>
+        <span class="wait muted" hidden>Le sélecteur lit le PMBOK…</span>
+      </div>
+    </form>
+  {% endif %}
+  {% if history %}
+  <details>
+    <summary class="muted">Historique des décisions ({{ history | length }})</summary>
+    <ul class="history">
+    {% for d in history %}
+      <li>{{ d.created_at.strftime('%Y-%m-%d %H:%M') if d.created_at else '' }} · {{ d.title }} ·
+          <strong>{{ d.status.value }}</strong>{% if d.decided_by %} par {{ d.decided_by }}{% endif %}{% if d.reason %} — {{ d.reason }}{% endif %}</li>
+    {% endfor %}
+    </ul>
+  </details>
+  {% endif %}
+</section>
+
+<section class="card">
+  <h2>Questions au PMO</h2>
+  <p class="muted">Chat limité à ce projet : l'agent reçoit la fiche du projet et répond en citant le PMBOK.</p>
+  <form hx-post="/projects/{{ project.id }}/ask" hx-target="#answers" hx-swap="afterbegin"
+        hx-indicator="#asking" hx-on::after-request="if(event.detail.successful) this.reset()">
+    <div class="row">
+      <select name="agent" aria-label="Agent">
+        {% for a in agents %}<option value="{{ a.id }}">{{ a.name }}</option>{% endfor %}
+      </select>
+      <input type="text" name="question" required placeholder="Ta question sur ce projet" style="flex:1; min-width:260px" aria-label="Question">
+      <button class="primary" type="submit">Demander</button>
+      <span id="asking" class="htmx-indicator muted">Réponse en cours…</span>
+    </div>
+  </form>
+  <div id="answers"></div>
+</section>
+
+<section class="card">
+  <h2>Fiche du projet</h2>
+  <div class="answer-md">{{ (project.description or 'Aucune description.') | md }}</div>
+</section>
+{% endblock %}

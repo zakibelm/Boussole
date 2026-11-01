@@ -6,36 +6,33 @@ Extraits fabriqués pour le test (aucun texte du PMBOK), modèle simulé, journa
 import json
 from dataclasses import replace
 from decimal import Decimal
-from pathlib import Path
 
 import pytest
-from sqlalchemy import create_engine, select
+from sqlalchemy import select
 from sqlalchemy.orm import Session, sessionmaker
-from sqlalchemy.pool import StaticPool
 
-from boussole.agents.answer import ANSWER, ANSWER_RULES, SEARCH, Answerer, AnswerRefusedError
+from boussole.agents.answer import (
+    ANSWER,
+    ANSWER_RULES,
+    COPY_BLOCKED,
+    SEARCH,
+    Answerer,
+    AnswerRefusedError,
+)
 from boussole.agents.answer_cli import render
-from boussole.agents.pmbok_skills import load_pmbok_skills
-from boussole.core.models import AgentLogEntry, Base
+from boussole.core.models import AgentLogEntry
 from boussole.platform.audit.log import AuditLog
 from boussole.platform.llm_gateway.budget import (
     BudgetedGateway,
     BudgetExceededError,
     InMemoryLedger,
 )
-from boussole.platform.llm_gateway.fake import FakeGateway
 from boussole.platform.llm_gateway.openrouter import _chat_body
-from boussole.platform.llm_gateway.port import GenerationRequest, GenerationResult, Usage
-from boussole.platform.memory_rag.embedders import FakeEmbedder
-from boussole.platform.memory_rag.local_store import LocalVectorStore
-from boussole.platform.memory_rag.memory import NO_SOURCE, RagMemory
+from boussole.platform.memory_rag.memory import NO_SOURCE
 from boussole.platform.memory_rag.port import Chunk
-from boussole.platform.settings_store.models import SETTINGS_TABLES
-from boussole.platform.settings_store.repository import SettingsRepository
-from tests.guardrails_support import CATALOG, audit_sessions, make_audit, make_gate
+from tests.answer_support import PMBOK, ScriptedGateway, memory_with, settings_repo
+from tests.guardrails_support import audit_sessions, make_audit, make_gate
 
-ROOT = Path(__file__).resolve().parents[2]
-PMBOK = load_pmbok_skills(ROOT / "config" / "pmbok_skills.yaml")
 PROTECTED_EXCERPT = "Le registre consigne la probabilité et l'impact de chaque menace identifiée."
 CHUNKS = [
     Chunk("c1", "Guide test", "2.7", "Risque", 200, 201, PROTECTED_EXCERPT),
@@ -44,34 +41,6 @@ CHUNKS = [
     ),
 ]
 REPLY = "Il note la probabilité et l'impact de chaque menace [1]."
-
-
-class ScriptedGateway(FakeGateway):
-    """Répond toujours `REPLY` et garde la dernière requête pour inspection."""
-
-    def __init__(self) -> None:
-        super().__init__()
-        self.requests: list[GenerationRequest] = []
-        self.reply = REPLY
-
-    def generate(self, request: GenerationRequest) -> GenerationResult:
-        self.requests.append(request)
-        return GenerationResult(self.reply, request.model, Usage(900, 40, Decimal("0.0021")))
-
-
-def _memory(chunks: list[Chunk]) -> RagMemory:
-    embedder, store = FakeEmbedder(), LocalVectorStore()
-    if chunks:
-        store.add(chunks, embedder.embed_documents([c.text for c in chunks]), embedder.model_name)
-    return RagMemory(embedder, store)
-
-
-def _repo() -> SettingsRepository:
-    engine = create_engine(
-        "sqlite://", poolclass=StaticPool, connect_args={"check_same_thread": False}
-    )
-    Base.metadata.create_all(engine, tables=list(SETTINGS_TABLES))
-    return SettingsRepository(sessionmaker(engine, expire_on_commit=False), CATALOG, PMBOK)
 
 
 Sessions = sessionmaker[Session]
@@ -89,7 +58,7 @@ def audit(sessions: Sessions) -> AuditLog:
 
 @pytest.fixture
 def model() -> ScriptedGateway:
-    return ScriptedGateway()
+    return ScriptedGateway(REPLY)
 
 
 def _answerer(
@@ -97,9 +66,9 @@ def _answerer(
 ) -> Answerer:
     return Answerer(
         gate=make_gate(audit),
-        memory=_memory(chunks),
+        memory=memory_with(chunks),
         gateway=BudgetedGateway(model, InMemoryLedger(), Decimal(cap)),
-        repo=_repo(),
+        repo=settings_repo(),
         pages_for=PMBOK.pages_for,
     )
 
@@ -193,3 +162,31 @@ def test_citations_are_detected_in_every_format(
     assert (
         _answerer(audit, model).answer("domain.risk", "Que contient le registre ?").cited == cited
     )
+
+
+def test_off_topic_questions_cost_nothing(audit: AuditLog, model: ScriptedGateway) -> None:
+    answerer = replace(_answerer(audit, model), min_score=1.01)
+    answer = answerer.answer("domain.risk", "Recette de la poutine")
+    assert answer.text == NO_SOURCE and not model.requests
+
+
+def test_a_task_can_target_other_parts_of_the_book(audit: AuditLog, model: ScriptedGateway) -> None:
+    answer = _answerer(audit, model).answer("domain.risk", "calendrier", pages=((155, 155),))
+    assert answer.citations == ("Guide test, section 2.3 « Échéancier », p. 155",)
+
+
+LONG_EXCERPT = (
+    "Le plan de réponse aux risques précise pour chaque menace la stratégie retenue le "
+    "responsable les actions prévues le budget associé les déclencheurs observables et la "
+    "date de revue afin que l'équipe puisse agir sans attendre."
+)
+
+
+def test_an_answer_copying_the_book_is_withheld(audit: AuditLog, model: ScriptedGateway) -> None:
+    chunk = Chunk("long", "Guide test", "2.7", "Risque", 200, 200, LONG_EXCERPT)
+    model.reply = f"Voici le texte : {LONG_EXCERPT} [1]"
+    answer = _answerer(audit, model, chunks=[chunk]).answer("domain.risk", "plan de réponse")
+    assert answer.text == COPY_BLOCKED and answer.cited == ()
+    model.reply = "Le plan fixe stratégie, responsable et déclencheurs pour chaque menace [1]."
+    kept = _answerer(audit, model, chunks=[chunk]).answer("domain.risk", "plan de réponse")
+    assert kept.cited == (1,)

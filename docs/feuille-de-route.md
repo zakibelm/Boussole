@@ -24,18 +24,18 @@ Critère de sortie : une réponse sourcée et journalisée de bout en bout.
 - [x] Critère de sortie démontré le 1er novembre : réponse sourcée et journalisée de bout en bout, extraits envoyés sans rétention (ADR 0008)
 - [x] Modèle par défaut choisi par benchmark : GPT-5.6 Luna pour tous les agents
 
-## Phase 1 : pilote
+## Phase 1 : pilote (en cours)
 
 Critère de sortie : validations humaines mesurées et valeur perçue positive.
 
-- Sélecteur d'approche (critères PMBOK 4.3, niveau augmentation)
+- [x] Sélecteur d'approche (critères PMBOK 4.3, niveau augmentation) : propose avec citations, l'humain valide, modifie ou refuse (raison obligatoire)
 - Chef de projet adaptatif et son équipe (Scrum Master, Product Owner et architecte)
 - Domaines portée, échéancier et risque (assistance, avec citations)
 - Connecteur en lecture seule vers l'outil du pilote
 - Interface : chat et file de validations
-- ★ Création d'un projet en une conversation
-- ★ Tableau de bord par projet
-- ★ Chat limité au projet courant
+- [x] ★ Création d'un projet en une conversation (page Projets)
+- [x] ★ Tableau de bord par projet (livrables, tâches, retards, risques critiques, budget; chiffres tirés des données)
+- [x] ★ Chat limité au projet courant (fiche du projet transmise comme donnée, réponses citées)
 - ★ Configuration sans code : critères et pondérations du sélecteur, niveaux d'autonomie, modèles de projet
 - ★ API publique
 - ◆ Vues de travail : tableau et Kanban

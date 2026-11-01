@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Projets · Boussole{% endblock %}
+{% block content %}
+<h1>Projets</h1>
+<p class="lead">Décris ton projet : le sélecteur propose une approche en citant le PMBOK, et tu décides.</p>
+
+<section class="card">
+  <h2>Nouveau projet</h2>
+  <form method="post" action="/projects" onsubmit="this.querySelector('button').disabled=true;this.querySelector('.wait').hidden=false">
+    <p><input type="text" name="name" required maxlength="200" placeholder="Nom du projet" aria-label="Nom du projet" style="width:100%"></p>
+    <p><textarea name="description" rows="6" aria-label="Description du projet"
+       placeholder="Livrables, contraintes (dates, normes, contrat), incertitudes, équipe, budget…"></textarea></p>
+    <div class="row">
+      <button class="primary" type="submit">Créer et demander l'approche</button>
+      <span class="wait muted" hidden>Le sélecteur lit le PMBOK… (environ 20 secondes)</span>
+    </div>
+  </form>
+  {% if error %}<p class="error">{{ error }}</p>{% endif %}
+  <p class="muted">Seuls les extraits utiles du PMBOK et la fiche du projet partent vers un fournisseur sans rétention (ADR 0008).</p>
+</section>
+
+<section class="card">
+  <h2>Mes projets</h2>
+  {% if projects %}
+  <table>
+    <thead><tr><th>Projet</th><th>Approche</th><th>Créé le</th></tr></thead>
+    <tbody>
+    {% for p in projects %}
+      <tr><td><a href="/projects/{{ p.id }}">{{ p.name }}</a></td>
+          <td><span class="badge">{{ p.approach_label }}</span></td>
+          <td class="muted">{{ p.created_at.strftime('%Y-%m-%d') if p.created_at else '' }}</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}<p class="muted">Aucun projet pour l'instant.</p>{% endif %}
+</section>
+{% endblock %}

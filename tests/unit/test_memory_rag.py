@@ -144,3 +144,20 @@ def test_file_store_survives_a_restart(tmp_path: Path) -> None:
 def test_mismatched_vectors_are_rejected() -> None:
     with pytest.raises(ValueError, match="Autant"):
         LocalVectorStore().add([_chunk("x", None)], [], "m")
+
+
+def test_citation_does_not_repeat_a_section_named_like_its_title() -> None:
+    chunk = Chunk("x", "PMBOK 8", "Section 5: Tools", "Section 5: Tools", 302, 303, "t")
+    assert chunk.citation() == "PMBOK 8, Section 5: Tools, p. 302-303"
+
+
+def test_front_matter_is_never_returned() -> None:
+    embedder, store = FakeEmbedder(), LocalVectorStore()
+    chunks = [
+        Chunk("toc", "Guide", "TOC", "Table of Contents", 3, 3, "registre des risques registre"),
+        Chunk("fig", "Guide", "LOF", "List of Figures and Tables", 4, 4, "registre des risques"),
+        Chunk("r", "Guide", "2.7", "Risque", 200, 200, "Le registre des risques."),
+    ]
+    store.add(chunks, embedder.embed_documents([c.text for c in chunks]), embedder.model_name)
+    hits = RagMemory(embedder, store).search("registre des risques", k=3)
+    assert [h.chunk.id for h in hits] == ["r"]

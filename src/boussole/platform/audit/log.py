@@ -8,6 +8,7 @@ altération de contenu, de chaînage ou de signature.
 import hashlib
 import hmac
 import json
+import threading
 import uuid
 from dataclasses import dataclass
 from datetime import UTC, datetime
@@ -21,6 +22,10 @@ from boussole.core.models import AgentLogEntry, Base
 from boussole.platform.secrets import SecretStore
 
 AUDIT_KEY = "audit_signing_key"
+RESUME_ACTION = "audit_resume"
+# Une seule écriture à la fois dans ce processus : sans cela, deux requêtes
+# simultanées lisent la même entrée précédente et le chaînage se ramifie.
+_WRITE_LOCK = threading.Lock()
 
 _SQLITE_APPEND_ONLY = (
     """CREATE TRIGGER IF NOT EXISTS agent_log_no_update BEFORE UPDATE ON agent_log
@@ -49,6 +54,7 @@ class VerifyReport:
     entries: int
     first_broken_id: int | None
     reason: str | None
+    documented_forks: tuple[int, ...] = ()
 
     @property
     def ok(self) -> bool:
@@ -62,7 +68,7 @@ class AuditLog:
 
     def append(self, event: AuditEvent) -> int:
         key = self._key()
-        with self._sessions.begin() as session:
+        with _WRITE_LOCK, self._sessions.begin() as session:
             _lock(session)
             prev = session.scalar(
                 select(AgentLogEntry.entry_hash).order_by(AgentLogEntry.id.desc()).limit(1)
@@ -86,17 +92,39 @@ class AuditLog:
             return row.id
 
     def verify(self) -> VerifyReport:
+        """Chaînage, contenu et signature. Un embranchement n'est accepté que s'il est
+        documenté par une entrée de reprise signée et pointe vers une entrée existante
+        (rien n'a été supprimé)."""
         key = self._key()
-        prev: str | None = None
-        count = 0
         with self._sessions() as session:
-            for row in session.scalars(select(AgentLogEntry).order_by(AgentLogEntry.id)):
-                count += 1
-                problem = _check(row, prev, key)
-                if problem:
-                    return VerifyReport(count, row.id, problem)
-                prev = row.entry_hash
-        return VerifyReport(count, None, None)
+            rows = list(session.scalars(select(AgentLogEntry).order_by(AgentLogEntry.id)))
+        documented = _documented_forks(rows, key)
+        seen: set[str] = set()
+        prev: str | None = None
+        accepted: list[int] = []
+        for row in rows:
+            fork = row.prev_hash != prev and row.id in documented and row.prev_hash in seen
+            problem = _check(row, row.prev_hash if fork else prev, key)
+            if problem:
+                return VerifyReport(len(rows), row.id, problem, tuple(accepted))
+            if fork:
+                accepted.append(row.id)
+            seen.add(row.entry_hash)
+            prev = row.entry_hash
+        return VerifyReport(len(rows), None, None, tuple(accepted))
+
+    def forks(self) -> list[int]:
+        """Entrées dont le précédent n'est pas l'entrée juste avant, mais une entrée qui
+        existe encore : écritures simultanées, pas suppression."""
+        with self._sessions() as session:
+            rows = list(session.scalars(select(AgentLogEntry).order_by(AgentLogEntry.id)))
+        found, seen, prev = [], set(), None
+        for row in rows:
+            if row.prev_hash != prev and row.prev_hash in seen:
+                found.append(row.id)
+            seen.add(row.entry_hash)
+            prev = row.entry_hash
+        return found
 
     def _key(self) -> bytes:
         value = self._secrets.get(AUDIT_KEY)
@@ -111,6 +139,15 @@ def create_audit_table(engine: Engine) -> None:
     with engine.begin() as conn:
         for statement in _SQLITE_APPEND_ONLY:
             conn.execute(text(statement))
+
+
+def _documented_forks(rows: list[AgentLogEntry], key: bytes) -> set[int]:
+    """Identifiants listés par des entrées de reprise intègres et signées."""
+    documented: set[int] = set()
+    for row in rows:
+        if row.action == RESUME_ACTION and _check(row, row.prev_hash, key) is None:
+            documented.update(int(i) for i in row.payload.get("forks", []))
+    return documented
 
 
 def _check(row: AgentLogEntry, prev: str | None, key: bytes) -> str | None:

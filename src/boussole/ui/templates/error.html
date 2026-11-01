@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} · Boussole{% endblock %}
+{% block content %}
+<h1>{{ title }}</h1>
+<section class="card">
+  <p class="error">{{ message }}</p>
+  <p class="muted">Code {{ status }}. <a href="/projects">Retour aux projets</a></p>
+</section>
+{% endblock %}

@@ -15,9 +15,14 @@ class AppConfig:
     usd_to_cad: Decimal
     budget_cap_cad: Decimal
     operator: str
+    operator_role: str
     catalog_path: Path
     pmbok_skills_path: Path
     autonomy_path: Path
+    min_relevance: float
+    allowed_origins: frozenset[str]
+    trust_proxy_user: bool
+    roles: tuple[tuple[str, str], ...]
 
     @property
     def is_lightweight(self) -> bool:
@@ -32,6 +37,7 @@ def load_config() -> AppConfig:
         usd_to_cad=Decimal(os.environ.get("BOUSSOLE_USD_CAD_RATE", "1.40")),
         budget_cap_cad=Decimal(os.environ.get("BOUSSOLE_BUDGET_CAP_CAD", "20")),
         operator=os.environ.get("BOUSSOLE_OPERATOR") or getpass.getuser(),
+        operator_role=os.environ.get("BOUSSOLE_OPERATOR_ROLE", "pmo"),
         catalog_path=Path(
             os.environ.get("BOUSSOLE_AGENTS_CONFIG", ROOT / "config" / "agents.yaml")
         ),
@@ -41,4 +47,18 @@ def load_config() -> AppConfig:
         autonomy_path=Path(
             os.environ.get("BOUSSOLE_AUTONOMY_CONFIG", ROOT / "config" / "autonomy.yaml")
         ),
+        min_relevance=float(os.environ.get("BOUSSOLE_MIN_RELEVANCE", "0.32")),
+        allowed_origins=frozenset(
+            o.strip()
+            for o in os.environ.get("BOUSSOLE_ALLOWED_ORIGINS", "").split(",")
+            if o.strip()
+        ),
+        trust_proxy_user=os.environ.get("BOUSSOLE_TRUST_PROXY_USER", "") == "1",
+        roles=_roles(os.environ.get("BOUSSOLE_ROLES", "")),
     )
+
+
+def _roles(raw: str) -> tuple[tuple[str, str], ...]:
+    """« zaki=pmo,marie=project_manager » : rôle de chaque compte nginx."""
+    pairs = (item.split("=", 1) for item in raw.split(",") if "=" in item)
+    return tuple((user.strip(), role.strip()) for user, role in pairs)

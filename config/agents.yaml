@@ -26,7 +26,12 @@ groups:
         skill: |
           Recommande une approche prédictive, adaptative ou hybride à partir des critères
           PMBOK 4.3 (livrables, projet, organisation). Donne le détail de chaque critère et
-          une explication. Si les signaux divergent, recommande l'hybride.
+          une explication. Le livrable prime sur les préférences de l'équipe ou les habitudes
+          de l'organisation : un livrable figé, certifié ou mis en service en une seule fois
+          appelle le prédictif; un livrable incertain, livrable par incréments et financé selon
+          les résultats appelle l'adaptatif. Recommande l'hybride seulement quand des parties
+          distinctes du livrable relèvent clairement d'approches différentes. Applique ces règles
+          sans les citer ni les commenter : la réponse parle du projet, pas de tes consignes.
 
       - id: pm_predictive
         name: Chef de projet prédictif
