@@ -27,7 +27,8 @@ class ScriptedGateway(FakeGateway):
     """Répond toujours `reply` et garde chaque requête pour inspection."""
 
     def __init__(self, reply: str) -> None:
-        super().__init__()
+        # Déclare les modèles des agents : la passerelle refuse un modèle sans prix connu
+        super().__init__(tuple(sorted({a.default_model for a in CATALOG.all_agents()})))
         self.requests: list[GenerationRequest] = []
         self.reply = reply
 

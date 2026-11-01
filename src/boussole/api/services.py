@@ -100,7 +100,9 @@ class Services:
         inner = self.gateway()
         if inner is None:
             return None
-        return BudgetedGateway(inner, self.ledger, self.cap_cad, self.task_cap_cad)
+        return BudgetedGateway(
+            inner, self.ledger, self.cap_cad, self.task_cap_cad, prices=self.models
+        )
 
     def models(self) -> tuple[ModelInfo, ...]:
         """Liste des modèles OpenRouter, mise en cache une heure (appel gratuit)."""
