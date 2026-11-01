@@ -138,7 +138,7 @@ class ProjectAssistant:
                 project_id, decision_id, DecisionStatus.REJECTED, signer.name, reason.strip()
             ),
         )
-        outcome = {"human": "rejected", "by": signer.name, "role": signer.role}
+        outcome: dict[str, object] = {"human": "rejected", "by": signer.name, "role": signer.role}
         self._gate.record(self._request(project_id, None), cid, outcome)
 
     def ask(self, project_id: uuid.UUID, agent_id: str, question: str) -> SourcedAnswer:
