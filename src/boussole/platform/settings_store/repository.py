@@ -8,6 +8,7 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session, sessionmaker
 
 from boussole.agents.catalog import Catalog
+from boussole.agents.pmbok_skills import PmbokSkills
 from boussole.platform.llm_gateway.budget import UsageRecord
 from boussole.platform.settings_store.models import AgentSetting, LlmUsage, SkillVersion
 
@@ -30,9 +31,15 @@ class SkillView:
 
 
 class SettingsRepository:
-    def __init__(self, sessions: sessionmaker[Session], catalog: Catalog) -> None:
+    def __init__(
+        self,
+        sessions: sessionmaker[Session],
+        catalog: Catalog,
+        pmbok: PmbokSkills | None = None,
+    ) -> None:
         self._sessions = sessions
         self._catalog = catalog
+        self._pmbok = pmbok
 
     def effective_model(self, agent_id: str) -> str:
         with self._sessions() as session:
@@ -95,8 +102,15 @@ class SettingsRepository:
         return self.save_skill(agent_id, target.text, author, SkillSource.REVERT, reason)
 
     def system_prompt(self, agent_id: str) -> str:
-        """Règles communes + skill courant : ce que reçoit réellement le modèle."""
-        return f"{self._catalog.shared_rules.strip()}\n\n{self.current_skill(agent_id).text}"
+        """Règles communes + skill courant + parties du PMBOK : ce que reçoit le modèle."""
+        parts = [self._catalog.shared_rules.strip(), self.current_skill(agent_id).text]
+        if note := self.pmbok_note(agent_id):
+            parts.append(note)
+        return "\n\n".join(parts)
+
+    def pmbok_note(self, agent_id: str) -> str:
+        """Le PMBOK en skill vient de la configuration : un skill édité ne peut pas l'effacer."""
+        return self._pmbok.note_for(agent_id) if self._pmbok else ""
 
 
 class SqlUsageLedger:
