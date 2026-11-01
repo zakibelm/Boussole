@@ -13,6 +13,9 @@ from pathlib import Path
 from typing import Any
 
 DATASETS = Path(__file__).resolve().parent / "datasets"
+# « base » : jeu de la phase 0 (saturé le 31 octobre); « hard » : cas ambigus,
+# risques implicites et statuts contradictoires pour départager les modèles.
+SUITES = ("base", "hard")
 MAX_STATUS_WORDS = 150
 # Les modèles à raisonnement consomment cette limite avant d'écrire leur réponse.
 REASONING_ROOM = 4000
@@ -37,8 +40,9 @@ class Task:
     score: Callable[[dict[str, Any], str], float]
     max_tokens: int
 
-    def items(self) -> list[dict[str, Any]]:
-        path = DATASETS / f"{self.name}.jsonl"
+    def items(self, suite: str = "base") -> list[dict[str, Any]]:
+        folder = DATASETS if suite == "base" else DATASETS / suite
+        path = folder / f"{self.name}.jsonl"
         return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
 
 
@@ -74,8 +78,9 @@ def _covered(text: str, groups: list[list[str]]) -> int:
 
 def _status_prompt(item: dict[str, Any]) -> str:
     return (
-        "Résume ce statut de projet pour la direction, en 5 puces au maximum : avancement, "
-        "budget, échéancier, problèmes et décision attendue.\n\n"
+        f"Résume ce statut de projet pour la direction, en 5 puces et {MAX_STATUS_WORDS} mots "
+        "au maximum : avancement, budget, échéancier, problèmes et décision attendue. "
+        "Signale toute incohérence entre les sources.\n\n"
         f"<notes>\n{item['notes']}\n</notes>"
     )
 
