@@ -3,9 +3,10 @@
 import json
 import logging
 import threading
-from collections.abc import Callable, Iterator
-from contextlib import contextmanager
+import uuid
+from collections.abc import Callable
 from dataclasses import dataclass
+from datetime import timedelta
 from decimal import Decimal
 from typing import Protocol
 
@@ -36,6 +37,8 @@ class UnknownModelPriceError(BudgetExceededError):
 # Prudent : surestime le nombre de jetons (environ 4 caractères par jeton en moyenne)
 CHARS_PER_TOKEN_ESTIMATE = 3
 _MILLION = Decimal(1_000_000)
+# Une réservation laissée par un processus arrêté cesse de compter après ce délai
+RESERVATION_TTL = timedelta(minutes=10)
 
 
 def estimate_max_cost_cad(prompt_chars: int, max_tokens: int, model: ModelInfo) -> Decimal:
@@ -53,27 +56,72 @@ class UsageRecord:
     usage: Usage
 
 
+@dataclass(frozen=True)
+class Reservation:
+    id: str
+    amount_cad: Decimal
+
+
 class UsageLedger(Protocol):
+    """Registre des coûts. `reserve` et `settle` sont atomiques, y compris entre processus
+    pour le registre en base (même verrou que le journal d'audit)."""
+
     def total_spent_cad(self) -> Decimal: ...
 
     def record(self, entry: UsageRecord) -> None: ...
 
+    def reserve(self, amount: Decimal, cap: Decimal, agent: str, model: str) -> Reservation:
+        """Réserve `amount` si dépensé + réservé + amount <= cap; sinon BudgetExceededError."""
+        ...
+
+    def settle(self, reservation: Reservation, entry: UsageRecord | None) -> None:
+        """Libère la réservation et, si l'appel a eu lieu, enregistre son coût réel."""
+        ...
+
+
+def fits(spent: Decimal, reserved: Decimal, amount: Decimal, cap: Decimal) -> bool:
+    """Budget épuisé : tout appel est refusé, même estimé gratuit. Sinon l'estimation
+    doit tenir dans le solde, appels en cours compris."""
+    available = cap - spent - reserved
+    return available > 0 and amount <= available
+
+
+def refusal(cap: Decimal, reserved: Decimal, amount: Decimal) -> BudgetExceededError:
+    return BudgetExceededError(
+        f"Budget d'essai atteint ({cap} $ CA, réservé par les appels en cours : "
+        f"{reserved:.4f} $ CA, estimation : {amount:.4f} $ CA) : appel refusé."
+    )
+
 
 class InMemoryLedger:
+    """Registre en mémoire (tests, benchmark) : un verrou pour les fils du processus."""
+
     def __init__(self) -> None:
         self.entries: list[UsageRecord] = []
+        self._reserved: dict[str, Decimal] = {}
+        self._lock = threading.Lock()
 
     def total_spent_cad(self) -> Decimal:
         return sum((e.usage.cost_cad for e in self.entries), Decimal("0"))
 
     def record(self, entry: UsageRecord) -> None:
-        self.entries.append(entry)
+        with self._lock:
+            self.entries.append(entry)
 
+    def reserve(self, amount: Decimal, cap: Decimal, agent: str, model: str) -> Reservation:
+        with self._lock:
+            reserved = sum(self._reserved.values(), Decimal("0"))
+            if not fits(self.total_spent_cad(), reserved, amount, cap):
+                raise refusal(cap, reserved, amount)
+            reservation = Reservation(uuid.uuid4().hex, amount)
+            self._reserved[reservation.id] = amount
+            return reservation
 
-# Réservations en cours, par registre de coûts : partagées par toutes les passerelles
-# du processus, pour que des appels simultanés ne dépassent pas le plafond ensemble.
-_RESERVED: dict[int, Decimal] = {}
-_RESERVATION_LOCK = threading.Lock()
+    def settle(self, reservation: Reservation, entry: UsageRecord | None) -> None:
+        with self._lock:
+            self._reserved.pop(reservation.id, None)
+            if entry is not None:
+                self.entries.append(entry)
 
 
 class BudgetedGateway:
@@ -108,16 +156,24 @@ class BudgetedGateway:
             len(json.dumps(t.parameters)) + len(t.description) for t in request.tools
         )
         estimate = self.estimate(request.model, prompt_chars, request.max_tokens)
-        with self._reservation(estimate):
+        reservation = self._ledger.reserve(estimate, self._cap, agent, request.model)
+        try:
             result = self._inner.generate(request)
-            self._record(UsageRecord(agent, result.model, result.usage))
+        except BaseException:
+            self._ledger.settle(reservation, None)
+            raise
+        self._settle(reservation, UsageRecord(agent, result.model, result.usage))
         return result
 
     def embed(self, model: str, texts: tuple[str, ...], agent: str = "unknown") -> EmbeddingResult:
         estimate = self.estimate(model, sum(len(t) for t in texts), 0)
-        with self._reservation(estimate):
+        reservation = self._ledger.reserve(estimate, self._cap, agent, model)
+        try:
             result = self._inner.embed(model, texts)
-            self._record(UsageRecord(agent, model, result.usage))
+        except BaseException:
+            self._ledger.settle(reservation, None)
+            raise
+        self._settle(reservation, UsageRecord(agent, model, result.usage))
         return result
 
     def list_models(self) -> tuple[ModelInfo, ...]:
@@ -142,26 +198,8 @@ class BudgetedGateway:
             self._price_cache = {m.id: m for m in source()}
         return self._price_cache.get(model)
 
-    @contextmanager
-    def _reservation(self, amount: Decimal) -> Iterator[None]:
-        key = id(self._ledger)
-        with _RESERVATION_LOCK:
-            others = _RESERVED.get(key, Decimal("0"))
-            available = self.remaining_cad() - others
-            if available <= 0 or amount > available:
-                raise BudgetExceededError(
-                    f"Budget d'essai atteint ({self._cap} $ CA, réservé par les appels en "
-                    f"cours : {others} $ CA, estimation : {amount:.4f} $ CA) : appel refusé."
-                )
-            _RESERVED[key] = others + amount
-        try:
-            yield
-        finally:
-            with _RESERVATION_LOCK:
-                _RESERVED[key] -= amount
-
-    def _record(self, entry: UsageRecord) -> None:
-        self._ledger.record(entry)
+    def _settle(self, reservation: Reservation, entry: UsageRecord) -> None:
+        self._ledger.settle(reservation, entry)
         if self._task_cap is not None and entry.usage.cost_cad > self._task_cap:
             log.warning(
                 "plafond par tâche dépassé : agent=%s modèle=%s coût=%s $ CA plafond=%s $ CA",

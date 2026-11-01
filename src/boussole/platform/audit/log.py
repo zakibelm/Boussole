@@ -17,6 +17,7 @@ from typing import Any
 from sqlalchemy import Engine, select, text
 from sqlalchemy.orm import Session, sessionmaker
 
+from boussole.core.database import serialize_writes
 from boussole.core.enums import ActionClass
 from boussole.core.models import AgentLogEntry, Base
 from boussole.platform.secrets import SecretStore
@@ -70,7 +71,7 @@ class AuditLog:
     def append(self, event: AuditEvent) -> int:
         key = self._key()
         with _WRITE_LOCK, self._sessions.begin() as session:
-            _lock(session)
+            serialize_writes(session)
             prev = session.scalar(
                 select(AgentLogEntry.entry_hash).order_by(AgentLogEntry.id.desc()).limit(1)
             )
@@ -235,9 +236,3 @@ def _sign(key: bytes, entry_hash: str) -> str:
 def _utc(moment: datetime) -> datetime:
     """SQLite rend des dates naïves : elles ont été écrites en UTC."""
     return moment if moment.tzinfo else moment.replace(tzinfo=UTC)
-
-
-def _lock(session: Session) -> None:
-    """Sérialise les écritures pour que le chaînage reste linéaire."""
-    if session.get_bind().dialect.name == "postgresql":
-        session.execute(text("SELECT pg_advisory_xact_lock(hashtext('agent_log'))"))

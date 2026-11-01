@@ -52,6 +52,24 @@ class LlmUsage(Base):
     cost_cad: Mapped[Decimal] = mapped_column(Numeric(12, 6))
 
 
+class LlmReservation(Base):
+    """Coût maximal réservé par un appel en cours, partagé par tous les processus.
+
+    Supprimée à la fin de l'appel (le coût réel passe dans llm_usage). Une réservation
+    laissée par un processus arrêté cesse de compter à `expires_at`.
+    """
+
+    __tablename__ = "llm_reservations"
+
+    id: Mapped[str] = mapped_column(String(32), primary_key=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
+    agent: Mapped[str] = mapped_column(String(80))
+    model: Mapped[str] = mapped_column(String(200))
+    amount_cad: Mapped[Decimal] = mapped_column(Numeric(12, 6))
+
+
 SETTINGS_TABLES = tuple(
-    Base.metadata.tables[name] for name in ("agent_settings", "skill_versions", "llm_usage")
+    Base.metadata.tables[name]
+    for name in ("agent_settings", "skill_versions", "llm_usage", "llm_reservations")
 )
