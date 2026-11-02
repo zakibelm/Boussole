@@ -14,7 +14,7 @@ import pytest
 
 CODE = Path(__file__).resolve().parents[2] / "infra" / "anchor-receiver" / "Code.gs"
 ANCHOR = "63:" + "ab" * 32
-TOKEN = "jeton-de-test_0123456789abcdef"  # noqa: S105 (valeur de test)
+TOKEN = "jeton_" + "x" * 24  # valeur de test, faible entropie (gitleaks)
 
 HARNESS = """
 const rows = [];
@@ -80,7 +80,7 @@ def test_placeholder_token_refuses_everything() -> None:
     [
         None,
         "pas du json",
-        _body(token="mauvais-jeton-0123456789"),  # noqa: S106 (valeur de test)
+        _body(token="mauvais_" + "y" * 20),
         _body(anchor="63:=HYPERLINK(1)"),
         _body(host="=IMPORTXML(1)"),
         _body(at="hier"),

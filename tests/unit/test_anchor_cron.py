@@ -17,7 +17,7 @@ import pytest
 SCRIPT = Path(__file__).resolve().parents[2] / "infra" / "anchor-cron.sh"
 ANCHOR = "63:" + "ab" * 32
 URL = "https://script.example/macros/s/secret-deploiement/exec"
-TOKEN = "jeton-de-test_0123456789abcdef"  # noqa: S105 (valeur de test)
+TOKEN = "jeton_" + "x" * 24  # valeur de test, faible entropie (gitleaks)
 
 pytestmark = pytest.mark.skipif(
     sys.platform == "win32", reason="script bash, testé sous Linux (CI)"
