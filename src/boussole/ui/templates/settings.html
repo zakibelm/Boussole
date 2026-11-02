@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block title %}Paramètres · Boussole{% endblock %}
+{% block content %}
+<h1>Paramètres</h1>
+<p class="lead">Clé OpenRouter, modèle et skill de chaque agent et sous-agent.</p>
+
+<section class="card">
+  <h2>Clé API OpenRouter</h2>
+  <div id="key-section">{% include "_key.html" %}</div>
+</section>
+
+<section class="card">
+  <h2>Budget d'essai</h2>
+  {% set pct = ((spent / cap) * 100) if cap else 0 %}
+  <div class="meter" aria-label="Budget consommé"><span style="width: {{ [pct, 100] | min }}%"></span></div>
+  <p class="muted">{{ "%.2f" | format(spent) }} $ CA dépensés sur {{ "%.2f" | format(cap) }} $ CA.
+    Au plafond, tout appel payant est refusé.</p>
+</section>
+
+<section class="card">
+  <h2>Agents et sous-agents</h2>
+  {% if models_error %}<p class="error">Liste des modèles indisponible : {{ models_error }}</p>
+  {% elif not models %}<p class="muted">Enregistre la clé pour choisir parmi les modèles d'OpenRouter.
+    En attendant, tu peux saisir un identifiant (ex. anthropic/claude-sonnet-5.5).</p>
+  {% else %}<p class="muted">{{ models | length }} modèles disponibles. Prix en $ CA par million de jetons (entrée / sortie).</p>
+  {% endif %}
+
+  {% if model_groups %}
+  {# Une seule copie de la liste (plusieurs centaines de modèles), recopiée dans chaque menu. #}
+  <template id="model-options">
+    {% for provider, group in model_groups %}
+    <optgroup label="{{ provider }}">
+      {% for m in group %}<option value="{{ m.id }}">{{ m.name }} · {{ m.prompt_cad_per_mtok }} / {{ m.completion_cad_per_mtok }} $ CA</option>{% endfor %}
+    </optgroup>
+    {% endfor %}
+  </template>
+  <script>
+    // Chaque menu reçoit la liste complète, plus un champ de recherche qui la filtre
+    // (nom, identifiant ou fournisseur). Le modèle choisi reste toujours visible.
+    document.addEventListener("DOMContentLoaded", () => {
+      const options = document.getElementById("model-options").content;
+      const fill = (select, query) => {
+        const current = select.value || select.dataset.current;
+        const list = options.cloneNode(true);
+        const words = query.toLowerCase().split(/\s+/).filter(Boolean);
+        for (const option of list.querySelectorAll("option")) {
+          const text = (option.value + " " + option.textContent + " "
+            + option.parentElement.label).toLowerCase();
+          if (option.value !== current && !words.every((w) => text.includes(w))) option.remove();
+        }
+        list.querySelectorAll("optgroup:empty").forEach((group) => group.remove());
+        select.replaceChildren(list);
+        if (![...select.options].some((o) => o.value === current)) {
+          select.prepend(new Option(current + " (absent d'OpenRouter)", current));
+        }
+        select.value = current;
+      };
+      for (const select of document.querySelectorAll("select.model-select")) {
+        const search = document.createElement("input");
+        search.type = "search";
+        search.className = "model-search";
+        search.placeholder = "Rechercher un modèle (ex. gratuit, claude, luna)…";
+        search.setAttribute("aria-label", "Rechercher un modèle");
+        search.addEventListener("input", () => fill(select, search.value));
+        select.before(search);
+        fill(select, "");
+      }
+    });
+  </script>
+  {% endif %}
+
+  <p class="muted">Autonomie (annexe X3) : <strong>Automatisation</strong> agit seule sur le faible risque ·
+    <strong>Assistance</strong> produit un brouillon révisé · <strong>Augmentation</strong> conseille, l'humain décide.
+    Plafond fixé par l'architecture.</p>
+  <details>
+    <summary class="muted">Règles communes ajoutées avant chaque skill</summary>
+    <pre class="rules">{{ shared_rules }}</pre>
+  </details>
+
+  {% for group in groups %}
+  <h3>{{ group.name }}</h3>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Agent</th><th>Autonomie</th><th>Modèle</th><th></th><th>Skill</th></tr></thead>
+    <tbody>
+    {% for agent in group.agents %}
+      {% with a=agent, child=False %}{% include "_agent_row.html" %}{% endwith %}
+      {% for sub in agent.children %}
+        {% with a=sub, child=True %}{% include "_agent_row.html" %}{% endwith %}
+      {% endfor %}
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  {% endfor %}
+</section>
+{% endblock %}

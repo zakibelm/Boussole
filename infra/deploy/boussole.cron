@@ -1,0 +1,14 @@
+# /etc/cron.d/boussole : sauvegarde et ancre du journal, chaque jour (UTC).
+#
+# L'ancre part hors du serveur par infra/anchor-cron.sh (POST HTTPS vers
+# BOUSSOLE_ANCHOR_URL, jeton BOUSSOLE_ANCHOR_TOKEN dans le corps, tous deux lus dans
+# /srv/boussole/boussole.env). Si l'adresse ou le jeton manque, ou si
+# l'envoi échoue, le script sort en erreur : cron le signale par courriel à MAILTO
+# (si l'envoi de courriel est configuré sur le VPS). Une copie locale reste dans
+# /var/log/boussole/anchors.log.
+# MAILTO=adresse@exemple.com
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+0 2 * * * root /opt/boussole/src/infra/deploy/backup.sh >> /var/log/boussole/backup.log 2>&1
+15 2 * * * root set -o pipefail; /opt/boussole/src/infra/anchor-cron.sh 2>&1 | tee -a /var/log/boussole/anchors.log

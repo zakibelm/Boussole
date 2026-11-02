@@ -1,0 +1,123 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main, "phase-*/**"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  qualite:
+    name: Lint et types
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+      - run: uv sync --frozen
+      - name: Formatage
+        run: uv run ruff format --check .
+      - name: Lint
+        run: uv run ruff check .
+      - name: Types (mypy strict)
+        run: uv run mypy
+
+  tests:
+    name: Tests (unitaires, contrat, intégration, red team)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: boussole
+          POSTGRES_DB: boussole_test
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U boussole"
+          --health-interval 2s
+          --health-retries 20
+    env:
+      BOUSSOLE_TEST_DATABASE_URL: postgresql+psycopg://boussole@localhost:5432/boussole_test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+      - run: uv sync --frozen
+      - name: Tests et couverture globale (80 %)
+        run: uv run pytest --cov --cov-report=term-missing
+      - name: Couverture du domaine et des garde-fous (80 %)
+        run: >-
+          uv run coverage report --fail-under=80
+          --include="src/boussole/core/*,src/boussole/platform/guardrails/*,src/boussole/platform/audit/*"
+
+  securite:
+    name: Dépendances, secrets et fichiers interdits
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+      - run: uv sync --frozen
+      - name: Vulnérabilités des dépendances (pip-audit)
+        run: |
+          uv export --frozen --format requirements-txt --no-hashes --no-emit-project > requirements-audit.txt
+          uv run pip-audit --strict -r requirements-audit.txt
+      - name: Secrets dans l'historique (gitleaks)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Aucun PDF, donnée locale ni .env suivi
+        run: bash infra/ci/check_forbidden_files.sh
+
+  deploiement:
+    name: Image de production et scripts de déploiement
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Scripts (shellcheck)
+        run: shellcheck -x infra/*.sh infra/deploy/*.sh infra/ci/*.sh
+      - name: Construction de l'image
+        run: docker build -f infra/deploy/Dockerfile -t boussole:ci .
+      - name: Démarrage comme en production (lecture seule, non root) et sonde de santé
+        run: |
+          mkdir -p /tmp/bs/data /tmp/bs/secrets && sudo chown -R 10001:10001 /tmp/bs
+          docker run -d --name bs --read-only --tmpfs /tmp --cap-drop ALL \
+            --security-opt no-new-privileges:true \
+            -v /tmp/bs/data:/app/data/local -v /tmp/bs/secrets:/app/secrets \
+            -e BOUSSOLE_ALLOWED_ORIGINS=https://boussole.example boussole:ci
+          for i in $(seq 1 30); do
+            status=$(docker inspect --format '{{.State.Health.Status}}' bs)
+            [ "$status" = healthy ] && break
+            sleep 3
+          done
+          docker logs bs
+          test "$status" = healthy
+          test "$(docker exec bs id -u)" = 10001
+      - name: Configuration nginx validée par nginx 1.24 (version du VPS)
+        run: |
+          le=/tmp/le && mkdir -p $le/live/boussole.optigenius.pro
+          openssl req -x509 -newkey rsa:2048 -nodes -days 1 -subj /CN=boussole.optigenius.pro \
+            -keyout $le/live/boussole.optigenius.pro/privkey.pem \
+            -out $le/live/boussole.optigenius.pro/fullchain.pem 2>/dev/null
+          openssl dhparam -dsaparam -out $le/ssl-dhparams.pem 2048 2>/dev/null
+          printf '%s\n' 'ssl_session_cache shared:le_nginx_SSL:10m;' 'ssl_session_timeout 1440m;' \
+            'ssl_session_tickets off;' 'ssl_protocols TLSv1.2 TLSv1.3;' \
+            'ssl_prefer_server_ciphers off;' > $le/options-ssl-nginx.conf
+          touch /tmp/htpasswd-boussole
+          docker run --rm \
+            -v "$PWD/infra/deploy/nginx/boussole.conf:/etc/nginx/conf.d/boussole.conf:ro" \
+            -v "$le:/etc/letsencrypt:ro" \
+            -v /tmp/htpasswd-boussole:/etc/nginx/.htpasswd-boussole:ro \
+            nginx:1.24 nginx -t

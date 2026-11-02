@@ -1,0 +1,30 @@
+<div>
+  {% if masked_key %}
+    <p>Clé enregistrée : <strong>{{ masked_key }}</strong> <span class="muted">(coffre du système)</span></p>
+  {% else %}
+    <p class="muted">Aucune clé enregistrée.</p>
+  {% endif %}
+
+  <form class="row" hx-post="/settings/api-key" hx-target="#key-section" hx-swap="innerHTML">
+    <input type="password" name="api_key" placeholder="sk-or-…" autocomplete="off" required
+           aria-label="Clé API OpenRouter" style="min-width: 320px">
+    <button class="primary" type="submit">{{ "Remplacer" if masked_key else "Enregistrer" }}</button>
+  </form>
+
+  {% if masked_key %}
+  <div class="row" style="margin-top: 10px">
+    <button hx-post="/settings/api-key/test" hx-target="#key-section" hx-swap="innerHTML">Tester la connexion</button>
+    <button class="danger" hx-post="/settings/api-key/delete" hx-target="#key-section" hx-swap="innerHTML"
+            hx-confirm="Supprimer la clé du coffre ?">Supprimer la clé</button>
+  </div>
+  {% endif %}
+
+  {% if key_info %}
+    <p class="notice">Connexion réussie (appel gratuit).
+      {% if key_info.limit is not none %}Limite du compte : {{ key_info.limit }} $ US. {% endif %}
+      Utilisation déclarée par OpenRouter : {{ key_info.usage }} $ US.</p>
+  {% endif %}
+  {% if notice %}<p class="notice">{{ notice }}</p>{% endif %}
+  {% if error %}<p class="error">{{ error }}</p>{% endif %}
+  <p class="muted">La clé n'est jamais réaffichée, ni écrite dans le dépôt, la base ou les journaux.</p>
+</div>

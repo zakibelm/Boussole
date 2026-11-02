@@ -1,0 +1,1073 @@
+{
+  "run_at": "20261031T231024Z",
+  "label": "ef0240",
+  "tasks": {
+    "status": {
+      "agent": "closing",
+      "items": 5
+    },
+    "risks": {
+      "agent": "domain.risk",
+      "items": 5
+    },
+    "approach": {
+      "agent": "selector",
+      "items": 10
+    }
+  },
+  "summary": {
+    "anthropic/claude-haiku-5.5": {
+      "status": 0.8,
+      "risks": 1.0,
+      "approach": 1.0,
+      "global": 0.95,
+      "cost_cad": 0.01265,
+      "latency_mean_s": 4.41825,
+      "latency_p95_s": 5.677,
+      "errors": 0.0
+    },
+    "anthropic/claude-sonnet-5.5": {
+      "status": 0.5,
+      "risks": 1.0,
+      "approach": 1.0,
+      "global": 0.875,
+      "cost_cad": 0.245605,
+      "latency_mean_s": 6.4266000000000005,
+      "latency_p95_s": 7.589,
+      "errors": 0.0
+    },
+    "google/gemini-3.8-flash": {
+      "status": 1.0,
+      "risks": 1.0,
+      "approach": 1.0,
+      "global": 1.0,
+      "cost_cad": 0.088795,
+      "latency_mean_s": 7.70105,
+      "latency_p95_s": 12.697,
+      "errors": 0.0
+    },
+    "mistralai/mistral-large-4-0": {
+      "status": 1.0,
+      "risks": 1.0,
+      "approach": 1.0,
+      "global": 1.0,
+      "cost_cad": 0.108473,
+      "latency_mean_s": 13.156450000000001,
+      "latency_p95_s": 18.638,
+      "errors": 0.0
+    },
+    "openai/gpt-5.6-luna": {
+      "status": 1.0,
+      "risks": 1.0,
+      "approach": 1.0,
+      "global": 1.0,
+      "cost_cad": 0.010976,
+      "latency_mean_s": 3.6720999999999995,
+      "latency_p95_s": 4.678,
+      "errors": 0.0
+    }
+  },
+  "recommended_default": "openai/gpt-5.6-luna",
+  "rows": [
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "status",
+      "item": "s01",
+      "score": 0.5,
+      "cost_cad": "0.015828",
+      "latency_s": 8.323,
+      "answer": "**Statut projet CRM, semaine 22**\n\n- **Avancement :** environ 60 % du travail est réalisé. L'import des contacts est terminé et 2 des 5 intégrations sont livrées.\n- **Budget :** 410 000 $ dépensés sur 500 000 $ prévus (82 %) pour 60 % de travail fait, soit un écart de 22 points. Calcul à partir des notes : CPI ≈ 0,73 (300 000 $ de valeur acquise / 410 000 $ de coût réel), si 500 000 $ est le budget total.\n- **Échéancier :** la migration des historiques glisse de 3 semaines parce que le fournisseur n'a pas livré l'extraction. Les tests avec les ventes sont prévus le 4 novembre, et les notes ne disent pas si cette date est maintenue.\n- **Problèmes :** une dépendance fournisseur bloque la migration, et les coûts progressent plus vite que le travail réalisé.\n- **Décision attendue :** faut-il réduire la portée des rapports ? Les notes ne chiffrent ni l'économie ni l'impact d'une réduction, il faudra donc les obtenir avant de trancher.\n\n**Limites :** tous les chiffres viennent des notes fournies. Aucune source en mémoire ne me donne de seuil de tolérance ni de référence de projet. Le CPI est mon calcul, pas une donnée du projet.",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "status",
+      "item": "s02",
+      "score": 0.5,
+      "cost_cad": "0.011763",
+      "latency_s": 6.075,
+      "answer": "**Statut de projet : Rénovation de l'école Saint-Jean**\n\n- **Avancement :** la charpente est terminée et la toiture est à 70 %.\n- **Budget :** conforme à 2 % près. Les notes ne disent pas si l'écart est en dépassement ou en économie, ni son montant.\n- **Échéancier :** l'échéance de la rentrée de janvier est maintenue, à condition que l'expertise ne révèle pas de problème structurel.\n- **Problème :** une infiltration d'eau a été découverte dans l'aile B et une expertise est demandée. Son résultat et sa date de remise ne sont pas indiqués.\n- **Décision attendue :** les notes n'en nomment pas explicitement. Le directeur demande une visite des parents le 12 décembre, et la direction devra l'accepter ou la refuser. La compatibilité avec l'état du chantier et la sécurité, notamment pour l'aile B, reste à confirmer.\n\n**Sources :** ces éléments viennent uniquement des notes fournies. Je n'ai aucune source en mémoire pour les recouper, et les chiffres (70 %, 2 %) ne sont pas vérifiés. La décision attendue est mon interprétation, à confirmer avec le chargé de projet.",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "status",
+      "item": "s03",
+      "score": 0.5,
+      "cost_cad": "0.009993",
+      "latency_s": 4.67,
+      "answer": "**Statut – Programme cybersécurité, mois 4 (pour la direction)**\n\n- **Avancement :** MFA déployée à 85 % des comptes (objectif : 100 %). Aucun incident ce mois-ci.\n- **Budget :** aucune donnée de budget global ou de consommation dans les notes. Seul chiffre disponible : 120 000 $ pour le remplacement des trois applications anciennes, un coût non encore budgété ou approuvé selon les notes.\n- **Échéancier :** échéance de 100 % de MFA fixée au 30 novembre. Les notes ne disent pas si le rythme actuel permet de l'atteindre. L'audit externe a lieu en janvier.\n- **Problèmes :** trois applications anciennes ne supportent pas la MFA, ce qui bloque les derniers 15 % de couverture.\n- **Décision attendue :** arbitrer entre (a) remplacer les trois applications (120 000 $) et (b) accorder une exception temporaire. Les notes ne précisent ni la durée ni les risques de l'exception, ni l'attente de l'auditeur à son sujet. Ces éléments sont à documenter avant la décision.\n\n**Source :** notes de statut fournies. Je n'ai consulté aucune autre source de la mémoire, et aucun chiffre n'a été ajouté ou extrapolé.",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "status",
+      "item": "s04",
+      "score": 0.5,
+      "cost_cad": "0.010620",
+      "latency_s": 5.891,
+      "answer": "**Statut de projet : Lancement Aurora (synthèse direction)**\n\n- **Avancement** : les précommandes dépassent la prévision de 40 %. La demande est supérieure aux attentes.\n- **Budget** : non documenté dans les notes. Aucun chiffre à rapporter, et l'impact financier de l'écart de production n'est pas évalué.\n- **Échéancier** : le marketing veut maintenir le lancement au 1er décembre. Aucun autre jalon n'est mentionné.\n- **Problèmes** : l'usine peut produire 8 000 unités au premier mois au lieu de 11 000, soit un écart de 3 000 unités (environ 27 %, calcul à partir des notes). Cela crée un risque de ruptures de stock et de clients mécontents.\n- **Décision attendue** : choisir entre maintenir le 1er décembre avec une offre limitée et l'option de livrer en deux vagues. Cette option est mentionnée sans détail (dates, volumes par vague, coûts). Ces éléments sont à obtenir avant l'arbitrage.\n\n**Sources et limites** : tout provient des notes fournies. Aucune source de la mémoire Boussole n'a été consultée. Le budget et le détail de l'option en deux vagues sont à confirmer auprès du chargé de projet.",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "status",
+      "item": "s05",
+      "score": 0.5,
+      "cost_cad": "0.013216",
+      "latency_s": 6.722,
+      "answer": "**Statut : implantation ERP, phase finance**\n\n- **Avancement :** les tests d'acceptation sont réussis à 92 %. Les 8 % restants portent sur la consolidation multidevise, qui bloque la mise en production.\n- **Budget :** l'attente coûterait environ 25 000 $ (estimation des notes). L'écart par rapport au budget approuvé et le coût d'un consultant additionnel ne sont pas fournis.\n- **Échéancier :** le consultant expert n'est disponible que dans 3 semaines. Si on attend, la mise en production risque donc d'être retardée d'autant, ce qui est mon inférence, car les notes ne donnent pas de dates de référence.\n- **Problèmes :** la consolidation multidevise est bloquante, et le projet dépend d'un seul consultant expert.\n- **Décision attendue (direction financière) :** attendre le consultant (environ 25 000 $, 3 semaines) ou embaucher un autre consultant. Le coût et le délai de cette option sont à chiffrer avant l'arbitrage.\n\n**Sources :** tous les chiffres proviennent des notes fournies. Je n'ai aucune source en mémoire pour les valider ou les comparer à la référence du projet.",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "risks",
+      "item": "r01",
+      "score": 1.0,
+      "cost_cad": "0.014062",
+      "latency_s": 6.713,
+      "answer": "```json\n[\n  {\n    \"titre\": \"Retard de livraison des serveurs\",\n    \"description\": \"Le fournisseur annonce un délai de six semaines au lieu de deux (compte rendu du 14 octobre). Cela risque de décaler les activités dépendantes de l'infrastructure, dont la migration. Cote estimée par l'agent, sans source en mémoire pour l'échelle.\",\n    \"probabilite\": 5,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Dépendance à une ressource clé (administratrice de bases de données)\",\n    \"description\": \"Seule l'administratrice de bases de données connaît la migration et elle part en congé parental en décembre (compte rendu du 14 octobre). Sans transfert de connaissances ni remplaçante, la migration risque d'être bloquée ou mal exécutée. Cote estimée par l'agent, sans source en mémoire pour l'échelle.\",\n    \"probabilite\": 4,\n    \"impact\": 5\n  },\n  {\n    \"titre\": \"Dérive du périmètre : rapports supplémentaires sans révision du budget\",\n    \"description\": \"Le client a demandé deux nouveaux rapports sans revoir le budget (compte rendu du 14 octobre). Cela risque de causer un dépassement de coûts et d'échéancier, ou de réduire la qualité, si le changement n'est pas traité formellement. Cote estimée par l'agent, sans source en mémoire pour l'échelle.\",\n    \"probabilite\": 4,\n    \"impact\": 3\n  }\n]\n```",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "risks",
+      "item": "r02",
+      "score": 1.0,
+      "cost_cad": "0.011519",
+      "latency_s": 5.476,
+      "answer": "[\n  {\n    \"titre\": \"Intempéries pendant le coulage des fondations\",\n    \"description\": \"Selon le texte, les prévisions annoncent trois semaines de pluie pendant le coulage. Risque de retard, de baisse de qualité du béton et de reprise de travaux. Probabilité et impact estimés par jugement, sans donnée chiffrée dans le texte.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Dépassement de coût lié à la hausse du prix de l'acier\",\n    \"description\": \"Selon le texte, le prix de l'acier a augmenté de 18 % depuis la soumission. L'écart est déjà constaté et menace le budget. Son effet réel dépend de la part de l'acier dans le coût total, qui n'est pas indiquée dans le texte.\",\n    \"probabilite\": 5,\n    \"impact\": 3\n  },\n  {\n    \"titre\": \"Date de visite de l'inspecteur municipal non confirmée\",\n    \"description\": \"Selon le texte, la date de visite n'est pas confirmée et conditionne la suite des travaux. Risque d'arrêt de chantier ou de retard sur le chemin critique. Probabilité et impact estimés par jugement, sans donnée sur les délais habituels de la municipalité.\",\n    \"probabilite\": 3,\n    \"impact\": 4\n  }\n]",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "risks",
+      "item": "r03",
+      "score": 1.0,
+      "cost_cad": "0.013558",
+      "latency_s": 6.395,
+      "answer": "```json\n[\n  {\n    \"titre\": \"Baisse de capacité de l'équipe de développement\",\n    \"description\": \"Selon le texte, la vélocité a baissé de 30 % depuis la réaffectation de deux développeurs vers un autre projet. Si la situation persiste, les prochains jalons risquent d'être retardés ou leur périmètre réduit. Cote estimée à partir du texte seul, sans donnée de mémoire sur le plan de livraison.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Incompatibilité avec la nouvelle version de l'API du partenaire de paiement\",\n    \"description\": \"Le texte indique que l'API change de version le mois prochain et que l'intégration n'a pas été testée sur la nouvelle version. Des paiements pourraient échouer ou être interrompus après la bascule. Le texte ne précise pas si l'ancienne version restera disponible. Cote estimée.\",\n    \"probabilite\": 4,\n    \"impact\": 5\n  },\n  {\n    \"titre\": \"Dégradation de l'adoption par les utilisateurs pilotes à cause des lenteurs de connexion\",\n    \"description\": \"Le texte rapporte que les utilisateurs pilotes se plaignent de lenteurs à chaque connexion. Ce problème est déjà observé et risque de nuire à la satisfaction, à l'adhésion au pilote et à la crédibilité du produit avant le déploiement élargi. La cause n'est pas identifiée dans le texte. Cote estimée.\",\n    \"probabilite\": 5,\n    \"impact\": 3\n  }\n]\n```",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "risks",
+      "item": "r04",
+      "score": 1.0,
+      "cost_cad": "0.014347",
+      "latency_s": 7.117,
+      "answer": "```json\n[\n  {\n    \"titre\": \"Vacance de commanditaire à la fin du trimestre\",\n    \"description\": \"Le commanditaire principal quitte l'entreprise à la fin du trimestre et aucun remplaçant n'est nommé. Risque de perte de soutien et d'autorité décisionnelle, de retard dans les arbitrages et les approbations, et de remise en cause des priorités. Source : texte de la réunion. Cotation proposée à partir du texte seul, sans source en mémoire, à valider par l'humain.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Non-conformité potentielle à la Loi 25 (hébergement des données aux États-Unis)\",\n    \"description\": \"Les données personnelles des clients seront hébergées aux États-Unis et le service juridique n'a pas évalué la conformité à la Loi 25. Risque de sanctions, d'atteinte à la réputation, et de refonte de l'architecture ou de l'hébergement si l'évaluation est défavorable. Les exigences précises de la Loi 25 ne sont pas vérifiées (aucune source en mémoire). Cotation à valider avec le service juridique.\",\n    \"probabilite\": 3,\n    \"impact\": 5\n  }\n]\n```",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "risks",
+      "item": "r05",
+      "score": 1.0,
+      "cost_cad": "0.014594",
+      "latency_s": 7.252,
+      "answer": "```json\n[\n  {\n    \"titre\": \"Conflit de calendrier entre la formation et la clôture financière annuelle\",\n    \"description\": \"La formation de 300 employés est planifiée la même semaine que la clôture financière annuelle. Les employés, notamment ceux des finances, risquent d'être indisponibles pour l'un ou l'autre, ce qui peut retarder la clôture, réduire la participation ou dégrader la qualité de la formation. Cotation estimée à partir du texte seul, aucune source en mémoire.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Plateforme de formation en ligne non éprouvée à cette échelle\",\n    \"description\": \"Le logiciel n'a jamais été utilisé pour 300 utilisateurs. Il existe un risque de surcharge, de lenteurs, de pannes ou de problèmes de suivi des participants, qui perturberaient la formation. Cotation estimée à partir du texte seul, aucune source en mémoire.\",\n    \"probabilite\": 3,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Opposition ou grief du syndicat en cas de changement d'horaire sans consultation\",\n    \"description\": \"Le syndicat exige d'être consulté avant tout changement d'horaire. Déplacer la formation ou ajuster les horaires pour résoudre le conflit avec la clôture sans consultation préalable peut entraîner un différend, des délais ou un refus de coopération. Cotation estimée à partir du texte seul, aucune source en mémoire.\",\n    \"probabilite\": 3,\n    \"impact\": 4\n  }\n]\n```",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "approach",
+      "item": "a01",
+      "score": 1.0,
+      "cost_cad": "0.010329",
+      "latency_s": 5.61,
+      "answer": "```json\n{\n  \"approche\": \"predictive\",\n  \"justification\": \"Les trois familles de critères convergent vers le prédictif, donc la règle de repli vers l'hybride ne s'applique pas. (1) Livrables : l'entrepôt est un livrable physique dont la portée est définie par des plans approuvés par la ville et des exigences stables. Le coût du changement est élevé et croît après la coulée du béton, ce qui favorise une planification détaillée en amont. (2) Projet : la date de livraison contractuelle est fixe, et la séquence des travaux (fondations, structure, enveloppe, finitions) est fortement dépendante. 40 sous-traitants exigent une coordination planifiée des jalons, des interfaces et des contrats. (3) Organisation : la structure hiérarchique est cohérente avec une gouvernance par phases et des points d'approbation formels. Aucun signal ne diverge. Note de vérification : aucune source de la mémoire n'a été fournie pour cette demande. Cette analyse repose uniquement sur les faits du projet et sur les trois familles de critères que vous citez (section 4.3 du PMBOK), sans citation textuelle vérifiée du guide.\"\n}\n```",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "approach",
+      "item": "a02",
+      "score": 1.0,
+      "cost_cad": "0.010945",
+      "latency_s": 6.067,
+      "answer": "```json\n{\n  \"approche\": \"adaptive\",\n  \"justification\": \"Les trois critères convergent vers l'adaptatif. Livrables : les fonctions sont à découvrir avec les premiers utilisateurs, sur un marché inconnu, donc l'incertitude est élevée et le périmètre est émergent. Projet : le financement par tranches selon les résultats favorise une livraison incrémentale avec des jalons de valeur. Il demande une gouvernance de revue à chaque tranche, mais ne contredit pas l'adaptatif. Organisation : l'équipe autogérée de 6 personnes et les retours clients toutes les deux semaines correspondent à une culture et à une cadence adaptatives. Les signaux ne divergent pas, donc l'hybride n'est pas justifié. Point de vigilance : relier les revues de tranches de financement aux résultats mesurables des itérations. Source : aucune source de la mémoire n'a été fournie pour cette analyse. Elle repose sur mon interprétation des critères de tailoring du PMBOK 4.3 et reste à valider par l'humain.\"\n}\n```",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "approach",
+      "item": "a03",
+      "score": 1.0,
+      "cost_cad": "0.013485",
+      "latency_s": 7.589,
+      "answer": "{\"approche\": \"hybrid\", \"justification\": \"Aucune source de la mémoire n'a été fournie : l'analyse repose uniquement sur les critères PMBOK 4.3 (livrables, projet, organisation) et sur la description du projet. 1) Livrables : les signaux divergent. Le paramétrage réglementaire et la migration des données sont bien définis, stables et imposés par la loi, ce qui oriente vers le prédictif. Les tableaux de bord doivent être découverts avec les gestionnaires, donc exigences émergentes et retours fréquents, ce qui oriente vers l'adaptatif. 2) Projet : les échéances légales datées, le déploiement sur 8 usines et le coût élevé d'une erreur sur la paie demandent un plan, des jalons et un contrôle des changements (prédictif). L'incertitude sur le besoin des gestionnaires se traite par itérations courtes avec validation en continu (adaptatif). 3) Organisation : la description ne donne aucune information sur la culture, la maturité agile, la gouvernance ou la disponibilité des parties prenantes. Ce critère n'est donc pas évalué et doit être confirmé par l'humain. Comme les signaux divergent sur les livrables et le projet, je recommande l'hybride : cycle prédictif pour le paramétrage réglementaire, la migration et le calendrier de déploiement, et cycles adaptatifs pour la conception des tableaux de bord. La décision finale revient au responsable du projet.\"}",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "approach",
+      "item": "a04",
+      "score": 1.0,
+      "cost_cad": "0.012130",
+      "latency_s": 6.956,
+      "answer": "```json\n{\n  \"approche\": \"predictive\",\n  \"justification\": \"Les trois familles de critères convergent vers le prédictif, donc l'hybride n'est pas nécessaire. (1) Livrables : exigences entièrement définies par le régulateur, donc stables, connues d'avance et non négociables. Il n'y a ni incertitude de périmètre ni valeur à découvrir par itération. (2) Projet : audits obligatoires à dates fixes, donc jalons imposés, et documentation de validation exigée à chaque étape, ce qui impose des revues par phases. Le risque est dominé par la non-conformité, pas par l'incertitude du besoin. Une livraison incrémentale n'apporterait pas de valeur, puisque la conformité n'est atteinte qu'une fois l'ensemble des exigences satisfait. (3) Organisation : le contexte réglementaire pharmaceutique et l'absence de tolérance à l'improvisation indiquent une culture de contrôle documenté et de gouvernance formelle. Cette lecture est déduite de la description, qui ne détaille ni la structure organisationnelle ni la disponibilité des parties prenantes pour un mode itératif. Je n'ai pas de source en mémoire pour citer le texte exact du PMBOK 4.3. Cette recommandation s'appuie donc sur les critères tels que vous les avez énoncés et sur la description du projet. À valider par le responsable du projet.\"\n}\n```",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "approach",
+      "item": "a05",
+      "score": 1.0,
+      "cost_cad": "0.011578",
+      "latency_s": 6.257,
+      "answer": "```json\n{\n  \"approche\": \"adaptive\",\n  \"justification\": \"Les trois familles de critères convergent vers l'adaptatif, donc pas de bascule vers l'hybride. (1) Livrables : portée très instable et forte innovation, donc exigences émergentes, peu définissables à l'avance, ce qui favorise l'adaptatif. (2) Projet : la direction veut de la valeur livrée en un mois puis décider de la suite, ce qui appelle une livraison incrémentale avec points de décision fréquents, donc adaptatif. (3) Organisation : équipe de 5 personnes, taille favorable à la collaboration, et parties prenantes très impliquées, ce qui permet un retour continu. Point de vigilance : le travail en réseau (équipe probablement distribuée) demande des outils et des rituels de coordination explicites, mais ne contredit pas le choix. Aucune source de la mémoire n'a été consultée : le rattachement aux critères de la section 4.3 du PMBOK repose sur votre énoncé des critères et n'est pas vérifié par une citation.\"\n}\n```",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "approach",
+      "item": "a06",
+      "score": 1.0,
+      "cost_cad": "0.012499",
+      "latency_s": 6.989,
+      "answer": "```json\n{\n  \"approche\": \"hybrid\",\n  \"justification\": \"Les signaux divergent selon les critères de sélection (PMBOK 4.3), donc l'hybride est recommandé. Aucune source de la mémoire n'a été consultée : les critères viennent de la demande et l'analyse repose uniquement sur la description fournie. (1) Livrables : usine et chaîne logistique ont des exigences stables et des coûts de changement élevés, ce qui oriente vers le prédictif. Emballage, site web et campagne marketing évoluent selon les tests clients, donc vers l'adaptatif. (2) Projet : les jalons fermes de l'usine et de la logistique (délais d'approvisionnement, investissements) demandent une planification anticipée, donc prédictif. L'incertitude sur la réception du marché pour la partie commerciale demande des cycles courts et du feedback, donc adaptatif. (3) Organisation : la description ne donne aucune information (culture, appétit pour le changement, accès aux clients, gouvernance). Ce critère n'est pas évalué et doit être validé avec l'équipe. Recommandation : planification prédictive pour la fabrication et la logistique, itérations adaptatives pour emballage, web et marketing, avec des points de synchronisation aux jalons fermes.\"\n}\n```",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "approach",
+      "item": "a07",
+      "score": 1.0,
+      "cost_cad": "0.010730",
+      "latency_s": 5.808,
+      "answer": "```json\n{\n  \"approche\": \"predictive\",\n  \"justification\": \"Les trois familles de critères convergent vers le prédictif, donc la règle de repli vers l'hybride ne s'applique pas. Livrables : l'inventaire est complet et connu, la portée est stable et les exigences sont peu susceptibles de changer. Projet : la fenêtre est fixe (une fin de semaine, planifiée un an d'avance), les dépendances techniques sont nombreuses mais documentées, donc planifiables en séquence. Le retour arrière très coûteux rend le coût du changement élevé et l'apprentissage par itérations peu praticable. Organisation : la structure fonctionnelle classique s'accorde avec une gouvernance et des jalons planifiés plutôt qu'avec des équipes autonomes. Réserve : aucune source de la mémoire n'a été consultée. L'application des critères du PMBOK (section 4.3) repose donc sur mon raisonnement, sans citation vérifiable. Des pratiques itératives locales (répétitions générales, tests de bascule) restent possibles à l'intérieur du cadre prédictif, sans changer l'approche globale.\"\n}\n```",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "approach",
+      "item": "a08",
+      "score": 1.0,
+      "cost_cad": "0.012205",
+      "latency_s": 6.454,
+      "answer": "```json\n{\n  \"approche\": \"adaptive\",\n  \"justification\": \"Les trois critères convergent vers l'adaptatif. (1) Livrables : besoins flous, utilisateurs qui veulent tester tôt, valeur à découvrir par itérations et retours rapides. (2) Projet : priorités qui changent souvent selon les commentaires, portée variable à budget fixe (le budget fixe est compatible avec un backlog priorisé où la portée est l'ajustement), livraison en continu. (3) Organisation : équipe de 7 personnes qui livre déjà en continu, taille adaptée à un fonctionnement itératif. Le budget fixe est le seul signal prédictif, mais il est compensé par la portée flexible, donc les signaux ne divergent pas assez pour justifier l'hybride. Limites : aucune source de la mémoire n'a été consultée pour citer le texte exact du PMBOK 4.3, et l'énoncé ne donne rien sur la gouvernance, la culture organisationnelle ni les contraintes contractuelles. À confirmer avec le sponsor : si une gouvernance rigide (jalons de financement, conformité) existe, une approche hybride serait à reconsidérer.\"\n}\n```",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "approach",
+      "item": "a09",
+      "score": 1.0,
+      "cost_cad": "0.011698",
+      "latency_s": 6.341,
+      "answer": "{\"approche\": \"hybrid\", \"justification\": \"Les signaux divergent entre les deux volets, d'où l'hybride. Livrables : le garage est tangible, bien défini, avec permis et appels d'offres, ce qui favorise le prédictif. La plateforme numérique est à co-concevoir avec les citoyens, donc les exigences émergent et sont incertaines, ce qui favorise l'adaptatif. Projet : le garage a une date fixe, des jalons contractuels et un coût peu modifiable, donc prédictif. La plateforme peut se livrer par incréments avec rétroaction citoyenne, donc adaptatif. Les nombreuses interdépendances entre les volets imposent une gouvernance et une coordination communes (jalons d'intégration, registre des dépendances). Organisation : le cadre municipal (marchés publics, permis, reddition de comptes) soutient le prédictif pour le garage. La co-conception exige des parties prenantes engagées et une équipe habilitée à décider, ce qui est à confirmer, car aucune information n'est fournie sur la culture ou la maturité agile de l'organisation. Recommandation : cycle prédictif pour le garage, cycles itératifs pour la plateforme, intégrés par une planification de programme commune. Aucune source de la mémoire n'a été consultée. Les critères reposent sur la référence PMBOK 4.3 de la demande et n'ont pas été vérifiés. La décision finale revient à l'humain.\"}",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "task": "approach",
+      "item": "a10",
+      "score": 1.0,
+      "cost_cad": "0.010506",
+      "latency_s": 5.827,
+      "answer": "```json\n{\n  \"approche\": \"predictive\",\n  \"justification\": \"Livrables : 200 bornes identiques, spécifications gelées et cahier des charges signé, donc exigences stables et connues d'avance, ce qui favorise le prédictif. Une certification électrique obligatoire avant livraison impose aussi des portes de validation séquentielles. Projet : le contrat prévoit des pénalités de retard, ce qui exige un périmètre, un calendrier et des coûts planifiés dès le départ, et la fabrication en série laisse peu de place à l'incertitude ou à l'itération. Organisation : aucune information fournie (culture, capacité d'adaptation, implication du client). Ce critère n'est donc pas évaluable et ne contredit pas les deux autres, qui convergent. Aucun signal ne diverge, donc pas de raison de recommander l'hybride. Source : aucune extraite de la mémoire, l'analyse repose uniquement sur les faits du projet fournis. Je ne peux donc pas citer le texte exact du PMBOK 4.3. À confirmer par l'humain : les caractéristiques de l'organisation.\"\n}\n```",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "status",
+      "item": "s01",
+      "score": 0.5,
+      "cost_cad": "0.000974",
+      "latency_s": 6.504,
+      "answer": "- **Avancement** : import des contacts terminé, 2 intégrations sur 5 livrées, environ 60 % du travail réalisé.\n- **Budget** : 410 000 $ dépensés sur 500 000 $ prévus (82 %). L'indice de performance des coûts est d'environ 0,73 (300 000 $ de valeur acquise / 410 000 $ de coût réel), ce qui indique un dépassement à surveiller.\n- **Échéancier** : migration des historiques en retard de 3 semaines, car le fournisseur n'a pas livré l'extraction.\n- **Problèmes** : dépendance au fournisseur pour l'extraction des données et dérive des coûts par rapport à l'avancement.\n- **Décision attendue** : faut-il réduire la portée des rapports ? Prochaine étape : tests avec les ventes le 4 novembre.\n\n*Note : le calcul de l'indice suppose que 500 000 $ est le budget total et que les 60 % représentent l'avancement en valeur. La méthode de la valeur acquise est standard en gestion des coûts (PMBOK), mais je n'ai pas de référence de section vérifiée à citer.*",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "status",
+      "item": "s02",
+      "score": 1.0,
+      "cost_cad": "0.000468",
+      "latency_s": 3.108,
+      "answer": "- **Avancement :** Charpente terminée, toiture à 70 %.\n- **Budget :** Respecté à 2 % près.\n- **Échéancier :** Rentrée de janvier maintenue, à condition que l'expertise sur l'infiltration d'eau dans l'aile B ne révèle pas de problème structurel.\n- **Problèmes :** Infiltration d'eau découverte dans l'aile B, expertise demandée et résultat encore attendu. Le directeur demande une visite des parents le 12 décembre.\n- **Décision attendue :** Les notes ne le précisent pas. Je propose de faire confirmer la visite des parents du 12 décembre, en attendant le résultat de l'expertise, ou de la reporter. Cette décision vous revient.",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "status",
+      "item": "s03",
+      "score": 1.0,
+      "cost_cad": "0.000479",
+      "latency_s": 3.5,
+      "answer": "- **Avancement :** MFA déployée sur 85 % des comptes. Objectif de 100 % au 30 novembre.\n- **Budget :** Les notes ne fournissent pas l'état budgétaire global. Seul chiffre disponible : 120 000 $ pour le remplacement des trois applications.\n- **Échéancier :** Fin de déploiement visée le 30 novembre. Passage de l'auditeur externe en janvier.\n- **Problèmes :** Trois applications anciennes ne supportent pas la MFA, ce qui bloque l'atteinte de 100 %. Aucun incident ce mois-ci.\n- **Décision attendue :** Trancher entre le remplacement des trois applications (120 000 $) et une exception temporaire, avant l'audit de janvier.",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "status",
+      "item": "s04",
+      "score": 0.5,
+      "cost_cad": "0.000861",
+      "latency_s": 5.627,
+      "answer": "**Statut Aurora : résumé pour la direction**\n\n- **Avancement :** Les précommandes dépassent la prévision de 40 %. Les notes ne contiennent pas d'avancement des livrables, à compléter avant diffusion.\n- **Budget :** Les notes ne contiennent aucune donnée budgétaire. Le coût de la livraison en deux vagues n'est pas chiffré.\n- **Échéancier :** Le marketing veut maintenir le lancement au 1er décembre. L'usine ne peut produire que 8 000 unités au premier mois, contre 11 000 prévues (écart de 3 000 unités, soit environ 27 %).\n- **Problèmes :** Risque de ruptures de stock et de clients mécontents si le lancement reste au 1er décembre avec cette capacité.\n- **Décision attendue :** Choisir entre maintenir le 1er décembre avec 8 000 unités disponibles, ou adopter la livraison en deux vagues. Cette décision revient à la direction ; je ne la tranche pas.\n\n*Source : notes de statut fournies. Aucune référence normative du PMBOK n'est invoquée dans ce résumé.*",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "status",
+      "item": "s05",
+      "score": 1.0,
+      "cost_cad": "0.000433",
+      "latency_s": 3.219,
+      "answer": "- **Avancement :** Les tests d'acceptation de la phase finance sont réussis à 92 %.\n- **Budget :** Le coût estimé de l'attente du consultant expert est de 25 000 $. Les notes ne fournissent pas le budget total du projet.\n- **Échéancier :** Le consultant expert n'est disponible que dans trois semaines, ce qui retarde la fin des 8 % restants et la mise en production.\n- **Problèmes :** La consolidation multidevise, qui couvre les 8 % restants, bloque la mise en production.\n- **Décision attendue :** La direction financière doit choisir entre attendre trois semaines le consultant expert (coût estimé de 25 000 $) ou embaucher un autre consultant.",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "risks",
+      "item": "r01",
+      "score": 1.0,
+      "cost_cad": "0.000595",
+      "latency_s": 3.622,
+      "answer": "```json\n[\n  {\n    \"titre\": \"Retard de livraison des serveurs\",\n    \"description\": \"Le fournisseur annonce un délai de six semaines au lieu de deux. Risque de décalage du calendrier des travaux qui dépendent des serveurs.\",\n    \"probabilite\": 5,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Départ de l'administratrice de bases de données\",\n    \"description\": \"L'unique administratrice de bases de données part en congé parental en décembre. Risque de perte de capacité sur les travaux de bases de données pendant son absence.\",\n    \"probabilite\": 5,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Connaissance de la migration concentrée sur une personne\",\n    \"description\": \"Personne d'autre que l'administratrice ne connaît la migration. Risque de blocage ou de retard de la migration si cette personne est indisponible.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Extension de périmètre sans révision budgétaire\",\n    \"description\": \"Le client demande deux nouveaux rapports sans révision du budget. Risque de dépassement budgétaire et de hausse de la charge de l'équipe.\",\n    \"probabilite\": 4,\n    \"impact\": 3\n  }\n]\n```",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "risks",
+      "item": "r02",
+      "score": 1.0,
+      "cost_cad": "0.000574",
+      "latency_s": 4.073,
+      "answer": "```json\n[\n  {\n    \"titre\": \"Pluie prolongée pendant le coulage des fondations\",\n    \"description\": \"Les prévisions annoncent trois semaines de pluie pendant le coulage des fondations, ce qui peut retarder les travaux, dégrader la qualité du béton et imposer des mesures de protection supplémentaires.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Hausse du prix de l'acier\",\n    \"description\": \"Le prix de l'acier a augmenté de 18 % depuis la soumission, ce qui peut dépasser le budget prévu et réduire la marge du projet si aucune clause d'indexation ne s'applique.\",\n    \"probabilite\": 5,\n    \"impact\": 3\n  },\n  {\n    \"titre\": \"Date de visite de l'inspecteur municipal non confirmée\",\n    \"description\": \"L'inspecteur municipal n'a pas encore confirmé sa date de visite. Cette visite conditionne la suite des travaux, donc tout retard de confirmation peut bloquer le calendrier.\",\n    \"probabilite\": 3,\n    \"impact\": 4\n  }\n]\n```",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "risks",
+      "item": "r03",
+      "score": 1.0,
+      "cost_cad": "0.000668",
+      "latency_s": 4.092,
+      "answer": "```json\n[\n  {\n    \"titre\": \"Baisse de la vélocité de l'équipe\",\n    \"description\": \"La vélocité a baissé de 30 % après la réaffectation de deux développeurs à un autre projet, ce qui peut retarder les livraisons prévues.\",\n    \"probabilite\": 5,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Changement de version de l'API du partenaire de paiement\",\n    \"description\": \"La nouvelle version de l'API du partenaire de paiement sera déployée le mois prochain et pourrait rendre l'intégration actuelle incompatible.\",\n    \"probabilite\": 4,\n    \"impact\": 5\n  },\n  {\n    \"titre\": \"Intégration non testée sur la nouvelle version de l'API\",\n    \"description\": \"L'intégration avec le partenaire de paiement n'a pas été testée sur la nouvelle version de l'API, ce qui peut provoquer des défaillances des paiements en production.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Lenteurs de connexion signalées par les utilisateurs pilotes\",\n    \"description\": \"Les utilisateurs pilotes signalent des lenteurs à chaque connexion, ce qui peut dégrader leur adoption et leur confiance dans la solution.\",\n    \"probabilite\": 4,\n    \"impact\": 3\n  }\n]\n```",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "risks",
+      "item": "r04",
+      "score": 1.0,
+      "cost_cad": "0.000470",
+      "latency_s": 3.348,
+      "answer": "```json\n[\n  {\n    \"titre\": \"Départ du commanditaire principal\",\n    \"description\": \"Le commanditaire principal quitte l'entreprise à la fin du trimestre et son remplaçant n'est pas encore nommé. Risque de perte de soutien décisionnel, de blocage des arbitrages et de retard dans les décisions du comité directeur.\",\n    \"probabilite\": 5,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Hébergement des données personnelles hors Québec non évalué au regard de la Loi 25\",\n    \"description\": \"Les données personnelles des clients seront hébergées aux États-Unis. Le service juridique n'a pas encore évalué cette pratique au regard de la Loi 25. Risque de non-conformité réglementaire, de sanctions et d'atteinte à la réputation, ainsi que de remise en cause du projet ou d'un correctif coûteux.\",\n    \"probabilite\": 3,\n    \"impact\": 5\n  }\n]\n```",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "risks",
+      "item": "r05",
+      "score": 1.0,
+      "cost_cad": "0.000544",
+      "latency_s": 3.555,
+      "answer": "[\n  {\n    \"titre\": \"Chevauchement avec la clôture financière annuelle\",\n    \"description\": \"La formation de 300 employés est prévue la même semaine que la clôture financière annuelle, ce qui peut mobiliser les mêmes équipes et retarder la clôture ou dégrader la qualité de la formation.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Logiciel de formation non éprouvé à grande échelle\",\n    \"description\": \"Le logiciel de formation en ligne n'a jamais été utilisé pour 300 utilisateurs simultanés. Risques de saturation, de pannes, de lenteurs ou de problèmes d'accès le jour de la formation.\",\n    \"probabilite\": 3,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Consultation syndicale préalable aux changements d'horaire\",\n    \"description\": \"Le syndicat exige d'être consulté avant tout changement d'horaire. Si un ajustement du planning est nécessaire pour éviter le chevauchement, le délai de consultation peut retarder les décisions et compresser le calendrier.\",\n    \"probabilite\": 3,\n    \"impact\": 3\n  }\n]",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "approach",
+      "item": "a01",
+      "score": 1.0,
+      "cost_cad": "0.000755",
+      "latency_s": 5.288,
+      "answer": "```json\n{\"approche\": \"predictive\", \"justification\": \"Critères PMBOK 4.3 (sélection du cycle de vie) : (1) Livrables : exigences stables et plans approuvés par la ville, donc périmètre définissable à l'avance; favorable au prédictif. (2) Projet : date de livraison contractuelle fixe et modifications coûteuses une fois le béton coulé, donc peu de tolérance à l'itération; favorable au prédictif. (3) Organisation : structure hiérarchique et 40 sous-traitants liés par contrats, donc besoin de jalons, d'engagements et de coordination formalisés; favorable au prédictif. Les trois critères convergent, il n'y a donc pas de divergence qui justifierait une approche hybride. Source : critères 4.3 du PMBOK Guide 8e édition tels que cités dans les instructions de cadrage; je ne peux pas vérifier la formulation exacte de la section en mémoire.\"}\n```",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "approach",
+      "item": "a02",
+      "score": 1.0,
+      "cost_cad": "0.000591",
+      "latency_s": 4.522,
+      "answer": "{\"approche\": \"adaptive\", \"justification\": \"Livrables : les fonctions sont à découvrir avec les premiers utilisateurs, donc le périmètre final est inconnu au départ et les exigences évolueront. Projet : marché non connu, financement par tranches selon les résultats, ce qui exige des cycles courts de validation plutôt qu'un plan figé. Organisation : équipe autogérée de 6 personnes et retours clients toutes les deux semaines, qui soutiennent une livraison itérative et une rétroaction fréquente. Les trois critères convergent vers l'adaptatif ; le financement par tranches peut être géré par des jalons de revue sans imposer un plan prédictif. Source : critères de l'approche de développement du PMBOK 4.3, tels que fournis dans les consignes de Boussole ; je n'ai pas vérifié le libellé exact dans l'édition 8.\"}",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "approach",
+      "item": "a03",
+      "score": 1.0,
+      "cost_cad": "0.000745",
+      "latency_s": 5.092,
+      "answer": "```json\n{\"approche\": \"hybrid\", \"justification\": \"Critères PMBOK 4.3 (livrables, projet, organisation), appliqués sans source chiffrée externe. LIVRABLES : divergence. Le paramétrage réglementaire et la migration des données ont des exigences stables, fixées par la loi, donc favorables au prédictif. Les tableaux de bord ont des exigences émergentes, à découvrir avec les gestionnaires, donc favorables à l'adaptatif. PROJET : les dates réglementaires sont imposées et fixes, ce qui contraint le calendrier et réduit la flexibilité du périmètre de conformité ; le déploiement dans 8 usines ajoute une dimension de répétition et de coordination. ORGANISATION : les gestionnaires doivent participer aux itérations de conception, ce qui suppose leur disponibilité et une boucle de rétroaction courte ; cette disponibilité n'est pas documentée ici et doit être confirmée. Les signaux divergent, donc la règle de Boussole recommande l'hybride : un noyau prédictif pour la conformité réglementaire et la migration, et une couche adaptative pour les tableaux de bord. Décision à valider par l'humain.\"}\n```",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "approach",
+      "item": "a04",
+      "score": 1.0,
+      "cost_cad": "0.000664",
+      "latency_s": 4.819,
+      "answer": "```json\n{\"approche\": \"predictive\", \"justification\": \"Critère livrables : les exigences sont entièrement définies par le régulateur et la documentation de validation est exigée à chaque étape, donc le périmètre est stable et connu d'avance, ce qui favorise une approche prédictive. Critère projet : les audits à dates fixes et les jalons réglementaires imposent un échéancier rigide et un contrôle formel des étapes ; un cycle adaptatif, qui accepte des changements de périmètre en cours de route, serait incompatible avec ces contraintes. Critère organisation : l'absence de tolérance à l'improvisation exige des processus formalisés, une traçabilité complète et des rôles de validation définis, ce qui correspond à une gouvernance prédictive. Les trois critères convergent vers la même approche, il n'y a donc pas de signaux divergents qui justifieraient une approche hybride. Le PMBOK ne fournit pas de seuil chiffré pour ce choix, et je n'ai pas de source chiffrée à citer ici. Cette recommandation reste une proposition : la décision finale appartient à l'humain responsable du projet.\"}\n```",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "approach",
+      "item": "a05",
+      "score": 1.0,
+      "cost_cad": "0.000752",
+      "latency_s": 5.677,
+      "answer": "{\"approche\": \"adaptive\", \"justification\": \"Livrables : portée très instable et forte innovation, donc les exigences ne peuvent pas être figées en amont ; un cycle itératif avec retours fréquents est adapté. Projet : la direction attend de la valeur livrée en un mois avant de décider de la suite, ce qui impose des incréments courts et un point de décision après chaque cycle. Organisation : équipe réseau de 5 personnes et parties prenantes très impliquées, ce qui favorise la collaboration continue et les revues fréquentes. Les trois critères convergent vers l'adaptatif, il n'y a donc pas de signal divergent justifiant l'hybride. Limite : je ne peux pas vérifier de mémoire la numérotation exacte « PMBOK 4.3 » dans la 8e édition ; j'ai appliqué les trois critères tels que formulés dans la consigne, sans citation de section précise. Ce choix reste une recommandation soumise à la décision de l'humain.\"}",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "approach",
+      "item": "a06",
+      "score": 1.0,
+      "cost_cad": "0.000530",
+      "latency_s": 3.672,
+      "answer": "{\"approche\": \"hybrid\", \"justification\": \"Critères PMBOK 4.3 (cadre fourni par Boussole ; je ne peux pas vérifier la numérotation exacte dans l'édition 8). Livrables : l'usine et la chaîne logistique sont stables, à exigences fermes et à jalons fixes, ce qui favorise le prédictif ; l'emballage, le site web et la campagne évoluent selon les tests clients, ce qui favorise l'adaptatif. Projet : les jalons d'usine et de logistique sont contraints par des délais longs et des engagements externes, alors que le marketing gagne à être itéré. Organisation : je n'ai pas de données sur la culture, la structure ou la maturité de l'organisation ; cette dimension reste à évaluer. Les signaux divergent entre livrables stables et livrables émergents, donc l'hybride est recommandé : un cadre prédictif pour l'usine et la logistique, et un cycle adaptatif (itérations, tests clients) pour l'emballage, le site et le marketing. Cette recommandation est à valider par l'humain décideur.\"}",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "approach",
+      "item": "a07",
+      "score": 1.0,
+      "cost_cad": "0.000482",
+      "latency_s": 3.674,
+      "answer": "{\"approche\": \"predictive\", \"justification\": \"Critères PMBOK 4.3 : (1) Livrables : inventaire complet connu, dépendances techniques documentées, exigences stables, et retour arrière très coûteux, ce qui favorise un périmètre et une séquence définis à l'avance. (2) Projet : date de fin de semaine fixée un an d'avance, fenêtre d'exécution contrainte et dépendances nombreuses, ce qui favorise un calendrier et un plan de contrôle des changements figés. (3) Organisation : structure fonctionnelle classique, qui s'accorde avec une planification détaillée et une gouvernance par jalons. Les trois critères convergent vers l'approche prédictive, sans signal divergent qui justifierait une approche hybride. Source : cadre des critères de sélection d'approche du PMBOK 4.3, tel que fourni dans les consignes de Boussole ; je ne cite pas de seuil chiffré.\"}",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "approach",
+      "item": "a08",
+      "score": 1.0,
+      "cost_cad": "0.000691",
+      "latency_s": 4.957,
+      "answer": "{\"approche\": \"adaptive\", \"justification\": \"Livrables : besoins flous, utilisateurs qui veulent tester tôt, priorités qui changent selon leurs commentaires. Ces signaux favorisent une approche adaptative (boucles courtes, rétroaction fréquente). Projet : le budget fixe et la portée variable se gèrent par des itérations à budget et délai bornés, ce qui est compatible avec l'adaptatif. Le budget fixe est le seul signal qui penche vers le prédictif, mais il ne suffit pas à le justifier. Organisation : une équipe de 7 personnes qui livre déjà en continu a la capacité de travailler en itérations. Les signaux convergent vers l'adaptatif, donc l'hybride n'est pas requis. Source : critères de sélection du cycle de vie, PMBOK Guide 8e éd. (section 4.3 citée par l'instruction ; je n'ai pas vérifié le détail de la formulation dans cette édition, à confirmer).\"}",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "approach",
+      "item": "a09",
+      "score": 1.0,
+      "cost_cad": "0.000766",
+      "latency_s": 5.455,
+      "answer": "{\"approche\": \"hybrid\", \"justification\": \"Critère livrables : le garage municipal a des exigences stables et normées (permis, appels d'offres, spécifications de construction), donc prédictif. La plateforme citoyenne doit être co-conçue avec les citoyens, avec des exigences encore incertaines, donc adaptatif. Critère projet : la date fixe du garage et l'enchaînement permis, appels d'offres, construction imposent une planification à jalons. La plateforme exige des itérations courtes et des rétroactions fréquentes. Critère organisation : les règles d'approvisionnement municipal et les obligations de reddition de comptes favorisent une approche prédictive, tandis que la participation citoyenne et la collaboration entre services favorisent une approche adaptative. Les signaux divergent entre les deux volets, et les interdépendances fortes entre eux exigent une coordination commune. Selon le cadre de décision demandé, l'approche hybride s'impose : planification prédictive pour le garage et les jalons contractuels, cycles adaptatifs pour la plateforme, avec un point de synchronisation explicite. Note : je ne cite pas de numéro de section ni de chiffre précis du PMBOK ; les critères retenus proviennent du cadre fourni, et la décision finale revient à l'humain.\"}",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "task": "approach",
+      "item": "a10",
+      "score": 1.0,
+      "cost_cad": "0.000608",
+      "latency_s": 4.561,
+      "answer": "{\"approche\": \"predictive\", \"justification\": \"Critère livrables : les spécifications techniques sont gelées et le cahier des charges est signé, avec 200 bornes identiques, ce qui favorise une approche prédictive. Critère projet : la certification électrique préalable à la livraison et les pénalités de retard contractuelles imposent des jalons et un périmètre stables, ce qui va dans le même sens. Critère organisation : l'information fournie ne permet pas de l'évaluer ; cette recommandation repose donc sur les deux premiers critères, et le critère organisation reste à confirmer. Les signaux disponibles ne divergent pas, donc l'approche hybride n'est pas retenue. Source : cadre de sélection d'approche PMBOK 4.3 fourni dans les instructions ; je ne peux pas vérifier de mémoire le numéro de section exact.\"}",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "status",
+      "item": "s01",
+      "score": 1.0,
+      "cost_cad": "0.004976",
+      "latency_s": 6.355,
+      "answer": "Voici le résumé exécutif basé sur les données fournies *(source : notes de projet CRM, semaine 22)* :\n\n* **Avancement** : 60 % du travail est réalisé (import des contacts terminé, 2 intégrations sur 5 livrées ; tests utilisateurs prévus le 4 novembre).\n* **Budget** : 410 000 $ dépensés sur l'enveloppe totale de 500 000 $ (soit 82 % des fonds consommés pour 60 % d'avancement, indiquant un risque de dépassement budgétaire).\n* **Échéancier** : Glissement de 3 semaines constaté sur l'activité de migration des historiques.\n* **Problèmes** : Retard imputable au fournisseur externe qui n'a pas livré les données d'extraction nécessaires à la migration.\n* **Décision attendue** : Arbitrage de la direction requis pour approuver ou non la réduction de la portée (périmètre des rapports).",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "status",
+      "item": "s02",
+      "score": 1.0,
+      "cost_cad": "0.004696",
+      "latency_s": 6.231,
+      "answer": "Voici le résumé de statut du projet pour la direction :\n\n* **Avancement** : La charpente est terminée et la toiture est réalisée à 70 % *(Source : notes du projet)*.\n* **Budget** : Enveloppe financière respectée avec un écart limité à 2 % *(Source : notes du projet)*.\n* **Échéancier** : Maintien de la cible de livraison pour la rentrée de janvier, conditionné par les résultats de l'expertise *(Source : notes du projet)*.\n* **Problèmes & Risques** : Infiltration d'eau constatée dans l'aile B ; expertise technique requise pour écarter tout dommage structurel *(Source : notes du projet)*.\n* **Décision attendue** : Arbitrage sur la validation ou le report de la visite du chantier par les parents demandée pour le 12 décembre *(Source : notes du projet)*.",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "status",
+      "item": "s03",
+      "score": 1.0,
+      "cost_cad": "0.005767",
+      "latency_s": 13.32,
+      "answer": "Voici le résumé du statut pour la direction :\n\n* **Avancement :** Déploiement de la MFA complété à 85 % des comptes, sans aucun incident de sécurité ce mois-ci *(Source : notes du projet)*.\n* **Échéancier :** Cible de 100 % fixée au 30 novembre, en amont de l'audit externe prévu en janvier *(Source : notes du projet)*.\n* **Budget :** Dépense potentielle de 120 000 $ identifiée selon l'option retenue ; l'état du budget global n'est pas précisé *(Source : notes du projet ; aucune source en mémoire pour le budget global)*.\n* **Problèmes :** Incompatibilité technique de la MFA avec trois applications anciennes *(Source : notes du projet)*.\n* **Décision attendue :** Arbitrage de la direction entre le remplacement des trois applications (coût : 120 000 $) et l'octroi d'une exception temporaire *(Source : notes du projet)*.",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "status",
+      "item": "s04",
+      "score": 1.0,
+      "cost_cad": "0.004713",
+      "latency_s": 12.697,
+      "answer": "Voici le résumé de statut du projet Aurora pour la direction :\n\n* **Avancement :** Forte traction commerciale avec des précommandes supérieures de 40 % aux prévisions *(source : notes fournies)*.\n* **Budget :** Non renseigné *(aucune donnée dans les notes fournies ni en mémoire)*.\n* **Échéancier :** Maintien de l'objectif de lancement au 1er décembre, conformément au souhait du marketing *(source : notes fournies)*.\n* **Problèmes :** Capacité industrielle insuffisante au premier mois (8 000 unités réalisables vs 11 000 nécessaires), générant un risque critique de rupture de stock et d'insatisfaction client *(source : notes fournies)*.\n* **Décision attendue :** Arbitrage de la direction sur la validation d'une stratégie de livraison échelonnée en deux vagues pour préserver la date de lancement *(source : notes fournies)*.",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "status",
+      "item": "s05",
+      "score": 1.0,
+      "cost_cad": "0.004436",
+      "latency_s": 7.416,
+      "answer": "Voici le résumé de statut du projet :\n\n* **Avancement** : Tests d’acceptation réussis à 92 % pour la phase finance *(source : notes fournies)*.\n* **Budget** : Coût d’attente estimé à 25 000 $ *(source : notes fournies)*.\n* **Échéancier** : Risque de report de la mise en production de 3 semaines en raison de l'indisponibilité de l'expert *(source : notes fournies)*.\n* **Problèmes** : Les 8 % de tests restants concernent la consolidation multidevise et sont bloquants pour le déploiement *(source : notes fournies)*.\n* **Décision attendue** : Arbitrage par la direction financière entre attendre la disponibilité du consultant (3 semaines) ou recruter un autre consultant.",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "risks",
+      "item": "r01",
+      "score": 1.0,
+      "cost_cad": "0.005423",
+      "latency_s": 12.018,
+      "answer": "[\n  {\n    \"titre\": \"Retard de livraison de l'infrastructure serveur\",\n    \"description\": \"Le fournisseur annonce un délai de livraison de six semaines au lieu de deux, risquant de retarder le déploiement et les jalons dépendants.\",\n    \"probabilite\": 5,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Perte de compétence critique sur la migration de bases de données\",\n    \"description\": \"Départ en congé parental en décembre de l'unique administratrice de bases de données sans transfert de compétences préalable sur la migration.\",\n    \"probabilite\": 5,\n    \"impact\": 5\n  },\n  {\n    \"titre\": \"Dérive du périmètre sans compensation budgétaire (Scope creep)\",\n    \"description\": \"Le client demande l'ajout de deux nouveaux rapports sans ajustement du budget, risquant d'engendrer une surcharge d'équipe et des dépassements de coûts.\",\n    \"probabilite\": 4,\n    \"impact\": 3\n  }\n]",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "risks",
+      "item": "r02",
+      "score": 1.0,
+      "cost_cad": "0.005442",
+      "latency_s": 7.289,
+      "answer": "[\n  {\n    \"titre\": \"Intempéries lors du coulage des fondations\",\n    \"description\": \"Trois semaines de pluie annoncées pouvant altérer la qualité du bétonnage et causer des retards sur le chemin critique.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Surcoût lié à la hausse du prix de l'acier\",\n    \"description\": \"Augmentation de 18 % du coût de l'acier depuis la soumission, générant un dépassement du budget prévisionnel.\",\n    \"probabilite\": 5,\n    \"impact\": 3\n  },\n  {\n    \"titre\": \"Blocage des travaux par retard de l'inspection municipale\",\n    \"description\": \"Absence de confirmation de la date de visite de l'inspecteur, paralysant le démarrage des étapes ultérieures.\",\n    \"probabilite\": 3,\n    \"impact\": 4\n  }\n]",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "risks",
+      "item": "r03",
+      "score": 1.0,
+      "cost_cad": "0.006463",
+      "latency_s": 10.889,
+      "answer": "[\n  {\n    \"titre\": \"Retard de livraison dû à la baisse de capacité\",\n    \"description\": \"La réaffectation de deux développeurs a réduit la vélocité de 30 %, créant un risque de non-respect des jalons et du périmètre prévus.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Rupture de service sur l'intégration de paiement\",\n    \"description\": \"L'API du partenaire de paiement change le mois prochain sans que l'intégration n'ait été testée, risquant d'entraîner une indisponibilité des transactions.\",\n    \"probabilite\": 4,\n    \"impact\": 5\n  },\n  {\n    \"titre\": \"Défaut d'adoption lié aux performances de connexion\",\n    \"description\": \"Les lenteurs constatées par les utilisateurs pilotes à chaque connexion risquent d'entraîner un rejet de la solution et des retours négatifs lors du déploiement.\",\n    \"probabilite\": 4,\n    \"impact\": 3\n  }\n]",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "risks",
+      "item": "r04",
+      "score": 1.0,
+      "cost_cad": "0.005436",
+      "latency_s": 7.054,
+      "answer": "[\n  {\n    \"titre\": \"Départ non comblé du commanditaire principal\",\n    \"description\": \"Le départ du commanditaire sans successeur désigné à la fin du trimestre risque de fragiliser la gouvernance, les arbitrages stratégiques et le maintien du budget du projet.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Non-conformité réglementaire à la Loi 25 (transfert transfrontalier)\",\n    \"description\": \"L'hébergement de données personnelles de clients aux États-Unis sans évaluation juridique préalable expose le projet à des sanctions légales, des amendes administratives et un arrêt potentiel des opérations de traitement.\",\n    \"probabilite\": 4,\n    \"impact\": 5\n  }\n]",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "risks",
+      "item": "r05",
+      "score": 1.0,
+      "cost_cad": "0.006235",
+      "latency_s": 8.784,
+      "answer": "[\n  {\n    \"titre\": \"Conflit d'agenda avec la clôture financière annuelle\",\n    \"description\": \"La mobilisation de 300 employés durant la semaine de clôture financière peut entraîner une surcharge critique, un absentéisme élevé à la formation ou des retards sur les livrables financiers.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Instabilité technique du logiciel de formation sous charge\",\n    \"description\": \"Le système n'ayant jamais été testé pour 300 utilisateurs simultanés, il existe un risque de panne, de ralentissement sévère ou d'indisponibilité de la plateforme.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Retard d'ajustement du planning dû aux consultations syndicales\",\n    \"description\": \"La nécessité de consulter le syndicat avant tout changement d'horaire limite la flexibilité et peut retarder toute mesure corrective sur le calendrier.\",\n    \"probabilite\": 3,\n    \"impact\": 3\n  }\n]",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "approach",
+      "item": "a01",
+      "score": 1.0,
+      "cost_cad": "0.003410",
+      "latency_s": 10.068,
+      "answer": "{\n  \"approche\": \"predictive\",\n  \"justification\": \"L'approche prédictive est recommandée car tous les critères (PMBOK 4.3) convergent : 1) Livrables : exigences stables, plans approuvés et coût du changement prohibitif une fois la construction entamée. 2) Projet : échéance contractuelle fixe et dépendances séquentielles critiques. 3) Organisation : structure hiérarchique et nécessité d'un cadre contractuel formel et prévisible pour coordonner 40 sous-traitants.\"\n}",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "approach",
+      "item": "a02",
+      "score": 1.0,
+      "cost_cad": "0.003695",
+      "latency_s": 5.812,
+      "answer": "{\n  \"approche\": \"adaptive\",\n  \"justification\": \"Tous les critères (PMBOK 4.3) convergent vers une approche adaptative : 1) Livrables : forte incertitude de marché et fonctionnalités à découvrir de manière incrémentale avec les utilisateurs ; 2) Projet : cadences courtes avec retours clients toutes les deux semaines et financement par tranches selon les résultats ; 3) Organisation : équipe restreinte (6 personnes) et autogérée, pleinement alignée sur les pratiques agiles.\"\n}",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "approach",
+      "item": "a03",
+      "score": 1.0,
+      "cost_cad": "0.003982",
+      "latency_s": 6.424,
+      "answer": "{\n  \"approche\": \"hybrid\",\n  \"justification\": \"Divergence des signaux selon les critères PMBOK : 1) Livrables : le socle réglementaire et la migration de données imposent une planification prédictive (exigences stables, non négociables), tandis que les tableaux de bord nécessitent une démarche adaptative (découverte itérative avec les utilisateurs). 2) Projet : présence conjointe d'une échéance légale fixe et d'un périmètre analytique évolutif. 3) Organisation : besoin de garantir la conformité légale tout en permettant la co-construction avec les gestionnaires d'usines.\"\n}",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "approach",
+      "item": "a04",
+      "score": 1.0,
+      "cost_cad": "0.003760",
+      "latency_s": 5.344,
+      "answer": "{\n  \"approche\": \"predictive\",\n  \"justification\": \"Critère Livrables : exigences claires, exhaustives et imposées par le régulateur, nécessitant une documentation de validation séquentielle formelle. Critère Projet : jalons d'audits à dates fixes, faible incertitude sur le périmètre et tolérance au risque quasi nulle. Critère Organisation : environnement pharmaceutique hautement réglementé exigeant une gouvernance stricte et une traçabilité rigide. Tous les signaux convergent sans ambiguïté vers le prédictif.\"\n}",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "approach",
+      "item": "a05",
+      "score": 1.0,
+      "cost_cad": "0.002591",
+      "latency_s": 5.561,
+      "answer": "{\n  \"approche\": \"adaptive\",\n  \"justification\": \"L'approche adaptative est recommandée selon les critères PMBOK 4.3 : 1) Livrables : forte incertitude, innovation élevée et portée instable nécessitant une exploration itérative. 2) Projet : exigence de livraison rapide de valeur sous un mois pour réorienter la suite, typique d'itérations courtes. 3) Organisation : petite équipe de 5 personnes et parties prenantes fortement engagées, conditions idéales pour des boucles de rétroaction continues. Tous les signaux convergent vers l'adaptatif.\"\n}",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "approach",
+      "item": "a06",
+      "score": 1.0,
+      "cost_cad": "0.004386",
+      "latency_s": 5.966,
+      "answer": "{\n  \"approche\": \"hybrid\",\n  \"justification\": \"Selon les critères du PMBOK 4.3, les signaux divergent : 1) Livrables : l'usine et la logistique requièrent une planification stable et prévisible avec jalons fermes (prédictif), tandis que le packaging, le site web et le marketing évoluent par itérations selon les retours utilisateurs (adaptatif). 2) Projet : coexistence de contraintes de dépendances physiques rigides et d'une forte incertitude sur l'expérience client. 3) Organisation : nécessité d'articuler un pilotage d'ingénierie/logistique classique avec des boucles de feedback agiles. La divergence des composantes justifie une approche hybride combinant jalons prédictifs et développement adaptatif.\"\n}",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "approach",
+      "item": "a07",
+      "score": 1.0,
+      "cost_cad": "0.002465",
+      "latency_s": 6.186,
+      "answer": "{\n  \"approche\": \"predictive\",\n  \"justification\": \"Tous les critères convergent vers une approche prédictive : 1) Livrables : périmètre totalement défini (inventaire connu, dépendances documentées) et coût prohibitif des modifications/retours arrière ; 2) Projet : contrainte temporelle fixe et critique (fenêtre d'une fin de semaine planifiée un an à l'avance) nécessitant une planification séquentielle rigoureuse ; 3) Organisation : structure fonctionnelle classique alignée sur une gouvernance et des processus prédictifs.\"\n}",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "approach",
+      "item": "a08",
+      "score": 1.0,
+      "cost_cad": "0.004140",
+      "latency_s": 6.108,
+      "answer": "{\n  \"approche\": \"adaptive\",\n  \"justification\": \"Selon les critères PMBOK : 1) Livrables : exigences initialement floues et modulaires, nécessitant des retours et expérimentations rapides des utilisateurs. 2) Projet : priorités changeantes avec une portée ajustable à budget fixe (inversion du triangle de contraintes en faveur de la valeur). 3) Organisation : équipe réduite (7 personnes) maîtrisant la livraison en continu et capable d'itérer fréquemment. Tous les signaux convergent sans divergence vers une approche adaptative.\"\n}",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "approach",
+      "item": "a09",
+      "score": 1.0,
+      "cost_cad": "0.003596",
+      "latency_s": 5.244,
+      "answer": "{\n  \"approche\": \"hybrid\",\n  \"justification\": \"Les signaux divergent selon les critères PMBOK 4.3. Livrables : le volet garage municipal relève d'une approche prédictive (construction physique, permis, appels d'offres stricts, date fixe), tandis que la plateforme numérique nécessite une approche adaptative (co-conception itérative avec les citoyens, périmètre évolutif). Projet : la présence d'interdépendances fortes entre deux sous-projets aux dynamiques opposées requiert une gouvernance intégrée. Organisation : le contexte municipal exige à la fois la conformité rigide des marchés publics et l'agilité requise pour l'engagement citoyen.\"\n}",
+      "error": null
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "task": "approach",
+      "item": "a10",
+      "score": 1.0,
+      "cost_cad": "0.003183",
+      "latency_s": 5.255,
+      "answer": "{\n  \"approche\": \"predictive\",\n  \"justification\": \"Critères PMBOK concordants vers le prédictif : 1) Livrables : spécifications techniques gelées, produit matériel standardisé et besoin de certification réglementaire préalable. 2) Projet : faible incertitude sur le périmètre, dépendances séquentielles fortes et présence de pénalités contractuelles de retard. 3) Organisation : cadre contractuel formel et exigences de conformité strictes.\"\n}",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "status",
+      "item": "s01",
+      "score": 1.0,
+      "cost_cad": "0.000507",
+      "latency_s": 3.605,
+      "answer": "- **Avancement :** 60 % du travail réalisé; import des contacts terminé et 2 intégrations sur 5 livrées.  \n- **Budget :** 410 000 $ dépensés sur 500 000 $ prévus (82 % du budget consommé pour 60 % d’avancement).  \n- **Échéancier :** migration des historiques retardée de 3 semaines en raison de la non-livraison de l’extraction par le fournisseur. Tests avec les ventes prévus le 4 novembre.  \n- **Problème principal :** dépendance fournisseur bloquant la migration des historiques et exposant l’échéancier.  \n- **Décision attendue :** déterminer s’il faut réduire la portée des rapports.  \n\n*Source : notes de statut fournies.*",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "status",
+      "item": "s02",
+      "score": 1.0,
+      "cost_cad": "0.000592",
+      "latency_s": 4.023,
+      "answer": "- **Avancement :** charpente terminée; toiture réalisée à **70 %**. *(Source : notes fournies.)*\n- **Budget :** budget respecté, avec un écart d’environ **2 %**. *(Source : notes fournies.)*\n- **Échéancier :** rentrée de janvier maintenue à ce stade, sous réserve que l’expertise de l’aile B n’identifie aucun problème structurel. *(Source : notes fournies.)*\n- **Problème :** infiltration d’eau découverte dans l’aile B; expertise demandée, résultat en attente. *(Source : notes fournies.)*\n- **Décision attendue :** confirmer ou non la tenue de la visite des parents demandée par le directeur le **12 décembre**, en fonction des conditions de sécurité et de l’expertise. *(Source : notes fournies.)*",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "status",
+      "item": "s03",
+      "score": 1.0,
+      "cost_cad": "0.000532",
+      "latency_s": 3.879,
+      "answer": "- **Avancement :** MFA déployée sur **85 % des comptes**; cible de **100 % au 30 novembre** (source : notes de statut).\n- **Budget :** coût estimé du remplacement des trois applications incompatibles : **120 000 $**; situation budgétaire globale non précisée (source : notes de statut).\n- **Échéancier :** décision à prendre avant l’échéance du **30 novembre**; audit externe prévu en **janvier** (source : notes de statut).\n- **Problèmes :** trois applications anciennes ne supportent pas la MFA. Aucun incident de cybersécurité signalé ce mois-ci (source : notes de statut).\n- **Décision attendue :** arbitrer entre le remplacement des applications (**120 000 $**) et l’octroi d’une exception temporaire.",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "status",
+      "item": "s04",
+      "score": 1.0,
+      "cost_cad": "0.000400",
+      "latency_s": 2.918,
+      "answer": "- **Avancement :** les précommandes dépassent de **40 %** les prévisions, signalant une forte demande.\n- **Budget :** aucune donnée budgétaire n’est fournie dans les notes.\n- **Échéancier :** le marketing souhaite maintenir le lancement au **1er décembre**.\n- **Problèmes :** capacité de production limitée à **8 000 unités** au premier mois contre **11 000 prévues**, avec un risque de rupture de stock et d’insatisfaction client.\n- **Décision attendue :** valider ou non une **livraison en deux vagues** afin de préserver la date de lancement.",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "status",
+      "item": "s05",
+      "score": 1.0,
+      "cost_cad": "0.000519",
+      "latency_s": 3.566,
+      "answer": "- **Avancement :** Phase finance de l’implantation ERP; tests d’acceptation réussis à **92 %**. Les **8 % restants** concernent la consolidation multidevise, qui demeure bloquante. *(Source : notes fournies.)*\n- **Budget :** Aucun budget global communiqué; le coût estimé de l’attente est de **25 000 $**. *(Source : notes fournies.)*\n- **Échéancier :** Le consultant expert ne sera disponible que dans **trois semaines**, ce qui reporte potentiellement la mise en production. *(Source : notes fournies.)*\n- **Problème :** La consolidation multidevise n’est pas finalisée et empêche la mise en production.\n- **Décision attendue :** La direction financière doit choisir entre attendre trois semaines l’expert actuel ou engager un autre consultant.",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "risks",
+      "item": "r01",
+      "score": 1.0,
+      "cost_cad": "0.000636",
+      "latency_s": 3.513,
+      "answer": "[\n  {\n    \"titre\": \"Retard de livraison des serveurs\",\n    \"description\": \"Le délai annoncé par le fournisseur passe de deux à six semaines, ce qui peut retarder les activités dépendant de la disponibilité des serveurs. Évaluation fondée sur le texte fourni.\",\n    \"probabilite\": 5,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Indisponibilité de la seule administratrice de bases de données\",\n    \"description\": \"Le départ en congé parental de l'unique administratrice en décembre, combiné à l'absence de connaissances internes sur la migration, crée un risque de dépendance à une personne clé et de retard ou d'erreur lors de la migration. Évaluation fondée sur le texte fourni.\",\n    \"probabilite\": 4,\n    \"impact\": 5\n  },\n  {\n    \"titre\": \"Périmètre supplémentaire sans budget révisé\",\n    \"description\": \"La demande de deux nouveaux rapports sans révision du budget peut entraîner un dépassement des coûts, une surcharge de l'équipe ou un compromis sur les délais et la qualité. Évaluation fondée sur le texte fourni.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  }\n]",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "risks",
+      "item": "r02",
+      "score": 1.0,
+      "cost_cad": "0.000542",
+      "latency_s": 3.376,
+      "answer": "[\n  {\n    \"titre\": \"Retard du coulage des fondations dû aux intempéries\",\n    \"description\": \"Trois semaines de pluie prévues pendant le coulage des fondations pourraient perturber ou retarder les travaux.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Dépassement du coût des fondations lié à la hausse de l'acier\",\n    \"description\": \"L'augmentation de 18 % du prix de l'acier depuis la soumission pourrait entraîner un dépassement du budget prévu.\",\n    \"probabilite\": 5,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Retard de la suite des travaux dû à l'absence de confirmation de l'inspection\",\n    \"description\": \"L'absence de date confirmée pour la visite de l'inspecteur municipal pourrait bloquer ou retarder la poursuite des travaux.\",\n    \"probabilite\": 4,\n    \"impact\": 5\n  }\n]",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "risks",
+      "item": "r03",
+      "score": 1.0,
+      "cost_cad": "0.000718",
+      "latency_s": 3.982,
+      "answer": "[\n  {\n    \"titre\": \"Baisse de capacité de développement\",\n    \"description\": \"La réaffectation de deux développeurs a entraîné une baisse de vélocité de 30 %, ce qui peut retarder les travaux planifiés. Réponse proposée : réévaluer le périmètre et les priorités du prochain sprint, puis ajuster la capacité disponible.\",\n    \"probabilite\": 5,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Incompatibilité potentielle avec la nouvelle version de l’API de paiement\",\n    \"description\": \"Le changement de version de l’API du partenaire est prévu le mois prochain, alors que l’intégration n’a pas encore été testée sur cette version. Réponse proposée : obtenir la nouvelle version dans un environnement de test et planifier rapidement des tests de compatibilité ainsi qu’un plan de restauration.\",\n    \"probabilite\": 4,\n    \"impact\": 5\n  },\n  {\n    \"titre\": \"Dégradation de l’expérience utilisateur à la connexion\",\n    \"description\": \"Les utilisateurs pilotes signalent des lenteurs à chaque connexion, ce qui peut réduire leur satisfaction et compromettre l’adoption. Réponse proposée : mesurer les temps de réponse, analyser les causes de performance et prioriser les actions correctives.\",\n    \"probabilite\": 5,\n    \"impact\": 4\n  }\n]",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "risks",
+      "item": "r04",
+      "score": 1.0,
+      "cost_cad": "0.000442",
+      "latency_s": 2.554,
+      "answer": "[\n  {\n    \"titre\": \"Perte de continuité du commanditaire principal\",\n    \"description\": \"Le départ du commanditaire principal à la fin du trimestre, sans remplaçant nommé, pourrait ralentir les décisions, réduire le soutien exécutif et affecter la gouvernance du projet.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Non-conformité potentielle liée à l'hébergement des données personnelles aux États-Unis\",\n    \"description\": \"L'hébergement des données personnelles des clients aux États-Unis n'a pas encore été évalué par le service juridique au regard de la Loi 25, ce qui pourrait entraîner des exigences de remédiation, des retards ou des conséquences réglementaires.\",\n    \"probabilite\": 3,\n    \"impact\": 5\n  }\n]",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "risks",
+      "item": "r05",
+      "score": 1.0,
+      "cost_cad": "0.000645",
+      "latency_s": 3.522,
+      "answer": "[\n  {\n    \"titre\": \"Conflit entre la formation et la clôture financière annuelle\",\n    \"description\": \"La simultanéité des activités peut surcharger les employés et les équipes support, entraînant des retards ou des erreurs dans la formation et la clôture financière. Estimation sans données historiques.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Défaillance du logiciel de formation à grande échelle\",\n    \"description\": \"Le logiciel n’ayant jamais été utilisé pour 300 employés simultanément, des problèmes de capacité, de performance ou d’accès pourraient perturber la formation. Estimation sans données de test de charge.\",\n    \"probabilite\": 3,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Retard lié à la consultation du syndicat\",\n    \"description\": \"L’absence de consultation préalable du syndicat avant une modification d’horaire pourrait entraîner une contestation, un retard de décision ou la non-acceptation du planning. Estimation sans connaissance des accords applicables.\",\n    \"probabilite\": 3,\n    \"impact\": 3\n  }\n]",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "approach",
+      "item": "a01",
+      "score": 1.0,
+      "cost_cad": "0.000544",
+      "latency_s": 3.697,
+      "answer": "{\"approche\":\"predictive\",\"justification\":\"Selon les critères du PMBOK Guide, section 4.3 : Livrables — les plans sont approuvés, les exigences sont stables et les modifications deviennent coûteuses après le coulage du béton, ce qui favorise une définition et une validation séquentielles du périmètre. Projet — la construction est physiquement dépendante des séquences de travaux, avec une date de livraison contractuelle fixe ; la planification détaillée, le contrôle des changements et le suivi des coûts et délais sont donc essentiels. Organisation — la structure hiérarchique et la coordination de 40 sous-traitants favorisent une gouvernance formelle, des responsabilités définies et des approbations centralisées. L’ensemble des signaux étant convergent, l’approche prédictive est recommandée. Source : PMBOK Guide, section 4.3.\"}",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "approach",
+      "item": "a02",
+      "score": 1.0,
+      "cost_cad": "0.000641",
+      "latency_s": 5.059,
+      "answer": "{\"approche\":\"adaptive\",\"justification\":\"Référence : PMBOK Guide, 8e édition, section 4.3. Livrables : les fonctions restent à découvrir et doivent évoluer selon les retours des premiers utilisateurs ; une approche adaptative permet des incréments fréquents et des ajustements toutes les deux semaines. Projet : le marché est inconnu et le financement dépend des résultats, ce qui favorise l’expérimentation, l’apprentissage progressif et la réorientation. Organisation : l’équipe autogérée de six personnes et le mécanisme de financement par tranches sont compatibles avec une gouvernance adaptative. Les trois critères convergent ; aucune approche hybride n’est donc nécessaire.\"}",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "approach",
+      "item": "a03",
+      "score": 1.0,
+      "cost_cad": "0.000663",
+      "latency_s": 4.678,
+      "answer": "{\"approche\":\"hybrid\",\"justification\":\"Selon le PMBOK Guide, 8e édition, §4.3 : livrables — approche prédictive pour le paramétrage réglementaire et la migration des données, car ils sont imposés et datés par la loi ; approche adaptative pour les tableaux de bord, dont les besoins doivent être découverts avec les gestionnaires au fil de l’eau. Projet — les contraintes légales et la date imposée appellent une planification et un contrôle prédictifs, tandis que l’incertitude fonctionnelle des tableaux de bord nécessite des itérations et des boucles de rétroaction. Organisation — aucune information n’est fournie sur la capacité ou la préférence organisationnelle ; ce critère ne permet donc pas d’infléchir la recommandation. Les signaux divergent entre livrables et projet : l’approche hybride est donc recommandée, avec un volet prédictif pour la conformité et la migration, et un volet adaptatif pour les tableaux de bord.\"}",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "approach",
+      "item": "a04",
+      "score": 1.0,
+      "cost_cad": "0.000520",
+      "latency_s": 3.621,
+      "answer": "{\"approche\":\"predictive\",\"justification\":\"Selon les critères du PMBOK Guide, 8e édition, section 4.3 : livrables — les exigences réglementaires, la documentation de validation et les contrôles sont entièrement définis et doivent être produits de manière séquentielle et vérifiable ; projet — les audits obligatoires à dates fixes et l’absence de tolérance à l’improvisation favorisent une planification détaillée, une gestion stricte des changements et des jalons prédéfinis ; organisation — le contexte réglementé impose une gouvernance formelle, des approbations documentées et une traçabilité complète. Les trois critères convergent donc vers une approche prédictive.\"}",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "approach",
+      "item": "a05",
+      "score": 1.0,
+      "cost_cad": "0.000544",
+      "latency_s": 4.109,
+      "answer": "{\"approche\":\"adaptive\",\"justification\":\"Selon les critères PMBOK 4.3 : livrables — la portée est très instable et le prototype implique une forte innovation, ce qui favorise des livraisons incrémentales et l’apprentissage par feedback ; projet — la direction attend de la valeur en un mois avant de décider de la suite, ce qui correspond à une planification progressive et à des réévaluations fréquentes ; organisation — l’équipe de cinq personnes travaille en réseau et les parties prenantes sont très impliquées, ce qui permet une collaboration étroite et des décisions rapides. Les trois critères convergent vers une approche adaptative plutôt qu’hybride.\"}",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "approach",
+      "item": "a06",
+      "score": 1.0,
+      "cost_cad": "0.000456",
+      "latency_s": 3.22,
+      "answer": "{\"approche\":\"hybrid\",\"justification\":\"Selon les critères du PMBOK 4.3, les livrables sont mixtes : l’usine et la chaîne logistique exigent une planification prédictive avec des jalons fermes, tandis que l’emballage, le site web et la campagne marketing bénéficient d’itérations fondées sur les tests clients, donc d’une approche adaptative. Le projet combine ainsi des composantes planifiables à long terme et des composantes nécessitant l’apprentissage et l’ajustement. L’organisation doit coordonner ces deux modes de réalisation et leurs interdépendances. Les signaux divergent entre les critères des livrables, du projet et de l’organisation : l’approche hybride est donc recommandée.\"}",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "approach",
+      "item": "a07",
+      "score": 1.0,
+      "cost_cad": "0.000399",
+      "latency_s": 2.901,
+      "answer": "{\"approche\":\"predictive\",\"justification\":\"Les livrables sont entièrement connus grâce à l’inventaire complet, le projet est planifiable avec un an d’avance et ses nombreuses dépendances techniques sont documentées. Le coût élevé d’un retour arrière favorise une planification détaillée, une maîtrise stricte des changements et des contrôles avant exécution. La structure fonctionnelle classique de l’organisation est également compatible avec une approche prédictive. Selon les critères du PMBOK 4.3, les signaux convergent donc vers l’approche prédictive.\"}",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "approach",
+      "item": "a08",
+      "score": 1.0,
+      "cost_cad": "0.000512",
+      "latency_s": 3.278,
+      "answer": "{\"approche\":\"adaptive\",\"justification\":\"Livrables : les besoins sont flous, les utilisateurs souhaitent tester tôt et la priorité évolue selon leurs commentaires ; une approche adaptative permet d’affiner progressivement les livrables. Projet : le budget est fixe tandis que la portée peut varier, ce qui favorise une planification par itérations et une repriorisation continue. Organisation : une équipe réduite de 7 personnes livre en continu, ce qui est compatible avec des cycles courts, des retours fréquents et une adaptation rapide. Selon les critères du PMBOK 4.3, les trois dimensions convergent donc vers une approche adaptative plutôt qu’hybride.\"}",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "approach",
+      "item": "a09",
+      "score": 1.0,
+      "cost_cad": "0.000645",
+      "latency_s": 4.208,
+      "answer": "{\"approche\":\"hybrid\",\"justification\":\"Selon les critères du PMBOK Guide 8e édition, section 4.3, les livrables appellent des approches différentes : le garage municipal comporte des exigences relativement définies, des permis, des appels d’offres et une date fixe, ce qui favorise une approche prédictive; la plateforme numérique doit être co-conçue avec les citoyens, ce qui favorise une approche adaptative fondée sur des itérations et des retours fréquents. Au niveau du projet, les interdépendances entre les deux volets nécessitent une planification intégrée, une gestion coordonnée des interfaces et des points de contrôle communs, tout en conservant des modes d’exécution distincts. Au niveau de l’organisation, une municipalité doit généralement assurer la conformité, la gouvernance, les approbations et la traçabilité du volet d’infrastructure, tout en mobilisant les parties prenantes et en facilitant la co-conception du volet numérique. Les signaux divergent donc entre les livrables, le projet et les besoins organisationnels; conformément au critère demandé, une approche hybride est recommandée.\"}",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5.6-luna",
+      "task": "approach",
+      "item": "a10",
+      "score": 1.0,
+      "cost_cad": "0.000519",
+      "latency_s": 3.733,
+      "answer": "{\"approche\":\"predictive\",\"justification\":\"Selon les critères du PMBOK 4.3 : livrables définis et répétitifs (200 bornes identiques), spécifications techniques gelées et certification électrique requise avant livraison, ce qui favorise une planification et un contrôle séquentiels. Le projet comporte des engagements contractuels fermes, notamment des pénalités de retard, appelant une maîtrise stricte du périmètre, des délais et de la conformité. L’organisation devra donc s’appuyer sur des processus formalisés de fabrication, d’assurance qualité, de certification et de livraison. Les signaux étant convergents vers la stabilité des livrables, du projet et de l’organisation, l’approche prédictive est recommandée.\"}",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "status",
+      "item": "s01",
+      "score": 1.0,
+      "cost_cad": "0.005991",
+      "latency_s": 10.943,
+      "answer": "**Rapport de statut – Projet CRM, semaine 22**\n*Source : aucune donnée en mémoire PMO ; ce résumé reprend exclusivement les notes externes que vous avez transmises.*\n\n• **Avancement** : 60 % du travail réalisé ; import des contacts terminé et 2 intégrations sur 5 livrées.\n• **Budget** : 410 000 $ dépensés sur 500 000 $ prévus, soit 82 % du budget consommé pour 60 % d'avancement (calcul effectué sur les chiffres fournis).\n• **Échéancier** : la migration des historiques glisse de 3 semaines.\n• **Problème** : cause identifiée – le fournisseur n'a pas livré l'extraction des données.\n• **Décision attendue** : arbitrage sur une éventuelle réduction de la portée des rapports ; prochaine étape : tests avec les ventes le 4 novembre.",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "status",
+      "item": "s02",
+      "score": 1.0,
+      "cost_cad": "0.005850",
+      "latency_s": 11.486,
+      "answer": "• **Avancement** : charpente terminée, toiture à 70 % (source : notes de statut fournies).\n• **Budget** : respecté à 2 % près (source : notes de statut fournies).\n• **Échéancier** : rentrée de janvier maintenue, sous réserve que l'expertise ne révèle pas de problème structurel (source : notes de statut fournies).\n• **Problèmes** : infiltration d'eau détectée dans l'aile B ; expertise demandée (source : notes de statut fournies).\n• **Décision attendue** : validation de la visite des parents proposée par le directeur pour le 12 décembre (source : notes de statut fournies).",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "status",
+      "item": "s03",
+      "score": 1.0,
+      "cost_cad": "0.004424",
+      "latency_s": 8.158,
+      "answer": "Sur la base exclusive des notes de suivi fournies (aucune donnée issue de la mémoire du PMO) :\n\n• **Avancement** : MFA déployée à 85 % des comptes (mois 4) ; aucun incident de sécurité signalé ce mois-ci.\n• **Budget** : Aucun montant global communiqué dans les notes ; 120 000 $ requis pour le remplacement de 3 applications legacy incompatibles MFA.\n• **Échéancier** : Objectif 100 % de déploiement MFA au 30 novembre ; audit externe prévu en janvier.\n• **Problèmes** : Trois applications anciennes ne supportent pas la MFA, ce qui bloque l'atteinte de la cible des 100 %.\n• **Décision attendue** : Arbitrage entre le remplacement des 3 applications (120 000 $) et l'octroi d'une exception temporaire.",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "status",
+      "item": "s04",
+      "score": 1.0,
+      "cost_cad": "0.004684",
+      "latency_s": 11.466,
+      "answer": "Voici le résumé pour la direction :\n\n• **Avancement** : Précommandes supérieures de 40 % aux prévisions, mais capacité de production du premier mois limitée à 8 000 unités contre 11 000 prévues — *source : notes de statut fournies*.\n\n• **Budget** : Aucune donnée chiffrée budgétaire n'est transmise dans les notes reçues.\n\n• **Échéancier** : Date de lancement maintenue au 1er décembre (position du marketing) — *source : notes de statut fournies*.\n\n• **Problèmes** : Risque de rupture de stock et d'insatisfaction client lié à l'écart entre la demande (+40 %) et l'offre (8 000 unités) — *source : notes de statut fournies*.\n\n• **Décision attendue** : Arbitrage de la direction sur la stratégie de livraison (option « deux vagues » soumise dans les notes) pour sécuriser le lancement du 1er décembre.",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "status",
+      "item": "s05",
+      "score": 1.0,
+      "cost_cad": "0.006561",
+      "latency_s": 14.011,
+      "answer": "Synthèse pour la direction — *source : notes de statut transmises (données externes, non issues de la mémoire PMO)* :\n\n• **Avancement** : Tests d'acceptation réussis à 92 % ; les 8 % restants portent sur la consolidation multidevise, identifiée comme bloquante pour la mise en production.\n\n• **Budget** : Coût de l'attente estimé à 25 000 $ ; aucun autre indicateur budgétaire n'est rapporté dans les notes fournies.\n\n• **Échéancier** : Le consultant expert requis n'est disponible que dans trois semaines, ce qui conditionne la date de mise en production.\n\n• **Problèmes** : Blocage fonctionnel sur la consolidation multidevise et indisponibilité immédiate de la ressource experte nécessaire à la résolution.\n\n• **Décision attendue** : Arbitrage de la direction financière entre attendre la disponibilité du consultant (dans 3 semaines) ou embaucher un consultant alternatif.",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "risks",
+      "item": "r01",
+      "score": 1.0,
+      "cost_cad": "0.005835",
+      "latency_s": 19.623,
+      "answer": "```json\n[\n  {\n    \"titre\": \"Retard de livraison des serveurs\",\n    \"description\": \"Le fournisseur annonce un délai de 6 semaines au lieu de 2, soit un allongement de 4 semaines sur la livraison des serveurs.\",\n    \"probabilite\": 5,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Perte de compétence unique sur la migration BDD\",\n    \"description\": \"L'unique administratrice bases de données maîtrisant la migration part en congé parental en décembre sans transfert de connaissances documenté.\",\n    \"probabilite\": 5,\n    \"impact\": 5\n  },\n  {\n    \"titre\": \"Dérive du périmètre sans ajustement budgétaire\",\n    \"description\": \"Le client demande deux rapports supplémentaires sans révision du budget, exposant le projet à un dépassement de coûts ou de délais.\",\n    \"probabilite\": 5,\n    \"impact\": 3\n  }\n]\n```",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "risks",
+      "item": "r02",
+      "score": 1.0,
+      "cost_cad": "0.008470",
+      "latency_s": 17.709,
+      "answer": "[\n  {\n    \"titre\": \"Intempéries lors du coulage des fondations\",\n    \"description\": \"Prévisions de trois semaines de pluie pendant le coulage des fondations (source : texte fourni), pouvant compromettre la qualité du béton et retarder le chantier.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Dépassement budgétaire lié à l'acier\",\n    \"description\": \"Hausse de 18 % du prix de l'acier depuis la soumission (source : texte fourni), impactant le coût prévisionnel du projet.\",\n    \"probabilite\": 5,\n    \"impact\": 3\n  },\n  {\n    \"titre\": \"Blocage administratif par l'inspection municipale\",\n    \"description\": \"Date de visite de l'inspecteur municipal non confirmée (source : texte fourni), conditionnant la suite des travaux et pouvant entraîner un arrêt de chantier.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  }\n]",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "risks",
+      "item": "r03",
+      "score": 1.0,
+      "cost_cad": "0.003379",
+      "latency_s": 18.436,
+      "answer": "```json\n[\n  {\n    \"titre\": \"Perte de vélocité due à la réaffectation de ressources\",\n    \"description\": \"Deux développeurs ont été réaffectés à un autre projet, entraînant une baisse de 30 % de la vélocité du sprint 6.\",\n    \"probabilite\": 5,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Incompatibilité avec la nouvelle version de l'API de paiement\",\n    \"description\": \"L'API du partenaire de paiement change de version le mois prochain et l'intégration actuelle n'est pas testée sur cette nouvelle version.\",\n    \"probabilite\": 4,\n    \"impact\": 5\n  },\n  {\n    \"titre\": \"Lenteurs à la connexion pour les utilisateurs pilotes\",\n    \"description\": \"Les utilisateurs pilotes signalent des lenteurs à chaque connexion, dégradant l'expérience utilisateur en phase de test.\",\n    \"probabilite\": 4,\n    \"impact\": 3\n  }\n]\n```",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "risks",
+      "item": "r04",
+      "score": 1.0,
+      "cost_cad": "0.006149",
+      "latency_s": 18.14,
+      "answer": "```json\n[\n  {\n    \"titre\": \"Départ du commanditaire principal sans remplaçant désigné\",\n    \"description\": \"Le commanditaire principal quitte l'entreprise à la fin du trimestre sans successeur nommé, ce qui risque de priver le projet de son sponsor stratégique et de bloquer les décisions de gouvernance.\",\n    \"probabilite\": 5,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Non-évaluation juridique de l'hébergement de données aux États-Unis au regard de la Loi 25\",\n    \"description\": \"L'hébergement de données personnelles de clients aux États-Unis n'a pas été évalué par le service juridique concernant la conformité à la Loi 25, exposant le projet à un risque de non-conformité réglementaire et de sanctions.\",\n    \"probabilite\": 3,\n    \"impact\": 5\n  }\n]\n```",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "risks",
+      "item": "r05",
+      "score": 1.0,
+      "cost_cad": "0.008175",
+      "latency_s": 18.517,
+      "answer": "```json\n[\n  {\n    \"titre\": \"Conflit de ressources entre formation et clôture financière\",\n    \"description\": \"La formation de 300 employés est planifiée la même semaine que la clôture financière annuelle, période critique nécessitant la pleine disponibilité des équipes concernées, créant un risque de surcharge et d'indisponibilité.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Défaillance technique du logiciel de formation à grande échelle\",\n    \"description\": \"Le logiciel e-learning n'ayant jamais été utilisé avec 300 employés simultanément ou sur une courte période, risque de panne, de lenteur ou d'indisponibilité du service.\",\n    \"probabilite\": 4,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Conflit social lié à l'absence de consultation syndicale\",\n    \"description\": \"Toute modification d'horaire induite par la formation sans consultation préalable du syndicat peut entraîner un conflit social, un blocage ou une non-conformité légale.\",\n    \"probabilite\": 3,\n    \"impact\": 4\n  },\n  {\n    \"titre\": \"Dégradation de la qualité de la clôture financière annuelle\",\n    \"description\": \"L'indisponibilité ou la distraction des employés impliqués dans la clôture durant leur formation peut provoquer des erreurs comptables ou des retards dans les déclarations annuelles.\",\n    \"probabilite\": 3,\n    \"impact\": 5\n  }\n]\n```",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "approach",
+      "item": "a01",
+      "score": 1.0,
+      "cost_cad": "0.007360",
+      "latency_s": 13.757,
+      "answer": "```json\n{\n  \"approche\": \"predictive\",\n  \"justification\": \"Critère livrables : plans approuvés par la ville et exigences stables indiquent un produit défini avec faible incertitude, favorable à une planification préalable complète (signal prédictif). Critère projet : date de livraison contractuelle fixe et coût élevé des modifications une fois le béton coulé (irréversibilité des travaux) imposent des contraintes temporelles et financières fortes nécessitant une séquence prédéfinie et un contrôle strict des changements (signal prédictif). Critère organisation : structure hiérarchique avec 40 sous-traitants requiert une gouvernance centralisée et des processus formalisés adaptés au pilotage par jalons (signal prédictif). Les trois signaux convergent vers l'approche prédictive ; aucun signal adaptatif détecté. Source mémoire pour citation normative exacte du PMBOK 4.3 : non disponible.\"\n}\n```",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "approach",
+      "item": "a02",
+      "score": 1.0,
+      "cost_cad": "0.005647",
+      "latency_s": 10.985,
+      "answer": "{\"approche\": \"adaptive\", \"justification\": \"Selon les critères PMBOK 8e éd. (Delivery Performance Domain) : Critère livrables — marché inconnu et fonctions à découvrir = livrables incertains et émergents, nécessitant une définition progressive par itérations. Critère projet — financement par tranches selon les résultats et retours clients toutes les deux semaines = environnement changeant avec feedback fréquent, favorisant des cycles courts et l'ajustement continu. Critère organisation — équipe autogérée de 6 personnes = structure autonome favorisant la collaboration et la réactivité. Les trois signaux convergent vers l'adaptatif ; aucun ne justifie l'hybride.\"}",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "approach",
+      "item": "a03",
+      "score": 1.0,
+      "cost_cad": "0.004559",
+      "latency_s": 9.558,
+      "answer": "{\"approche\": \"hybrid\", \"justification\": \"Selon les critères PMBOK 4.3 : (1) Livrables — mixtes : le paramétrage réglementaire et la migration des données présentent des exigences stables, connues et imposées par la loi (signal prédictif), tandis que les tableaux de bord ont des exigences émergentes et incertaines à découvrir avec les gestionnaires (signal adaptatif). (2) Projet — divergent : la contrainte légale fixe le scope et la deadline pour la paie, nécessitant planification, contrôle stricts et gestion des risques réglementaires (prédictif), mais la composante tableaux de bord exige flexibilité, itérations et feedback continu (adaptatif). (3) Organisation — non décrite explicitement dans le contexte fourni ; la nécessité de co-construire les tableaux de bord 'au fil de l'eau' suppose néanmoins une capacité organisationnelle à supporter l'itération pour cette partie. Les signaux étant divergents entre la composante réglementaire (prédictif) et la composante tableaux de bord (adaptatif), l'approche hybride est recommandée.\"}",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "approach",
+      "item": "a04",
+      "score": 1.0,
+      "cost_cad": "0.006841",
+      "latency_s": 18.638,
+      "answer": "```json\n{\n  \"approche\": \"predictive\",\n  \"justification\": \"Selon les critères PMBOK 4.3 (source : PMBOK Guide 8e édition, domaine Development Approach and Life Cycle) : (1) Livrables – les exigences sont entièrement définies par le régulateur et la documentation de validation est exigée à chaque étape, ce qui signale un périmètre stable, connu et peu sujet au changement, favorable à l'approche prédictive ; (2) Projet – les audits obligatoires à dates fixes et l'interdiction d'improvisation créent des contraintes temporelles et de qualité strictes qui nécessitent une planification détaillée, un contrôle rigoureux et une gestion des risques proactive, caractéristiques de l'approche prédictive ; (3) Organisation – le secteur pharmaceutique, fortement régulé, repose sur une culture de conformité documentée et de processus reproductibles, alignée avec une approche prédictive. Les trois signaux convergent vers la prédictivité ; aucune divergence ne justifie une approche hybride.\"\n}\n```",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "approach",
+      "item": "a05",
+      "score": 1.0,
+      "cost_cad": "0.005252",
+      "latency_s": 10.813,
+      "answer": "{\"approche\": \"adaptive\", \"justification\": \"Critère livrables : la portée très instable et la forte innovation rendent les spécifications incertaines et évolutives, ce qui nécessite des itérations plutôt qu'un livrable défini d'avance. Critère projet : l'exigence de valeur livrée en un mois et l'environnement incertain favorisent des cycles courts avec feedback rapide et ajustements continus. Critère organisation : une équipe de 5 personnes en réseau et des parties prenantes très impliquées correspondent à une structure collaborative et auto-organisée. Les trois signaux convergent vers l'adaptatif.\"}",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "approach",
+      "item": "a06",
+      "score": 1.0,
+      "cost_cad": "0.003110",
+      "latency_s": 12.248,
+      "answer": "```json\n{\n  \"approche\": \"hybrid\",\n  \"justification\": \"Critère livrables : signaux divergents — usine et chaîne logistique stables et définis (prédictif) vs emballage, site web et campagne marketing soumis à tests clients itératifs (adaptatif). Critère projet : jalons fermes obligatoires pour la production industrielle, mais incertitude sur les livrables commerciaux nécessitant des boucles de feedback. Critère organisation : doit orchestrer simultanément planification ferme et itérations rapides. Selon PMBOK 4.3, la divergence entre composantes impose l'approche hybride.\"\n}\n```",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "approach",
+      "item": "a07",
+      "score": 1.0,
+      "cost_cad": "0.004925",
+      "latency_s": 8.813,
+      "answer": "```json\n{\n  \"approche\": \"predictive\",\n  \"justification\": \"Selon PMBOK Guide 8e éd., section 4.3 : (1) Livrables : inventaire complet connu, périmètre stable et entièrement défini → signal prédictif. (2) Projet : fenêtre temporelle immuable (week-end fixé un an à l'avance), retour arrière très coûteux, dépendances techniques documentées = faible incertitude et coût du changement élevé → signal prédictif. (3) Organisation : structure fonctionnelle classique → signal prédictif. Tous les critères convergent : approche prédictive.\"\n}\n```",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "approach",
+      "item": "a08",
+      "score": 1.0,
+      "cost_cad": "0.002819",
+      "latency_s": 11.476,
+      "answer": "```json\n{\n  \"approche\": \"adaptive\",\n  \"justification\": \"Selon les critères PMBOK 4.3 : (1) Livrables — les besoins sont flous et les priorités changent fréquemment selon les retours utilisateurs, ce qui correspond à des exigences émergentes nécessitant des itérations courtes pour valider ; (2) Projet — l'incertitude est élevée, les utilisateurs demandent à tester tôt et l'équipe livre en continu, ce qui favorise une planification par vagues avec feedback précoce plutôt qu'un périmètre verrouillé ; (3) Organisation — une équipe de 7 personnes livrant en continu reflète une structure autonome et itérative adaptée à l'adaptatif. Le budget fixe avec portée variable est géré en ajustant le périmètre par incréments, ce qui est compatible avec l'approche adaptative. Aucun signal ne justifie une composante prédictive forte, donc pas d'hybride.\"\n}\n```",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "approach",
+      "item": "a09",
+      "score": 1.0,
+      "cost_cad": "0.003452",
+      "latency_s": 6.423,
+      "answer": "```json\n{\n  \"approche\": \"hybrid\",\n  \"justification\": \"Signaux divergents selon les critères PMBOK 4.3 : (1) Livrables — mixtes : le garage municipal est un livrable tangible défini, soumis à permis, appels d'offres et date fixe (prédictif), tandis que la plateforme numérique est un livrable logiciel incertain nécessitant co-conception itérative avec les citoyens (adaptatif) ; (2) Projet — complexité élevée due aux nombreuses interdépendances entre un volet construction à processus séquentiels réglementaires et un volet digital à besoins évolutifs ; (3) Organisation — contexte municipal exigeant conformité procédurale stricte pour la construction (prédictif) et agilité pour l'engagement citoyen (adaptatif). L'approche hybride permet de piloter chaque volet selon sa nature tout en gérant leurs interdépendances au niveau du programme.\"\n}\n```",
+      "error": null
+    },
+    {
+      "model": "mistralai/mistral-large-4-0",
+      "task": "approach",
+      "item": "a10",
+      "score": 1.0,
+      "cost_cad": "0.004990",
+      "latency_s": 11.929,
+      "answer": "```json\n{\n  \"approche\": \"predictive\",\n  \"justification\": \"Selon les critères PMBOK 4.3 : (1) Livrables — 200 bornes identiques, spécifications techniques gelées et cahier des charges signé : livrables stables, bien définis et reproductibles, signal fort pour le prédictif. (2) Projet — certification électrique requise avant livraison et pénalités de retard contractuelles : environnement à faible incertitude sur le scope, nécessitant une planification détaillée, un contrôle strict des délais et une gestion formelle des risques, typique de l'approche prédictive. (3) Organisation — contrat signé avec pénalités suggère une culture de conformité, des processus de gestion établis et une tolérance limitée à l'ambiguïté, compatibles avec le prédictif. Les trois critères convergent sans divergence, d'où une recommandation prédictive.\"\n}\n```",
+      "error": null
+    }
+  ]
+}

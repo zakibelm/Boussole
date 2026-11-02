@@ -1,0 +1,18 @@
+{% if error %}
+<p class="error">{{ error }}</p>
+{% else %}
+<div class="answer">
+  <p class="muted">Question : {{ question }}</p>
+  <div class="answer-md">{{ answer.text | md }}</div>
+  {% if answer.citations and not answer.cited %}
+  <p class="error">⚠ Cette réponse ne cite aucune des sources fournies : vérifie-la avant de t'en servir.</p>
+  {% endif %}
+  {% if answer.citations %}
+  <p class="muted" style="margin-bottom:4px">Sources fournies, citées en gras ({{ answer.cited | length }} sur {{ answer.citations | length }}) :</p>
+  <ol class="sources">
+    {% for c in answer.citations %}<li class="{{ 'cited' if loop.index in answer.cited else '' }}">{{ c }}</li>{% endfor %}
+  </ol>
+  {% endif %}
+  <p class="muted">Modèle : {{ answer.model }} · coût : {{ answer.cost_cad }} $ CA · journal : entrées {{ answer.audit_ids | join(', ') }}</p>
+</div>
+{% endif %}
