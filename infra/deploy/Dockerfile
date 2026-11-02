@@ -5,8 +5,10 @@
 # L'application lit config/ et data/local/ par rapport à la racine du dépôt : l'image
 # garde cette arborescence sous /app. Données et secrets vivent dans des volumes.
 
-FROM python:3.12-slim-bookworm AS build
-COPY --from=ghcr.io/astral-sh/uv:0.11.28 /uv /usr/local/bin/uv
+# Images de base figées par empreinte (index multi-architecture) : une étiquette peut être
+# déplacée, une empreinte non. Mettre à jour l'empreinte avec l'étiquette, dans une PR.
+FROM python:3.12-slim-bookworm@sha256:e697c81897302a4c4333bade000d98038fbb21eb064f8ee1fd42d02ebcd9d337 AS build
+COPY --from=ghcr.io/astral-sh/uv:0.11.28@sha256:0f36cb9361a3346885ca3677e3767016687b5a170c1a6b88465ec14aefec90aa /uv /usr/local/bin/uv
 ENV UV_COMPILE_BYTECODE=1 \
     UV_LINK_MODE=copy \
     UV_PYTHON_DOWNLOADS=never
@@ -19,7 +21,7 @@ COPY src ./src
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-dev --extra server
 
-FROM python:3.12-slim-bookworm
+FROM python:3.12-slim-bookworm@sha256:e697c81897302a4c4333bade000d98038fbb21eb064f8ee1fd42d02ebcd9d337
 RUN groupadd --system --gid 10001 boussole \
     && useradd --system --uid 10001 --gid boussole --home-dir /app --no-create-home boussole
 WORKDIR /app
