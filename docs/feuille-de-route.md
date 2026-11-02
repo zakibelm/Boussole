@@ -23,6 +23,8 @@ Critère de sortie : une réponse sourcée et journalisée de bout en bout.
 - [x] Tests d'intégration PostgreSQL exécutés (dans la CI, service pgvector)
 - [x] Critère de sortie démontré le 1er novembre : réponse sourcée et journalisée de bout en bout, extraits envoyés sans rétention (ADR 0008)
 - [x] Modèle par défaut choisi par benchmark : GPT-5.6 Luna pour tous les agents
+- [x] Écart ha01/ha02 tranché le 2026-11-02 par le PMO (Zakaria Belmeddah) : quand la nature du livrable est claire (ouvrage physique, exigences figées ou réglementées), le sélecteur suit le livrable même si la préférence de l'équipe diverge; l'hybride seulement si le livrable a des parties de nature différente (PR `fix/selecteur-livrable-prime`)
+- [x] Après le critère : audit et red team (8 constats, 4 compléments, tous corrigés), déploiement versionné (ADR 0009, bascule le 2 novembre), ancre quotidienne hors serveur
 
 ## Phase 1 : pilote (en cours)
 
