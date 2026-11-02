@@ -115,9 +115,9 @@ jobs:
           printf '%s\n' 'ssl_session_cache shared:le_nginx_SSL:10m;' 'ssl_session_timeout 1440m;' \
             'ssl_session_tickets off;' 'ssl_protocols TLSv1.2 TLSv1.3;' \
             'ssl_prefer_server_ciphers off;' > $le/options-ssl-nginx.conf
-          touch /tmp/boussole.htpasswd
+          touch /tmp/htpasswd-boussole
           docker run --rm \
             -v "$PWD/infra/deploy/nginx/boussole.conf:/etc/nginx/conf.d/boussole.conf:ro" \
             -v "$le:/etc/letsencrypt:ro" \
-            -v /tmp/boussole.htpasswd:/etc/nginx/boussole.htpasswd:ro \
+            -v /tmp/htpasswd-boussole:/etc/nginx/.htpasswd-boussole:ro \
             nginx:1.24 nginx -t

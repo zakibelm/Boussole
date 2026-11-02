@@ -42,7 +42,7 @@ L'ancien montage n'est jamais supprimé par cette procédure : il sert de retour
 | Modèles d'embeddings | volume : `/data/fastembed/` | `/srv/boussole/data/models/` |
 | Index RAG et PDF | `/opt/boussole/rag` (`rag_index.jsonl`, `pmbok8.pdf`) | `/srv/boussole/data/` |
 | nginx | `/etc/nginx/sites-available/boussole.optigenius.pro`, proxy `127.0.0.1:8770` | même fichier, proxy `127.0.0.1:8000` |
-| Comptes | htpasswd : `zaki` | idem; `BOUSSOLE_ROLES=zaki=pmo` |
+| Comptes | `/etc/nginx/.htpasswd-boussole` : compte `zaki` | même fichier, conservé tel quel; `BOUSSOLE_ROLES=zaki=pmo` |
 | Journal de référence | 62 entrées, embranchements documentés [32, 35] | 63 entrées après l'ancre de l'étape 1 |
 
 Sauvegarde déjà faite : `/opt/boussole/backups/` (base et compose du 2026-11-01 20:04).
@@ -95,6 +95,9 @@ Sauvegarde déjà faite : `/opt/boussole/backups/` (base et compose du 2026-11-0
    nginx -t && systemctl reload nginx
    ```
    Le `.bak` reste dans `sites-available`, jamais dans `sites-enabled`.
+   Les comptes restent ceux de `/etc/nginx/.htpasswd-boussole` (fichier existant, ne pas le
+   recréer). Ajouter un compte : `htpasswd -B /etc/nginx/.htpasswd-boussole <compte>` (sans
+   `-c`, qui écraserait le fichier), puis l'ajouter à `BOUSSOLE_ROLES`.
 8. Contrôles (doivent tous réussir) :
    ```bash
    curl -s -o /dev/null -w "%{http_code}
