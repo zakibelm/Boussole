@@ -48,7 +48,10 @@ def build_answerer() -> Answerer:
     if not key:
         raise MissingApiKeyError("Clé OpenRouter absente : saisis-la dans la page Paramètres.")
     gateway = BudgetedGateway(
-        OpenRouterGateway(key, config.usd_to_cad), SqlUsageLedger(sessions), config.budget_cap_cad
+        OpenRouterGateway(key, config.usd_to_cad),
+        SqlUsageLedger(sessions),
+        config.budget_cap_cad,
+        config.task_cap_cad,
     )
     return Answerer(
         gate=ActionGate(load_policy(config.autonomy_path), catalog, AuditLog(sessions, secrets)),

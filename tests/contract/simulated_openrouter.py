@@ -37,6 +37,12 @@ _MODELS = {
             "pricing": {"prompt": "0.000003", "completion": "0.000015"},
         },
         {
+            "id": "openai/gpt-5.6-luna",
+            "name": "GPT-5.6 Luna",
+            "context_length": 400000,
+            "pricing": {"prompt": "0.0000002", "completion": "0.0000012"},
+        },
+        {
             "id": "meta-llama/llama-4-scout:free",
             "name": "Llama 4 Scout (free)",
             "context_length": 128000,

@@ -44,8 +44,10 @@ class SameOriginMiddleware:
         origin = headers.get("origin") or headers.get("referer")
         if origin is None:
             return True
-        hosts = {headers.get("host"), headers.get("x-forwarded-host")} | self._allowed
-        return _netloc(origin) in hosts - {None, ""}
+        # X-Forwarded-Host n'est pas pris : il viendrait du client. Derrière nginx,
+        # l'origine publique est déclarée dans BOUSSOLE_ALLOWED_ORIGINS.
+        hosts = {(headers.get("host") or "").lower()} | self._allowed
+        return _netloc(origin) in hosts - {""}
 
 
 def _netloc(url: str) -> str:

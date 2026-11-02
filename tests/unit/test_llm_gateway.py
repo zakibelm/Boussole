@@ -49,13 +49,18 @@ def test_budget_records_each_call() -> None:
     assert gateway.remaining_cad() == Decimal("20") - Decimal("0.001400")
 
 
-def test_budget_refuses_calls_once_cap_is_reached() -> None:
+def test_budget_refuses_a_call_whose_maximal_cost_no_longer_fits() -> None:
+    # Estimation d'un appel : environ 0,0215 $ CA (1 024 jetons max au prix de Sonnet);
+    # coût réel simulé : 0,0014 $ CA. Avec 0,025 $ CA, trois appels passent, puis le
+    # solde (0,0208 $ CA) ne couvre plus l'estimation : refus avant l'envoi.
     ledger = InMemoryLedger()
-    gateway = BudgetedGateway(_openrouter(), ledger, cap_cad=Decimal("0.001"))
-    gateway.generate(REQUEST)
+    gateway = BudgetedGateway(_openrouter(), ledger, cap_cad=Decimal("0.025"))
+    for _ in range(3):
+        gateway.generate(REQUEST)
     with pytest.raises(BudgetExceededError, match="Budget d'essai atteint"):
         gateway.generate(REQUEST)
-    assert len(ledger.entries) == 1
+    assert len(ledger.entries) == 3
+    assert ledger.total_spent_cad() <= Decimal("0.025")
 
 
 def test_finish_reason_is_reported() -> None:

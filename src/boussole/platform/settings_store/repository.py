@@ -1,16 +1,30 @@
 """Lecture et écriture des paramètres d'agents. Le catalogue fournit les défauts."""
 
+import uuid
 from dataclasses import dataclass
+from datetime import UTC, datetime
 from decimal import Decimal
 from enum import StrEnum
 
-from sqlalchemy import func, select
+from sqlalchemy import delete, func, select
 from sqlalchemy.orm import Session, sessionmaker
 
 from boussole.agents.catalog import Catalog
 from boussole.agents.pmbok_skills import PmbokSkills
-from boussole.platform.llm_gateway.budget import UsageRecord
-from boussole.platform.settings_store.models import AgentSetting, LlmUsage, SkillVersion
+from boussole.core.database import serialize_writes
+from boussole.platform.llm_gateway.budget import (
+    RESERVATION_TTL,
+    Reservation,
+    UsageRecord,
+    fits,
+    refusal,
+)
+from boussole.platform.settings_store.models import (
+    AgentSetting,
+    LlmReservation,
+    LlmUsage,
+    SkillVersion,
+)
 
 
 class SkillSource(StrEnum):
@@ -114,25 +128,64 @@ class SettingsRepository:
 
 
 class SqlUsageLedger:
+    """Registre des coûts en base. Les réservations y sont partagées par tous les
+    processus (workers, commandes), sous le même verrou que le journal d'audit."""
+
     def __init__(self, sessions: sessionmaker[Session]) -> None:
         self._sessions = sessions
 
     def total_spent_cad(self) -> Decimal:
         with self._sessions() as session:
-            total = session.scalar(select(func.coalesce(func.sum(LlmUsage.cost_cad), 0)))
-        return Decimal(str(total))
+            return _spent(session)
 
     def record(self, entry: UsageRecord) -> None:
         with self._sessions.begin() as session:
+            session.add(_usage(entry))
+
+    def reserve(self, amount: Decimal, cap: Decimal, agent: str, model: str) -> Reservation:
+        now = datetime.now(UTC)
+        with self._sessions.begin() as session:
+            serialize_writes(session)
+            session.execute(delete(LlmReservation).where(LlmReservation.expires_at <= now))
+            reserved = Decimal(
+                str(session.scalar(select(func.coalesce(func.sum(LlmReservation.amount_cad), 0))))
+            )
+            if not fits(_spent(session), reserved, amount, cap):
+                raise refusal(cap, reserved, amount)
+            reservation = Reservation(uuid.uuid4().hex, amount)
             session.add(
-                LlmUsage(
-                    agent=entry.agent,
-                    model=entry.model,
-                    prompt_tokens=entry.usage.prompt_tokens,
-                    completion_tokens=entry.usage.completion_tokens,
-                    cost_cad=entry.usage.cost_cad,
+                LlmReservation(
+                    id=reservation.id,
+                    created_at=now,
+                    expires_at=now + RESERVATION_TTL,
+                    agent=agent,
+                    model=model,
+                    amount_cad=amount,
                 )
             )
+            return reservation
+
+    def settle(self, reservation: Reservation, entry: UsageRecord | None) -> None:
+        with self._sessions.begin() as session:
+            serialize_writes(session)
+            session.execute(delete(LlmReservation).where(LlmReservation.id == reservation.id))
+            if entry is not None:
+                session.add(_usage(entry))
+
+
+def _spent(session: Session) -> Decimal:
+    total = session.scalar(select(func.coalesce(func.sum(LlmUsage.cost_cad), 0)))
+    return Decimal(str(total))
+
+
+def _usage(entry: UsageRecord) -> LlmUsage:
+    return LlmUsage(
+        agent=entry.agent,
+        model=entry.model,
+        prompt_tokens=entry.usage.prompt_tokens,
+        completion_tokens=entry.usage.completion_tokens,
+        cost_cad=entry.usage.cost_cad,
+    )
 
 
 def _view(row: SkillVersion) -> SkillView:

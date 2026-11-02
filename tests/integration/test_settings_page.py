@@ -1,10 +1,13 @@
 """Page Paramètres de bout en bout, avec OpenRouter simulé (aucun appel payant)."""
 
+import html
+import re
 from decimal import Decimal
 from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
+from httpx import Response
 from markupsafe import escape
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -20,6 +23,7 @@ from boussole.platform.secrets import OPENROUTER_KEY, InMemorySecretStore
 from boussole.platform.settings_store.models import SETTINGS_TABLES
 from boussole.platform.settings_store.repository import SettingsRepository
 from tests.contract import simulated_openrouter
+from tests.guardrails_support import make_audit
 
 CATALOG = load_catalog(Path(__file__).resolve().parents[2] / "config" / "agents.yaml")
 VALID_KEY = "sk-or-test"
@@ -44,6 +48,7 @@ def services() -> Services:
         ),
         cap_cad=Decimal("20"),
         operator="Zakaria",
+        audit=make_audit(),
     )
 
 
@@ -178,11 +183,22 @@ def test_refine_is_refused_once_budget_is_spent(client: TestClient, services: Se
 
 
 def test_accepting_a_proposal_records_its_source(client: TestClient, services: Services) -> None:
+    services.secrets.set(OPENROUTER_KEY, VALID_KEY)
+    proposal = proposal_in(
+        client.post("/settings/agents/selector/skill/refine", data={"text": "B"})
+    )
     client.post(
         "/settings/agents/selector/skill",
-        data={"text": "Version IA", "source": "ai_refined", "reason": "Raffiné par l'IA"},
+        data={"text": proposal, "source": "ai_refined", "reason": "Raffiné par l'IA"},
     )
     assert services.repo.current_skill("selector").source == "ai_refined"
+
+
+def proposal_in(response: Response) -> str:
+    """Texte de la proposition de l'IA, tel qu'affiché dans le panneau du skill."""
+    found = re.search(r'aria-label="Skill proposé">(.*?)</textarea>', response.text, re.S)
+    assert found is not None, "aucune proposition affichée"
+    return html.unescape(found.group(1))
 
 
 def test_revert_restores_text_as_new_version(client: TestClient, services: Services) -> None:

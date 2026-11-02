@@ -1,0 +1,34 @@
+# Production de Boussole sur le VPS (ADR 0009). Lancé par infra/deploy/deploy.sh :
+#   BOUSSOLE_IMAGE_TAG=<commit> docker compose -f infra/deploy/compose.prod.yml -p boussole-prod up -d
+#
+# - L'application n'écoute que sur 127.0.0.1 : seul nginx (sur l'hôte) la joint, et c'est
+#   lui qui pose X-Remote-User. Joignable autrement, n'importe qui choisirait son identité.
+# - Données et secrets sur l'hôte, sous BOUSSOLE_HOME (par défaut /srv/boussole), pour les
+#   sauvegardes : data/ (base, index RAG, PDF, modèle) et secrets/ (coffre des clés).
+
+name: boussole-prod
+
+services:
+  app:
+    image: boussole:${BOUSSOLE_IMAGE_TAG:?BOUSSOLE_IMAGE_TAG manquant (commit déployé)}
+    restart: unless-stopped
+    env_file:
+      - ${BOUSSOLE_HOME:-/srv/boussole}/boussole.env
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - ${BOUSSOLE_HOME:-/srv/boussole}/data:/app/data/local
+      - ${BOUSSOLE_HOME:-/srv/boussole}/secrets:/app/secrets
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    mem_limit: 2g
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"

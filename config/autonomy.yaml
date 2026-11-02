@@ -7,6 +7,7 @@
 # level : automation (agit seul, journalisé) | assistance (brouillon révisé)
 #         | augmentation (l'humain décide)
 # approvers : rôles humains autorisés à valider (irréversible : obligatoire)
+# outbound : l'action sort de Boussole; sa destination est obligatoire et doit être en liste blanche
 #
 # Règles non configurables, appliquées par le code :
 # - une action inconnue est refusée;
@@ -50,6 +51,7 @@ actions:
     class: irreversible
     level: augmentation
     approvers: [project_manager, pmo]
+    outbound: true
     description: Envoyer un message hors de Boussole
   change_budget:
     class: irreversible

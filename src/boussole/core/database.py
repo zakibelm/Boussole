@@ -4,7 +4,8 @@ début (BEGIN IMMEDIATE), ce qui sérialise aussi les écritures entre processus
 
 from typing import Any
 
-from sqlalchemy import Engine, create_engine, event
+from sqlalchemy import Engine, create_engine, event, text
+from sqlalchemy.orm import Session
 
 
 def make_engine(url: str) -> Engine:
@@ -22,3 +23,13 @@ def _immediate_transactions(engine: Engine) -> None:
     @event.listens_for(engine, "begin")
     def _begin_immediate(connection: Any) -> None:
         connection.exec_driver_sql("BEGIN IMMEDIATE")
+
+
+def serialize_writes(session: Session) -> None:
+    """Verrou d'écriture partagé par le journal d'audit et les réservations de budget.
+
+    PostgreSQL : verrou consultatif de transaction. SQLite : la transaction a déjà
+    réservé l'écriture (BEGIN IMMEDIATE, voir make_engine).
+    """
+    if session.get_bind().dialect.name == "postgresql":
+        session.execute(text("SELECT pg_advisory_xact_lock(hashtext('agent_log'))"))
