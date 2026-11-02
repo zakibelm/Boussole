@@ -1,0 +1,7 @@
+# Faux positifs vérifiés (generic-api-key), commit c01388f, PR #9 :
+# faux jetons inventés pour les tests de l'ancre (aucun vrai jeton, aucune adresse réelle).
+# Remplacés par des valeurs à faible entropie dans a1f6e43; ces empreintes ne visent que
+# ce commit et ces lignes, sans réécrire l'historique (décision de Zakaria Belmeddah).
+c01388f09bd45ffe28f88c05fd2c6b4b63a99724:tests/unit/test_anchor_cron.py:generic-api-key:20
+c01388f09bd45ffe28f88c05fd2c6b4b63a99724:tests/unit/test_anchor_receiver.py:generic-api-key:17
+c01388f09bd45ffe28f88c05fd2c6b4b63a99724:tests/unit/test_anchor_receiver.py:generic-api-key:83
