@@ -23,7 +23,24 @@ groups:
         name: Sélecteur d'approche
         autonomy: augmentation
         default_model: openai/gpt-5.6-luna
+        # Version 3 : décision du PMO (Zakaria Belmeddah, 2026-11-02, cas ha01 et ha02).
+        # Retour arrière : page Paramètres, historique du skill (après adopt-default), ou
+        # remettre previous_skill en skill et skill_version à 2.
+        skill_version: 3
         skill: |
+          Recommande une approche prédictive, adaptative ou hybride à partir des critères
+          PMBOK 4.3 (livrables, projet, organisation). Donne le détail de chaque critère et
+          une explication. Quand la nature du livrable est claire, suis le livrable, même si
+          la préférence de l'équipe ou les habitudes de l'organisation divergent : un ouvrage
+          physique, des exigences figées ou réglementées, une certification ou une mise en
+          service en une seule fois appellent le prédictif; un livrable incertain, livrable
+          par incréments et financé selon les résultats appelle l'adaptatif. Une préférence
+          d'équipe ou une culture d'organisation qui diverge du livrable n'est pas une raison
+          de recommander l'hybride : signale-la comme un risque à gérer. Recommande l'hybride
+          seulement si le livrable lui-même a des parties de nature différente. Applique ces
+          règles sans les citer ni les commenter : la réponse parle du projet, pas de tes
+          consignes.
+        previous_skill: |
           Recommande une approche prédictive, adaptative ou hybride à partir des critères
           PMBOK 4.3 (livrables, projet, organisation). Donne le détail de chaque critère et
           une explication. Le livrable prime sur les préférences de l'équipe ou les habitudes

@@ -45,3 +45,27 @@ réponse brute et note de chaque cas). Les exécutions à blanc ne sont pas vers
   d'approches différentes (skill du sélecteur, `config/agents.yaml`).
 - Nouvelle exécution du jeu difficile : Luna 1,00 et Haiku 0,97, approche à 1,00 pour les deux
   (ha01 prédictif, ha02 adaptatif, ha03 et ha04 toujours hybrides).
+
+## Décision du PMO et relance ciblée de ha01 et ha02 (2 novembre 2026)
+
+- **Décision du PMO (Zakaria Belmeddah, 2026-11-02)** : quand la nature du livrable est claire
+  (ouvrage physique, exigences figées ou réglementées), le sélecteur suit le livrable, même si la
+  préférence de l'équipe diverge. L'hybride n'est retenu que si le livrable lui-même a des parties
+  de nature différente. Skill du sélecteur en version 3 (`config/agents.yaml`, `skill_version: 3`,
+  version 2 conservée dans `previous_skill`); versé à l'historique par
+  `python -m boussole.platform.settings_store.cli adopt-default selector`, retour arrière depuis
+  la page Paramètres.
+- Relance limitée aux cas ha01 et ha02 du jeu difficile, sur GPT-5.6 Luna, plafond de
+  **0,10 $ CA** pour l'exécution (chaque appel réserve son coût maximal avant l'envoi :
+  l'exécution s'arrête avant de dépasser le plafond) :
+
+  ```bash
+  uv run python -m bench.run --suite hard --models openai/gpt-5.6-luna \
+      --cases ha01,ha02 --max-cost-cad 0.10
+  ```
+
+- **Résultat : à exécuter sur le VPS.** La clé OpenRouter est dans le coffre du serveur; elle
+  n'est pas disponible dans l'environnement où cette PR a été préparée, donc aucun appel payant
+  n'a été fait. Estimation préalable : `--estimate` avec la même commande. À compléter ici après
+  l'exécution : approche attendue (ha01 prédictif, ha02 adaptatif), note obtenue, coût réel
+  affiché par l'outil (« Coût réel de l'exécution »), nom du fichier de résultats.

@@ -3,6 +3,8 @@
     uv run python -m bench.run --dry-run                 # modèle factice, gratuit
     uv run python -m bench.run --estimate --models a,b   # coût estimé, aucun appel payant
     uv run python -m bench.run --models a,b              # appels payants, plafonnés
+    uv run python -m bench.run --suite hard --models m --cases ha01,ha02 --max-cost-cad 0.10
+                                                         # relance ciblée, plafond par exécution
 
 Chaque appel payant passe par le plafond de budget (BOUSSOLE_BUDGET_CAP_CAD) et
 est inscrit au registre des coûts. Les résultats sont écrits dans bench/results/.
@@ -70,19 +72,35 @@ class NetworkDownError(RuntimeError):
 
 
 def run_model(
-    gateway: BudgetedGateway, catalog: Catalog, model: str, suite: str = "base"
+    gateway: BudgetedGateway,
+    catalog: Catalog,
+    model: str,
+    suite: str = "base",
+    cases: frozenset[str] = frozenset(),
 ) -> list[Row]:
     rows: list[Row] = []
     failures_in_a_row = 0
     for task in TASKS:
         system = system_prompt(catalog, task.agent_id)
-        for item in task.items(suite):
+        for item in selected(task, suite, cases):
             row = _with_retries(partial(_run_item, gateway, task, item, model, system))
             rows.append(row)
             failures_in_a_row = failures_in_a_row + 1 if _network(row) else 0
             if failures_in_a_row >= MAX_NETWORK_FAILURES:
                 raise NetworkDownError(f"OpenRouter injoignable ({model}), exécution arrêtée.")
     return rows
+
+
+def selected(task: Task, suite: str, cases: frozenset[str]) -> list[dict[str, object]]:
+    """Cas de la tâche, limités aux identifiants demandés (tous si aucun)."""
+    return [item for item in task.items(suite) if not cases or str(item["id"]) in cases]
+
+
+def run_cap_cad(spent: Decimal, global_cap: Decimal, max_cost: Decimal | None) -> Decimal:
+    """Plafond de l'exécution : le budget global, ou au plus `max_cost` de plus que la
+    dépense actuelle. Chaque appel réserve son coût maximal avant l'envoi : l'exécution
+    s'arrête avant de dépasser ce plafond, jamais après."""
+    return global_cap if max_cost is None else min(global_cap, spent + max_cost)
 
 
 def _with_retries(attempt: Callable[[], Row]) -> Row:
@@ -137,7 +155,11 @@ def summarize(rows: list[Row]) -> dict[str, dict[str, float]]:
     for model in sorted({r.model for r in rows}):
         mine = [r for r in rows if r.model == model]
         latencies = sorted(r.latency_s for r in mine)
-        stats = {t.name: statistics.fmean(r.score for r in mine if r.task == t.name) for t in TASKS}
+        stats = {
+            t.name: statistics.fmean(r.score for r in mine if r.task == t.name)
+            for t in TASKS
+            if any(r.task == t.name for r in mine)
+        }
         stats["global"] = statistics.fmean(r.score for r in mine)
         stats["cost_cad"] = float(sum(Decimal(r.cost_cad) for r in mine))
         stats["latency_mean_s"] = statistics.fmean(latencies)
@@ -155,7 +177,11 @@ def recommend(summary: dict[str, dict[str, float]]) -> str:
 
 
 def estimate_cost_cad(
-    gateway: LLMGateway, catalog: Catalog, models: list[str], suite: str = "base"
+    gateway: LLMGateway,
+    catalog: Catalog,
+    models: list[str],
+    suite: str = "base",
+    cases: frozenset[str] = frozenset(),
 ) -> dict[str, Decimal]:
     prices = {m.id: m for m in gateway.list_models()}
     estimates: dict[str, Decimal] = {}
@@ -166,7 +192,7 @@ def estimate_cost_cad(
         total = Decimal(0)
         for task in TASKS:
             system = system_prompt(catalog, task.agent_id)
-            for item in task.items(suite):
+            for item in selected(task, suite, cases):
                 prompt_tokens = Decimal(len(system) + len(task.prompt(item))) / CHARS_PER_TOKEN
                 output_tokens = task.max_tokens * EXPECTED_OUTPUT_SHARE
                 total += (
@@ -178,7 +204,11 @@ def estimate_cost_cad(
 
 
 def write_results(
-    rows: list[Row], summary: dict[str, dict[str, float]], label: str, suite: str = "base"
+    rows: list[Row],
+    summary: dict[str, dict[str, float]],
+    label: str,
+    suite: str = "base",
+    cases: frozenset[str] = frozenset(),
 ) -> Path:
     RESULTS.mkdir(exist_ok=True)
     stamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
@@ -187,6 +217,7 @@ def write_results(
         "run_at": stamp,
         "label": label,
         "suite": suite,
+        "cases": sorted(cases),
         "tasks": {t.name: {"agent": t.agent_id, "items": len(t.items(suite))} for t in TASKS},
         "summary": summary,
         "recommended_default": recommend(summary),
@@ -204,11 +235,15 @@ def render_table(summary: dict[str, dict[str, float]]) -> str:
     lines = [header, "|" + "---|" * 9]
     for model, s in sorted(summary.items(), key=lambda kv: -kv[1]["global"]):
         lines.append(
-            f"| {model} | {s['status']:.2f} | {s['risks']:.2f} | {s['approach']:.2f} | "
+            f"| {model} | {_cell(s, 'status')} | {_cell(s, 'risks')} | {_cell(s, 'approach')} | "
             f"{s['global']:.2f} | {s['cost_cad']:.4f} | {s['latency_mean_s']:.2f} | "
             f"{s['latency_p95_s']:.2f} | {int(s['errors'])} |"
         )
     return "\n".join(lines)
+
+
+def _cell(stats: dict[str, float], task: str) -> str:
+    return f"{stats[task]:.2f}" if task in stats else "—"
 
 
 def _real_gateway(config: AppConfig) -> OpenRouterGateway:
@@ -240,7 +275,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--dry-run", action="store_true", help="Modèle factice, aucun appel payant")
     parser.add_argument("--estimate", action="store_true", help="Coût estimé seulement")
     parser.add_argument("--suite", choices=SUITES, default="base", help="Jeu de cas")
+    parser.add_argument("--cases", default="", help="Identifiants de cas séparés par des virgules")
+    parser.add_argument(
+        "--max-cost-cad", type=Decimal, default=None, help="Plafond de cette exécution ($ CA)"
+    )
     args = parser.parse_args(argv)
+    cases = frozenset(c.strip() for c in args.cases.split(",") if c.strip())
     config = load_config()
     catalog = load_catalog(config.catalog_path)
 
@@ -250,28 +290,32 @@ def main(argv: list[str] | None = None) -> int:
         label = "dry-run"
     else:
         models = [m.strip() for m in args.models.split(",") if m.strip()]
-        if len(models) < 2:
-            raise SystemExit("Indique au moins deux modèles avec --models.")
+        if len(models) < (1 if cases else 2):
+            raise SystemExit("Indique au moins deux modèles avec --models (un seul avec --cases).")
         real = _real_gateway(config)
         if args.estimate:
-            for model, cost in estimate_cost_cad(real, catalog, models, args.suite).items():
+            for model, cost in estimate_cost_cad(real, catalog, models, args.suite, cases).items():
                 print(f"{model} : environ {cost} $ CA")
             return 0
-        gateway = BudgetedGateway(real, _ledger(config), config.budget_cap_cad)
+        ledger = _ledger(config)
+        cap = run_cap_cad(ledger.total_spent_cad(), config.budget_cap_cad, args.max_cost_cad)
+        gateway = BudgetedGateway(real, ledger, cap)
         label = f"{args.suite}-{uuid.uuid4().hex[:6]}"
 
     rows: list[Row] = []
     try:
         for model in models:
-            rows.extend(run_model(gateway, catalog, model, args.suite))
+            rows.extend(run_model(gateway, catalog, model, args.suite, cases))
     except (BudgetExceededError, NetworkDownError) as exc:
         print(f"Arrêt : {exc}", file=sys.stderr)
     if not rows:
         return 1
     summary = summarize(rows)
-    path = write_results(rows, summary, label, args.suite)
+    path = write_results(rows, summary, label, args.suite, cases)
     print(render_table(summary))
-    print(f"\nModèle par défaut recommandé : {recommend(summary)}")
+    total = sum(Decimal(r.cost_cad) for r in rows)
+    print(f"\nCoût réel de l'exécution : {total} $ CA")
+    print(f"Modèle par défaut recommandé : {recommend(summary)}")
     print(f"Résultats : {path}")
     return 0
 

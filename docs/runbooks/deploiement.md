@@ -25,6 +25,21 @@ version) est une **décision humaine** : arrêter l'application, copier
 `/var/backups/boussole/<date>/boussole.db` vers `/srv/boussole/data/boussole.db`, relancer,
 puis `audit.cli verify --expect` avec la dernière ancre conservée hors du serveur.
 
+## Nouvelle version d'un skill par défaut
+
+Quand `config/agents.yaml` augmente le `skill_version` d'un agent (par exemple le
+sélecteur, version 3 du 2026-11-02), le nouveau texte ne s'applique pas tout seul si
+l'agent a déjà un historique en base. Après le déploiement, le PMO le verse à
+l'historique (journalisé avant l'effet) :
+
+```bash
+docker exec boussole-prod-app-1 python -m boussole.platform.settings_store.cli adopt-default selector
+```
+
+La version précédente reste dans l'historique : retour arrière depuis la page Paramètres
+(historique du skill, « Rétablir »), lui aussi journalisé. Sans effet si la dernière
+version est déjà le défaut.
+
 ## Migration depuis le montage manuel (une seule fois)
 
 Objectif : reprendre **les données et les clés actuelles**, sans perdre le journal signé.

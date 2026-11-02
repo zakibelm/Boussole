@@ -9,7 +9,14 @@ from bench import run
 from bench.tasks import TASKS, extract_json
 
 from boussole.agents.catalog import load_catalog
+from boussole.platform.llm_gateway.budget import (
+    BudgetedGateway,
+    BudgetExceededError,
+    InMemoryLedger,
+)
+from boussole.platform.llm_gateway.fake import FakeGateway
 from boussole.platform.llm_gateway.openrouter import OpenRouterGateway
+from boussole.platform.llm_gateway.port import GenerationRequest, Message
 from tests.contract import simulated_openrouter
 
 TASK = {t.name: t for t in TASKS}
@@ -144,3 +151,34 @@ def test_dry_run_on_the_hard_suite(monkeypatch: pytest.MonkeyPatch, tmp_path: Pa
     payload = json.loads(result.read_text(encoding="utf-8"))
     assert payload["suite"] == "hard"
     assert len(payload["rows"]) == 2 * sum(len(t.items("hard")) for t in TASKS)
+
+
+def test_targeted_dry_run_keeps_only_the_requested_cases(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    monkeypatch.setattr(run, "RESULTS", tmp_path)
+    assert run.main(["--dry-run", "--suite", "hard", "--cases", "ha01,ha02"]) == 0
+    (result,) = tmp_path.glob("*-dry-run.json")
+    payload = json.loads(result.read_text(encoding="utf-8"))
+    assert payload["cases"] == ["ha01", "ha02"]
+    assert {r["item"] for r in payload["rows"]} == {"ha01", "ha02"}
+    assert {r["task"] for r in payload["rows"]} == {"approach"}
+    assert set(next(iter(payload["summary"].values()))) >= {"approach", "global"}
+
+
+def test_run_cap_never_exceeds_the_global_budget_or_the_run_limit() -> None:
+    spent, cap = Decimal("1.41"), Decimal("20")
+    assert run.run_cap_cad(spent, cap, None) == cap
+    assert run.run_cap_cad(spent, cap, Decimal("0.10")) == Decimal("1.51")
+    assert run.run_cap_cad(Decimal("19.95"), cap, Decimal("0.10")) == cap
+
+
+def test_run_cap_stops_before_the_limit_is_exceeded() -> None:
+    gateway = BudgetedGateway(
+        FakeGateway(("fake/small",)),
+        InMemoryLedger(),
+        run.run_cap_cad(Decimal("0"), Decimal("20"), Decimal("0")),
+    )
+    request = GenerationRequest(model="fake/small", messages=(Message("user", "x"),), max_tokens=10)
+    with pytest.raises(BudgetExceededError):
+        gateway.generate(request)

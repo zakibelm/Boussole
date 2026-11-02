@@ -55,6 +55,10 @@ class SettingsRepository:
         self._catalog = catalog
         self._pmbok = pmbok
 
+    @property
+    def catalog(self) -> Catalog:
+        return self._catalog
+
     def effective_model(self, agent_id: str) -> str:
         with self._sessions() as session:
             setting = session.get(AgentSetting, agent_id)
@@ -114,6 +118,38 @@ class SettingsRepository:
             raise KeyError(f"{agent_id} v{version}")
         reason = f"Retour à la version {version}"
         return self.save_skill(agent_id, target.text, author, SkillSource.REVERT, reason)
+
+    def adopt_default(self, agent_id: str, author: str) -> list[SkillView]:
+        """Verse le skill par défaut du catalogue à l'historique, comme nouvelle version.
+
+        Sans historique, la version précédente du catalogue (si connue) est versée d'abord :
+        le retour arrière reste possible depuis Paramètres. Un skill modifié par le PMO est
+        remplacé par le défaut, mais reste dans l'historique. Sans effet si la dernière
+        version est déjà le défaut. Renvoie les versions créées.
+        """
+        if not self.default_pending(agent_id):
+            return []
+        spec = self._catalog.get(agent_id)
+        created: list[SkillView] = []
+        if spec.previous_skill and not self.skill_history(agent_id):
+            created.append(
+                self._save_default(agent_id, spec.previous_skill, author, spec.skill_version - 1)
+            )
+        created.append(self._save_default(agent_id, spec.skill.strip(), author, spec.skill_version))
+        return created
+
+    def default_pending(self, agent_id: str) -> bool:
+        """Vrai si adopt_default créerait une version : la dernière version diffère du
+        défaut, ou aucun historique alors qu'une version précédente est connue."""
+        spec = self._catalog.get(agent_id)
+        history = self.skill_history(agent_id)
+        if history:
+            return history[0].text != spec.skill.strip()
+        return spec.previous_skill is not None
+
+    def _save_default(self, agent_id: str, text: str, author: str, version: int) -> SkillView:
+        reason = f"Défaut du catalogue, version {version}"
+        return self.save_skill(agent_id, text, author, SkillSource.DEFAULT, reason)
 
     def system_prompt(self, agent_id: str) -> str:
         """Règles communes + skill courant + parties du PMBOK : ce que reçoit le modèle."""
