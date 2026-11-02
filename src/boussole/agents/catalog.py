@@ -15,7 +15,17 @@ class AgentSpec(BaseModel):
     autonomy: Autonomy
     default_model: str
     skill: str
+    # Version du skill par défaut et texte de la version précédente, pour la verser à
+    # l'historique (adopt_default) et permettre le retour arrière depuis Paramètres.
+    skill_version: int = Field(default=1, ge=1)
+    previous_skill: str | None = None
     children: list["AgentSpec"] = []
+
+    @model_validator(mode="after")
+    def _previous_skill_needs_a_later_version(self) -> "AgentSpec":
+        if self.previous_skill is not None and self.skill_version < 2:
+            raise ValueError(f"{self.id} : previous_skill exige skill_version >= 2.")
+        return self
 
 
 class AgentGroup(BaseModel):
