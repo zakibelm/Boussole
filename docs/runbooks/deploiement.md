@@ -65,7 +65,9 @@ Sauvegarde déjà faite : `/opt/boussole/backups/` (base et compose du 2026-11-0
    ```
    Dans `boussole.env` : `BOUSSOLE_TRUST_PROXY_USER=1`, `BOUSSOLE_ROLES=zaki=pmo`,
    `BOUSSOLE_OPERATOR=zaki`, `BOUSSOLE_ALLOWED_ORIGINS=https://boussole.optigenius.pro`,
-   `BOUSSOLE_ANCHOR_URL=<adresse HTTPS de réception des ancres>`. Ne **pas** définir
+   `BOUSSOLE_ANCHOR_URL=<adresse HTTPS de réception des ancres, sans paramètre>` et
+   `BOUSSOLE_ANCHOR_TOKEN=<jeton du script de réception>` (voir
+   `docs/runbooks/journal-audit.md`). Ne **pas** définir
    `BOUSSOLE_DATABASE_URL` (la base est celle de `/srv/boussole/data`).
 4. Arrêter l'ancien conteneur **sans le supprimer**, puis copier données et coffre :
    ```bash

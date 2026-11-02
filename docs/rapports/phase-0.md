@@ -2,8 +2,8 @@
 
 - **Date :** 2026-11-01
 - **Critère de sortie :** une réponse sourcée et journalisée de bout en bout.
-- **Statut :** démontré le 2026-11-01 sur boussole.optigenius.pro; à valider par
-  Zakaria Belmeddah (la fusion de la PR vaut validation).
+- **Statut :** à valider par Zakaria Belmeddah (critère démontré le 2026-11-01 sur
+  boussole.optigenius.pro; la fusion de la PR « Fin de phase 0 » vaut validation).
 
 ## Critère de sortie : démonstration
 
@@ -78,10 +78,49 @@ Détail dans `bench/results/README.md`.
 
 | Écart | Action proposée | Bénéfice |
 |---|---|---|
-| ha01 et ha02 ratés par les 5 modèles : le skill du sélecteur impose l'hybride dès que les signaux divergent | Préciser le skill (le livrable prime sur la préférence de l'équipe) ou étiqueter ces cas « hybride » : décision du PMO | Sélecteur calibré avant la phase 1 |
+| ha01 et ha02 ratés par les 5 modèles : le skill du sélecteur impose l'hybride dès que les signaux divergent | **Tranché le 2026-11-02 par le PMO (Zakaria Belmeddah)** : quand la nature du livrable est claire, le sélecteur suit le livrable; l'hybride seulement si le livrable a des parties de nature différente (PR `fix/selecteur-livrable-prime`) | Sélecteur calibré avant la phase 1 |
 | La première démonstration affichait « citées : aucune » : le modèle cite au format « [4 — section 4.2.3, p. 88] » | Détecteur élargi et testé sur 4 formats, redéployé | Mesure fiable du taux de citation |
 | Journal démarré le 2026-11-01 : la clé de signature n'existait pas avant | Clé créée par Zakaria Belmeddah; toute écriture sans clé est refusée | Aucune entrée non signée |
 | Interface limitée à Paramètres; la réponse sourcée passe par la ligne de commande | Chat et file de validations en tête de la phase 1 | Démonstration accessible depuis le site |
+
+## Après le critère de sortie (1er novembre)
+
+### Audit et red team
+
+Audit du code au commit `2f868e4` (`docs/rapports/audit-redteam-2026-11-01.md`) :
+**8 constats**, dont 2 de gravité haute (écritures de Paramètres sans contrôle de rôle ni
+journal), tous corrigés sur `fix/audit-redteam-2026-11-01` avec 28 tests red team. Une
+revue de ces corrections a ajouté **4 compléments** (coût maximal estimé avant chaque
+appel, réservations de budget en base partagées entre processus, ancre envoyée hors du
+serveur, provenance « raffinée par l'IA » vérifiée côté serveur), tous corrigés. Les
+7 preuves de concept relancées : 5 échouent (faille fermée); les 2 du journal visent un
+journal jamais ancré, limite assumée levée par l'ancre quotidienne ci-dessous.
+
+### Déploiement versionné
+
+- ADR 0009 et PR #7 : image Docker construite par commit, `deploy.sh` et `rollback.sh`,
+  sauvegarde quotidienne, projet `boussole-prod`, nginx 1.24 devant l'application
+  (écoute sur `127.0.0.1` seulement).
+- Bascule faite le **2 novembre** de l'ancien conteneur vers le déploiement versionné,
+  données et coffre copiés sans suppression de l'ancien. Journal vérifié après la
+  bascule : **intègre, 63 entrées**, ancre `63:5c366c8d…c850f`.
+- PR #8 : nginx lit le fichier de comptes réel du VPS (`/etc/nginx/.htpasswd-boussole`).
+
+### Ancre quotidienne hors serveur
+
+Chaque jour à 2 h 15 UTC, `infra/anchor-cron.sh` crée une ancre signée et l'envoie en
+HTTPS à un Apps Script (`infra/anchor-receiver/Code.gs`) qui l'écrit dans une feuille
+Google privée. Le jeton voyage dans le corps du POST, jamais dans l'adresse, et n'est
+jamais versionné ni affiché (`docs/runbooks/journal-audit.md`). Une suppression de la fin
+du journal est désormais détectable avec `verify --expect` et la dernière ancre de la
+feuille.
+
+### Tests
+
+- 360 tests au moment de la bascule (352 réussis, 8 sautés : PostgreSQL, exécutés dans
+  la CI avec pgvector); 379 avec cette clôture (371 réussis, 8 sautés), dont les tests du
+  point de réception et de l'envoi par le corps.
+- Images de base de l'image Docker figées par empreinte sha256 (Python 3.12 et uv).
 
 ## Prochaine étape
 
