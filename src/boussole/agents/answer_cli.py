@@ -18,6 +18,7 @@ from boussole.agents.answer import (
     SourcedAnswer,
 )
 from boussole.agents.catalog import load_catalog
+from boussole.agents.knowledge_skills import load_knowledge_skills
 from boussole.agents.pmbok_skills import load_pmbok_skills
 from boussole.config import load_config
 from boussole.core.database import make_engine
@@ -43,6 +44,7 @@ def build_answerer() -> Answerer:
     sessions = sessionmaker(engine, expire_on_commit=False)
     catalog = load_catalog(config.catalog_path)
     pmbok = load_pmbok_skills(config.pmbok_skills_path)
+    knowledge = load_knowledge_skills(config.knowledge_path)
     secrets = KeyringSecretStore()
     key = secrets.get(OPENROUTER_KEY)
     if not key:
@@ -57,7 +59,7 @@ def build_answerer() -> Answerer:
         gate=ActionGate(load_policy(config.autonomy_path), catalog, AuditLog(sessions, secrets)),
         memory=memory(),
         gateway=gateway,
-        repo=SettingsRepository(sessions, catalog, pmbok),
+        repo=SettingsRepository(sessions, catalog, pmbok, knowledge),
         pages_for=pmbok.pages_for,
     )
 

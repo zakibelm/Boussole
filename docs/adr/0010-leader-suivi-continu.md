@@ -44,14 +44,15 @@ chaque affirmation normative reste citée avec section et page.
 ## Conséquences
 - Réponse à l'écart « personne ne suit » de la phase 1 (chef de projet adaptatif et son
   équipe) et préparation de la phase 2 (suivi et clôture).
-- Un port `SkillKnowledge` charge les skills par agent ; l'index `skills-index.json`
-  sert d'aiguillage par mots-clés.
+- Les skills sont répartis entre les 22 agents du catalogue (3 au maximum par agent) par
+  `config/knowledge/agent_skills.yaml` ; `KnowledgeSkills` les ajoute au prompt de chaque
+  agent, à côté du PMBOK en skills (`config/pmbok_skills.yaml`). Modifiable sans code.
 - Coût IA : le suivi est déterministe, seule la rédaction consomme (plafond en dollars
   canadiens existant).
 
 ## Décisions demandées au PMO
 1. Accepter ou refuser cette direction (point d'arrêt : structurant).
-2. Si acceptée : première PR de code = port `SkillKnowledge` + lecture des skills par
-   agent ; deuxième PR = `tick` en lecture seule sur un projet de test.
+2. Si acceptée : prochaine PR de code = `tick` en lecture seule sur un projet de test.
+   La répartition des skills entre agents est déjà faite et testée.
 3. Indexer les éditions 6, 7 et l'Extension logicielle dans la mémoire RAG du VPS avec la
    commande existante (`ingest`, option `--source`), une seule fois, dans `data/local/`.
