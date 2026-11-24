@@ -14,6 +14,7 @@ from sqlalchemy.orm import Session, sessionmaker
 
 from boussole.agents.answer import Answerer, MissingApiKeyError
 from boussole.agents.catalog import Catalog, load_catalog
+from boussole.agents.knowledge_skills import load_knowledge_skills
 from boussole.agents.pmbok_skills import PmbokSkills, load_pmbok_skills
 from boussole.config import AppConfig
 from boussole.core.database import make_engine
@@ -157,9 +158,11 @@ def build_services(config: AppConfig) -> Services:
     catalog = load_catalog(config.catalog_path)
     pmbok = load_pmbok_skills(config.pmbok_skills_path)
     pmbok.check_agents(catalog)
+    knowledge = load_knowledge_skills(config.knowledge_path)
+    knowledge.check_agents(catalog)
     services = Services(
         catalog=catalog,
-        repo=SettingsRepository(sessions, catalog, pmbok),
+        repo=SettingsRepository(sessions, catalog, pmbok, knowledge),
         ledger=SqlUsageLedger(sessions),
         secrets=KeyringSecretStore(),
         gateway_factory=lambda key: OpenRouterGateway(key, config.usd_to_cad),

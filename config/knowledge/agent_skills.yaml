@@ -1,0 +1,37 @@
+# Connaissances métier : quels skills PMBOK chaque agent reçoit (3 au maximum).
+# Il y a moins d'agents que de besoins : les skills sont combinés par rôle.
+# Les textes vivent dans config/knowledge/pmbok-skills/<nom>/SKILL.md (image Docker).
+# Les extraits précis du livre viennent de la mémoire RAG (config/pmbok_skills.yaml).
+# Chaque skill doit servir au moins un agent ; skill_refiner n'en reçoit aucun.
+
+agents:
+  # Orientation et pilotage
+  selector: [pmbok-router, pmbok-cycles-de-vie-approches, pmbok-adaptation-tailoring]
+  pm_predictive: [pmbok-router, pmbok-6e-processus-49, pmbok-evolution-des-editions]
+  pm_adaptive: [pmbok-router, pmbok-cycles-de-vie-approches, pmbok-extension-logicielle]
+  pm_hybrid: [pmbok-router, pmbok-cycles-de-vie-approches, pmbok-adaptation-tailoring]
+
+  # Équipes des chefs de projet
+  pm_predictive.planner: [pmbok-echeancier, pmbok-6e-processus-49]
+  pm_predictive.milestones: [pmbok-echeancier]
+  pm_adaptive.scrum_master: [pmbok-ressources-equipe, pmbok-7e-domaines-modeles, pmbok-extension-logicielle]
+  pm_adaptive.product_owner: [pmbok-portee, pmbok-principes-valeur, pmbok-extension-logicielle]
+  pm_hybrid.coordinator: [pmbok-gouvernance, pmbok-adaptation-tailoring, pmbok-qualite]
+  pm_hybrid.kpi_tracking: [pmbok-finance, pmbok-echeancier, pmbok-gouvernance]
+
+  # Domaines de performance
+  domain.scope: [pmbok-portee, pmbok-qualite]
+  domain.schedule: [pmbok-echeancier, pmbok-6e-processus-49]
+  domain.finance: [pmbok-finance, pmbok-approvisionnement]
+  domain.stakeholders: [pmbok-parties-prenantes-communications]
+  domain.resources: [pmbok-ressources-equipe, pmbok-approvisionnement]
+  domain.risk: [pmbok-risque-incertitude]
+
+  # Principes transversaux
+  principle.value: [pmbok-principes-valeur]
+  principle.quality: [pmbok-qualite]
+  principle.sustainability: [pmbok-principes-valeur]
+  principle.ethics: [pmbok-principes-valeur, pmbok-pmo-et-ia]
+
+  # Suivi et clôture
+  closing: [pmbok-gouvernance, pmbok-pmo-et-ia]

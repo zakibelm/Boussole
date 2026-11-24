@@ -10,6 +10,7 @@ from sqlalchemy import delete, func, select
 from sqlalchemy.orm import Session, sessionmaker
 
 from boussole.agents.catalog import Catalog
+from boussole.agents.knowledge_skills import KnowledgeSkills
 from boussole.agents.pmbok_skills import PmbokSkills
 from boussole.core.database import serialize_writes
 from boussole.platform.llm_gateway.budget import (
@@ -50,10 +51,12 @@ class SettingsRepository:
         sessions: sessionmaker[Session],
         catalog: Catalog,
         pmbok: PmbokSkills | None = None,
+        knowledge: KnowledgeSkills | None = None,
     ) -> None:
         self._sessions = sessions
         self._catalog = catalog
         self._pmbok = pmbok
+        self._knowledge = knowledge
 
     @property
     def catalog(self) -> Catalog:
@@ -156,11 +159,17 @@ class SettingsRepository:
         parts = [self._catalog.shared_rules.strip(), self.current_skill(agent_id).text]
         if note := self.pmbok_note(agent_id):
             parts.append(note)
+        if knowledge := self.knowledge_note(agent_id):
+            parts.append(knowledge)
         return "\n\n".join(parts)
 
     def pmbok_note(self, agent_id: str) -> str:
         """Le PMBOK en skill vient de la configuration : un skill édité ne peut pas l'effacer."""
         return self._pmbok.note_for(agent_id) if self._pmbok else ""
+
+    def knowledge_note(self, agent_id: str) -> str:
+        """Les skills métier viennent aussi de la configuration, jamais de la base."""
+        return self._knowledge.note_for(agent_id) if self._knowledge else ""
 
 
 class SqlUsageLedger:

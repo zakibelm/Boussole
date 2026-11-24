@@ -19,6 +19,7 @@ class AppConfig:
     operator_role: str
     catalog_path: Path
     pmbok_skills_path: Path
+    knowledge_path: Path
     autonomy_path: Path
     min_relevance: float
     allowed_origins: frozenset[str]
@@ -46,6 +47,7 @@ def load_config() -> AppConfig:
         pmbok_skills_path=Path(
             os.environ.get("BOUSSOLE_PMBOK_SKILLS", ROOT / "config" / "pmbok_skills.yaml")
         ),
+        knowledge_path=Path(os.environ.get("BOUSSOLE_KNOWLEDGE", ROOT / "config" / "knowledge")),
         autonomy_path=Path(
             os.environ.get("BOUSSOLE_AUTONOMY_CONFIG", ROOT / "config" / "autonomy.yaml")
         ),

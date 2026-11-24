@@ -1,0 +1,27 @@
+{
+  "collection": "pmbok-skills",
+  "version": "1.0.0",
+  "default_edition": "8e",
+  "editions": ["5e-extension-logicielle", "6e", "7e", "8e"],
+  "language": "fr",
+  "skills": [
+    {"name": "pmbok-router", "agent": "orchestrateur", "editions": ["6e","7e","8e"], "keywords": ["quel skill","aiguillage","par où commencer","édition"]},
+    {"name": "pmbok-principes-valeur", "agent": "stratege-valeur", "editions": ["7e","8e"], "keywords": ["principes","valeur","état d'esprit","durabilité","leadership","système de valeur"]},
+    {"name": "pmbok-cycles-de-vie-approches", "agent": "architecte-methode", "editions": ["6e","7e","8e"], "keywords": ["cycle de vie","prédictif","agile","adaptatif","hybride","phase","gate","cadence","zones de focus"]},
+    {"name": "pmbok-adaptation-tailoring", "agent": "architecte-methode", "editions": ["7e","8e"], "keywords": ["adapter","tailoring","contexte","diagnostic","méthode"]},
+    {"name": "pmbok-gouvernance", "agent": "stratege-valeur", "editions": ["6e","8e"], "keywords": ["charte","plan de management","changement","clôture","connaissances","gouvernance","indicateurs avancés"]},
+    {"name": "pmbok-portee", "agent": "analyste-portee-qualite", "editions": ["6e","8e"], "keywords": ["portée","exigences","WBS","backlog","périmètre","validation","DoD","scope creep"]},
+    {"name": "pmbok-echeancier", "agent": "planificateur-delais-couts", "editions": ["6e","8e"], "keywords": ["échéancier","planning","durée","chemin critique","estimation","retard","prévision"]},
+    {"name": "pmbok-finance", "agent": "planificateur-delais-couts", "editions": ["6e","8e"], "keywords": ["coût","budget","réserve","valeur acquise","EVM","CPI","SPI","EAC","financement"]},
+    {"name": "pmbok-parties-prenantes-communications", "agent": "charge-engagement", "editions": ["6e","7e","8e"], "keywords": ["parties prenantes","communication","engagement","registre","influence"]},
+    {"name": "pmbok-ressources-equipe", "agent": "charge-engagement", "editions": ["6e","7e","8e"], "keywords": ["équipe","ressources","leadership","RACI","conflit","bien-être","virtuel"]},
+    {"name": "pmbok-risque-incertitude", "agent": "gestionnaire-risques-achats", "editions": ["6e","7e","8e"], "keywords": ["risque","menace","opportunité","appétit","seuil","résilience","incertitude","ambiguïté"]},
+    {"name": "pmbok-qualite", "agent": "analyste-portee-qualite", "editions": ["6e","8e"], "keywords": ["qualité","assurance","contrôle","coût de la qualité","Pareto","audit","DoD"]},
+    {"name": "pmbok-approvisionnement", "agent": "gestionnaire-risques-achats", "editions": ["6e","8e"], "keywords": ["achat","contrat","fournisseur","faire ou acheter","appel d'offres","prix forfaitaire","sous-traitance"]},
+    {"name": "pmbok-6e-processus-49", "agent": "archiviste-processus", "editions": ["6e","8e"], "keywords": ["49 processus","ITTO","groupes de processus","domaines de connaissance","examen PMP"]},
+    {"name": "pmbok-7e-domaines-modeles", "agent": "charge-engagement", "editions": ["7e"], "keywords": ["modèle","Tuckman","ADKAR","Cynefin","mesure","métriques","artefacts","méthodes"]},
+    {"name": "pmbok-evolution-des-editions", "agent": "orchestrateur", "editions": ["5e-extension-logicielle","6e","7e","8e"], "keywords": ["différence entre éditions","nouveauté","équivalence","migration","8e","7e","6e"]},
+    {"name": "pmbok-extension-logicielle", "agent": "architecte-methode", "editions": ["5e-extension-logicielle","8e"], "keywords": ["logiciel","développement","points de fonction","défauts","version","dette technique","IEEE","SI"]},
+    {"name": "pmbok-pmo-et-ia", "agent": "stratege-valeur", "editions": ["8e"], "keywords": ["PMO","bureau de projet","maturité","intelligence artificielle","IA","éthique","biais"]}
+  ]
+}
